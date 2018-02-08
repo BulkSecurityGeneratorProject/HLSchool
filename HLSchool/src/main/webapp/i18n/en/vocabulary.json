@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "vocabulary" : {
+            "home": {
+                "title": "Vocabularies",
+                "createLabel": "Create a new Vocabulary",
+                "createOrEditLabel": "Create or edit a Vocabulary"
+            },
+            "created": "A new Vocabulary is created with identifier {{ param }}",
+            "updated": "A Vocabulary is updated with identifier {{ param }}",
+            "deleted": "A Vocabulary is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Vocabulary {{ id }}?"
+            },
+            "detail": {
+                "title": "Vocabulary"
+            },
+            "japanese": "Japanese",
+            "english": "English",
+            "vietnamese": "Vietnamese",
+            "image": "Image",
+            "audio": "Audio"
+        }
+    }
+}

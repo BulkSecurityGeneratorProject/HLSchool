@@ -1,0 +1,99 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myVocabularyLabel" jhiTranslate="hlSchoolApp.vocabulary.home.createOrEditLabel">Create or edit a Vocabulary</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!vocabulary.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="vocabulary.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.vocabulary.japanese" for="field_japanese">Japanese</label>
+            <input type="text" class="form-control" name="japanese" id="field_japanese"
+                [(ngModel)]="vocabulary.japanese" required/>
+            <div [hidden]="!(editForm.controls.japanese?.dirty && editForm.controls.japanese?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.japanese?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.vocabulary.english" for="field_english">English</label>
+            <input type="text" class="form-control" name="english" id="field_english"
+                [(ngModel)]="vocabulary.english" required/>
+            <div [hidden]="!(editForm.controls.english?.dirty && editForm.controls.english?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.english?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.vocabulary.vietnamese" for="field_vietnamese">Vietnamese</label>
+            <input type="text" class="form-control" name="vietnamese" id="field_vietnamese"
+                [(ngModel)]="vocabulary.vietnamese" required/>
+            <div [hidden]="!(editForm.controls.vietnamese?.dirty && editForm.controls.vietnamese?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.vietnamese?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.vocabulary.image" for="field_image">Image</label>
+            <div>
+                <img [src]="'data:' + vocabulary.imageContentType + ';base64,' + vocabulary.image" style="max-height: 100px;" *ngIf="vocabulary.image" alt="vocabulary image"/>
+                <div *ngIf="vocabulary.image" class="form-text text-danger clearfix">
+                    <span class="pull-left">{{vocabulary.imageContentType}}, {{byteSize(vocabulary.image)}}</span>
+                    <button type="button" (click)="clearInputImage('image', 'imageContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <input type="file" id="file_image" (change)="setFileData($event, vocabulary, 'image', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+            </div>
+            <input type="hidden" class="form-control" name="image" id="field_image"
+                [(ngModel)]="vocabulary.image" required/>
+            <input type="hidden" class="form-control" name="imageContentType" id="field_imageContentType"
+                [(ngModel)]="vocabulary.imageContentType" />
+            <div [hidden]="!(editForm.controls.image?.dirty && editForm.controls.image?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.image?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.vocabulary.audio" for="field_audio">Audio</label>
+            <div>
+                <div *ngIf="vocabulary.audio" class="form-text text-danger clearfix">
+                    <a class="pull-left" (click)="openFile(vocabulary.audioContentType, vocabulary.audio)" jhiTranslate="entity.action.open">open</a><br>
+                    <span class="pull-left">{{vocabulary.audioContentType}}, {{byteSize(vocabulary.audio)}}</span>
+                    <button type="button" (click)="vocabulary.audio=null;vocabulary.audioContentType=null;"
+                            class="btn btn-secondary btn-xs pull-right">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <input type="file" id="file_audio" (change)="setFileData($event, vocabulary, 'audio', false)" jhiTranslate="entity.action.addblob"/>
+            </div>
+            <input type="hidden" class="form-control" name="audio" id="field_audio"
+                [(ngModel)]="vocabulary.audio" />
+            <input type="hidden" class="form-control" name="audioContentType" id="field_audioContentType"
+                [(ngModel)]="vocabulary.audioContentType" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

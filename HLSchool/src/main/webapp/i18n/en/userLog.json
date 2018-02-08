@@ -1,0 +1,23 @@
+{
+    "hlSchoolApp": {
+        "userLog" : {
+            "home": {
+                "title": "User Logs",
+                "createLabel": "Create a new User Log",
+                "createOrEditLabel": "Create or edit a User Log"
+            },
+            "created": "A new User Log is created with identifier {{ param }}",
+            "updated": "A User Log is updated with identifier {{ param }}",
+            "deleted": "A User Log is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete User Log {{ id }}?"
+            },
+            "detail": {
+                "title": "User Log"
+            },
+            "createDate": "Create Date",
+            "complete": "Complete",
+            "point": "Point"
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<div class="card jh-card">
+    <div *ngIf="room">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.room.detail.title">Room</span> {{room.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.room.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{room.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.room.level">Level</span>
+            </dt>
+            <dd>
+                <span>{{room.level}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.room.title">Title</span>
+            </dt>
+            <dd>
+                <span>{{room.title}}</span>
+            </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'room/'+ room.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+            class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
+</div>

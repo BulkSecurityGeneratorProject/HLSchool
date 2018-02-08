@@ -1,0 +1,68 @@
+<div class="card jh-card">
+    <div *ngIf="course">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.course.detail.title">Course</span> {{course.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{course.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.activated">Activated</span>
+            </dt>
+            <dd>
+                <span>{{course.activated}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.title">Title</span>
+            </dt>
+            <dd>
+                <span>{{course.title}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.level">Level</span>
+            </dt>
+            <dd>
+                <span>{{course.level}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.contenten">Contenten</span>
+            </dt>
+            <dd>
+                <span>{{course.contenten}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.contentvi">Contentvi</span>
+            </dt>
+            <dd>
+                <span>{{course.contentvi}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.course.image">Image</span>
+            </dt>
+            <dd>
+                <div *ngIf="course.image">
+                    <a (click)="openFile(course.imageContentType, course.image)">
+                        <img [src]="'data:' + course.imageContentType + ';base64,' + course.image" style="max-width: 100%;" alt="course image" />
+                    </a>
+                    {{course.imageContentType}}, {{byteSize(course.image)}}
+                </div>
+            </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'course/'+ course.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+            class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
+</div>

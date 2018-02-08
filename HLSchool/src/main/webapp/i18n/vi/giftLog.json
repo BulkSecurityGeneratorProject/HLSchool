@@ -1,0 +1,23 @@
+{
+    "hlSchoolApp": {
+        "giftLog" : {
+            "home": {
+                "title": "Gift Logs",
+                "createLabel": "Thêm mới một Gift Log",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift Log"
+            },
+            "created": "Một Gift Log mới được tạo với định danh {{ param }}",
+            "updated": "Một Gift Log cập nhật với định danh {{ param }}",
+            "deleted": "Một Gift Log đã xóa với định danh {{ param }}",
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa Gift Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Gift Log"
+            },
+            "createDate": "Create Date",
+            "user": "User",
+            "gift": "Gift"
+        }
+    }
+}

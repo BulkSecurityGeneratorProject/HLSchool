@@ -1,0 +1,111 @@
+entity Config {
+    key String required,
+    value String required
+}
+
+entity Vocabulary {
+    japanese String required,
+    english String required,
+    vietnamese String required,
+    image ImageBlob required,
+    audio AnyBlob,
+}
+
+entity Post {
+    title String required minlength(20),
+    content_en String,
+    content_vi String,
+    createDate ZonedDateTime,
+    lastModifier ZonedDateTime,
+    activated Boolean required
+}
+
+entity Comment {
+    createDate ZonedDateTime,
+    content String required minlength(5)
+}
+
+entity Room {
+    createDate ZonedDateTime,
+    level Integer required,
+    title String required minlength(5)
+}
+
+entity Course {
+    createDate ZonedDateTime,
+    activated Boolean required,
+    title String required minlength(5),
+    level Integer required,
+    content_en TextBlob,
+    content_vi TextBlob,
+    image ImageBlob required
+}
+
+entity Lesson {
+    createDate ZonedDateTime,
+    activated Boolean required,
+    title String required minlength(5),
+    level Integer required,
+    content_en TextBlob,
+    content_vi TextBlob,
+    image ImageBlob required
+}
+
+entity Feedback {
+    createDate ZonedDateTime,
+    content String required minlength(20)
+}
+
+enum QuestionType {
+    TRANSLATION, LISTENING, SELECTION, SPEECH
+}
+
+entity Question {
+    createDate ZonedDateTime,
+    questionType QuestionType required,
+    content_en String required,
+    content_vi String required,
+    image ImageBlob,
+    resource AnyBlob
+}
+
+entity Answer {
+    createDate ZonedDateTime,
+    result Boolean required
+}
+
+
+entity UserLog {
+    createDate ZonedDateTime,
+    complete Boolean,
+    point Integer
+}
+
+entity GiftLog {
+    createDate ZonedDateTime
+}
+
+entity Gift {
+    price Integer required,
+    image ImageBlob required,
+    content String required,
+    createDate ZonedDateTime
+}
+
+relationship ManyToOne {
+    Post{user(login)} to User,
+    Comment{post} to Post{comment},
+    Comment{user(login)} to User,
+    Question{lesson} to Lesson,
+    Answer{question} to Question,
+    Answer{vocabulary} to Vocabulary,
+    Feedback{question} to Question,
+    Feedback{user(login)} to User,
+    Lesson{course} to Course,
+    GiftLog{user(login)} to User,
+    GiftLog{gift} to Gift
+}
+
+paginate * with pagination
+service * with serviceImpl
+dto * with mapstruct

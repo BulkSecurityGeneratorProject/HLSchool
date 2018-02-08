@@ -1,0 +1,23 @@
+{
+    "hlSchoolApp": {
+        "userLog" : {
+            "home": {
+                "title": "User Logs",
+                "createLabel": "Thêm mới một User Log",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật User Log"
+            },
+            "created": "Một User Log mới được tạo với định danh {{ param }}",
+            "updated": "Một User Log cập nhật với định danh {{ param }}",
+            "deleted": "Một User Log đã xóa với định danh {{ param }}",
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa User Log {{ id }}?"
+            },
+            "detail": {
+                "title": "User Log"
+            },
+            "createDate": "Create Date",
+            "complete": "Complete",
+            "point": "Point"
+        }
+    }
+}

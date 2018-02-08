@@ -1,0 +1,76 @@
+<div class="card jh-card">
+    <div *ngIf="lesson">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.lesson.detail.title">Lesson</span> {{lesson.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{lesson.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.activated">Activated</span>
+            </dt>
+            <dd>
+                <span>{{lesson.activated}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.title">Title</span>
+            </dt>
+            <dd>
+                <span>{{lesson.title}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.level">Level</span>
+            </dt>
+            <dd>
+                <span>{{lesson.level}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.contenten">Contenten</span>
+            </dt>
+            <dd>
+                <span>{{lesson.contenten}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.contentvi">Contentvi</span>
+            </dt>
+            <dd>
+                <span>{{lesson.contentvi}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.image">Image</span>
+            </dt>
+            <dd>
+                <div *ngIf="lesson.image">
+                    <a (click)="openFile(lesson.imageContentType, lesson.image)">
+                        <img [src]="'data:' + lesson.imageContentType + ';base64,' + lesson.image" style="max-width: 100%;" alt="lesson image" />
+                    </a>
+                    {{lesson.imageContentType}}, {{byteSize(lesson.image)}}
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lesson.course">Course</span>
+            </dt>
+            <dd>
+                <div *ngIf="lesson.courseId">
+                    <a [routerLink]="['/course', lesson.courseId]">{{lesson.courseId}}</a>
+                </div>
+            </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'lesson/'+ lesson.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+            class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
+</div>
