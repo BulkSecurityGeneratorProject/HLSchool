@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "feedback")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "feedback")
 public class Feedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +33,10 @@ public class Feedback implements Serializable {
     @Size(min = 20)
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     @ManyToOne
     private Question question;
@@ -71,6 +77,19 @@ public class Feedback implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Feedback rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public Question getQuestion() {
@@ -126,6 +145,7 @@ public class Feedback implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", content='" + getContent() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

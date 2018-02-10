@@ -39,4 +39,14 @@ public interface ConfigService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    /**
+     * Search for the config corresponding to the query.
+     *
+     * @param query the query of the search
+     * 
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    Page<ConfigDTO> search(String query, Pageable pageable);
 }

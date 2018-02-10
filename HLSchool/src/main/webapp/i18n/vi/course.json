@@ -4,7 +4,8 @@
             "home": {
                 "title": "Courses",
                 "createLabel": "Thêm mới một Course",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Course"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Course",
+                "search": "Tìm Course"
             },
             "created": "Một Course mới được tạo với định danh {{ param }}",
             "updated": "Một Course cập nhật với định danh {{ param }}",
@@ -19,9 +20,11 @@
             "activated": "Activated",
             "title": "Title",
             "level": "Level",
+            "coin": "Coin",
             "contenten": "Contenten",
             "contentvi": "Contentvi",
-            "image": "Image"
+            "image": "Image",
+            "rawData": "Raw Data"
         }
     }
 }

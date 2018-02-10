@@ -18,18 +18,26 @@
             ]
         },
         {
-            "fieldName": "content",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "contenten",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "contentvi",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "createDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130518",
+    "changelogDate": "20180210073809",
     "entityTableName": "gift",
     "dto": "mapstruct",
     "pagination": "pagination",

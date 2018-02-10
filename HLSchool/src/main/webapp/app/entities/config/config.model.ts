@@ -5,6 +5,7 @@ export class Config implements BaseEntity {
         public id?: number,
         public key?: string,
         public value?: string,
+        public rawData?: any,
     ) {
     }
 }

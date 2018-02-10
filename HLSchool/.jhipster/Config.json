@@ -15,9 +15,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130506",
+    "changelogDate": "20180210073753",
     "entityTableName": "config",
     "dto": "mapstruct",
     "pagination": "pagination",

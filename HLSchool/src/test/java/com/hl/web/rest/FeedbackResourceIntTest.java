@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Feedback;
 import com.hl.repository.FeedbackRepository;
 import com.hl.service.FeedbackService;
+import com.hl.repository.search.FeedbackSearchRepository;
 import com.hl.service.dto.FeedbackDTO;
 import com.hl.service.mapper.FeedbackMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -52,6 +54,9 @@ public class FeedbackResourceIntTest {
     private static final String DEFAULT_CONTENT = "AAAAAAAAAAAAAAAAAAAA";
     private static final String UPDATED_CONTENT = "BBBBBBBBBBBBBBBBBBBB";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private FeedbackRepository feedbackRepository;
 
@@ -60,6 +65,9 @@ public class FeedbackResourceIntTest {
 
     @Autowired
     private FeedbackService feedbackService;
+
+    @Autowired
+    private FeedbackSearchRepository feedbackSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -97,12 +105,14 @@ public class FeedbackResourceIntTest {
     public static Feedback createEntity(EntityManager em) {
         Feedback feedback = new Feedback()
             .createDate(DEFAULT_CREATE_DATE)
-            .content(DEFAULT_CONTENT);
+            .content(DEFAULT_CONTENT)
+            .rawData(DEFAULT_RAW_DATA);
         return feedback;
     }
 
     @Before
     public void initTest() {
+        feedbackSearchRepository.deleteAll();
         feedback = createEntity(em);
     }
 
@@ -124,6 +134,12 @@ public class FeedbackResourceIntTest {
         Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
         assertThat(testFeedback.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testFeedback.getContent()).isEqualTo(DEFAULT_CONTENT);
+        assertThat(testFeedback.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Feedback in Elasticsearch
+        Feedback feedbackEs = feedbackSearchRepository.findOne(testFeedback.getId());
+        assertThat(testFeedback.getCreateDate()).isEqualTo(testFeedback.getCreateDate());
+        assertThat(feedbackEs).isEqualToIgnoringGivenFields(testFeedback, "createDate");
     }
 
     @Test
@@ -177,7 +193,8 @@ public class FeedbackResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(feedback.getId().intValue())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -192,7 +209,8 @@ public class FeedbackResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(feedback.getId().intValue()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -208,6 +226,7 @@ public class FeedbackResourceIntTest {
     public void updateFeedback() throws Exception {
         // Initialize the database
         feedbackRepository.saveAndFlush(feedback);
+        feedbackSearchRepository.save(feedback);
         int databaseSizeBeforeUpdate = feedbackRepository.findAll().size();
 
         // Update the feedback
@@ -216,7 +235,8 @@ public class FeedbackResourceIntTest {
         em.detach(updatedFeedback);
         updatedFeedback
             .createDate(UPDATED_CREATE_DATE)
-            .content(UPDATED_CONTENT);
+            .content(UPDATED_CONTENT)
+            .rawData(UPDATED_RAW_DATA);
         FeedbackDTO feedbackDTO = feedbackMapper.toDto(updatedFeedback);
 
         restFeedbackMockMvc.perform(put("/api/feedbacks")
@@ -230,6 +250,12 @@ public class FeedbackResourceIntTest {
         Feedback testFeedback = feedbackList.get(feedbackList.size() - 1);
         assertThat(testFeedback.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testFeedback.getContent()).isEqualTo(UPDATED_CONTENT);
+        assertThat(testFeedback.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Feedback in Elasticsearch
+        Feedback feedbackEs = feedbackSearchRepository.findOne(testFeedback.getId());
+        assertThat(testFeedback.getCreateDate()).isEqualTo(testFeedback.getCreateDate());
+        assertThat(feedbackEs).isEqualToIgnoringGivenFields(testFeedback, "createDate");
     }
 
     @Test
@@ -256,6 +282,7 @@ public class FeedbackResourceIntTest {
     public void deleteFeedback() throws Exception {
         // Initialize the database
         feedbackRepository.saveAndFlush(feedback);
+        feedbackSearchRepository.save(feedback);
         int databaseSizeBeforeDelete = feedbackRepository.findAll().size();
 
         // Get the feedback
@@ -263,9 +290,30 @@ public class FeedbackResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean feedbackExistsInEs = feedbackSearchRepository.exists(feedback.getId());
+        assertThat(feedbackExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Feedback> feedbackList = feedbackRepository.findAll();
         assertThat(feedbackList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchFeedback() throws Exception {
+        // Initialize the database
+        feedbackRepository.saveAndFlush(feedback);
+        feedbackSearchRepository.save(feedback);
+
+        // Search the feedback
+        restFeedbackMockMvc.perform(get("/api/_search/feedbacks?query=id:" + feedback.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(feedback.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

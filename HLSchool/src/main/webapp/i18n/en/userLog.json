@@ -4,7 +4,8 @@
             "home": {
                 "title": "User Logs",
                 "createLabel": "Create a new User Log",
-                "createOrEditLabel": "Create or edit a User Log"
+                "createOrEditLabel": "Create or edit a User Log",
+                "search": "Search for User Log"
             },
             "created": "A new User Log is created with identifier {{ param }}",
             "updated": "A User Log is updated with identifier {{ param }}",
@@ -17,7 +18,9 @@
             },
             "createDate": "Create Date",
             "complete": "Complete",
-            "point": "Point"
+            "point": "Point",
+            "rawData": "Raw Data",
+            "user": "User"
         }
     }
 }

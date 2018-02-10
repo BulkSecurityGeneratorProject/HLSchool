@@ -5,6 +5,7 @@ export class Answer implements BaseEntity {
         public id?: number,
         public createDate?: any,
         public result?: boolean,
+        public rawData?: any,
         public questionId?: number,
         public vocabularyId?: number,
     ) {

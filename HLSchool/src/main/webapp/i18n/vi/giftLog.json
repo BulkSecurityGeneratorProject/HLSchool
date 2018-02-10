@@ -4,7 +4,8 @@
             "home": {
                 "title": "Gift Logs",
                 "createLabel": "Thêm mới một Gift Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift Log"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift Log",
+                "search": "Tìm Gift Log"
             },
             "created": "Một Gift Log mới được tạo với định danh {{ param }}",
             "updated": "Một Gift Log cập nhật với định danh {{ param }}",
@@ -16,6 +17,7 @@
                 "title": "Gift Log"
             },
             "createDate": "Create Date",
+            "rawData": "Raw Data",
             "user": "User",
             "gift": "Gift"
         }

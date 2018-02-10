@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.CourseService;
 import com.hl.domain.Course;
 import com.hl.repository.CourseRepository;
+import com.hl.repository.search.CourseSearchRepository;
 import com.hl.service.dto.CourseDTO;
 import com.hl.service.mapper.CourseMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Course.
@@ -26,9 +29,12 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseMapper courseMapper;
 
-    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper) {
+    private final CourseSearchRepository courseSearchRepository;
+
+    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper, CourseSearchRepository courseSearchRepository) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
+        this.courseSearchRepository = courseSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class CourseServiceImpl implements CourseService {
         log.debug("Request to save Course : {}", courseDTO);
         Course course = courseMapper.toEntity(courseDTO);
         course = courseRepository.save(course);
-        return courseMapper.toDto(course);
+        CourseDTO result = courseMapper.toDto(course);
+        courseSearchRepository.save(course);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class CourseServiceImpl implements CourseService {
     public void delete(Long id) {
         log.debug("Request to delete Course : {}", id);
         courseRepository.delete(id);
+        courseSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the course corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CourseDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Courses for query {}", query);
+        Page<Course> result = courseSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(courseMapper::toDto);
     }
 }

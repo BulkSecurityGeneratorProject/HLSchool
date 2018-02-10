@@ -3,8 +3,8 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "relationshipName": "lesson",
-            "otherEntityName": "lesson",
+            "relationshipName": "subLesson",
+            "otherEntityName": "subLesson",
             "otherEntityField": "id"
         }
     ],
@@ -17,6 +17,14 @@
             "fieldName": "questionType",
             "fieldType": "QuestionType",
             "fieldValues": "TRANSLATION,LISTENING,SELECTION,SPEECH",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "questionSubType",
+            "fieldType": "QuestionSubType",
+            "fieldValues": "SELECTION_IMAGE,SELECTION_TEXT,SELECTION_SPEECH",
             "fieldValidateRules": [
                 "required"
             ]
@@ -44,9 +52,14 @@
             "fieldName": "resource",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130514",
+    "changelogDate": "20180210073802",
     "entityTableName": "question",
     "dto": "mapstruct",
     "pagination": "pagination",

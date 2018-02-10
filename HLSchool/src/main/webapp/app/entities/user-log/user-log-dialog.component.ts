@@ -4,11 +4,13 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { UserLog } from './user-log.model';
 import { UserLogPopupService } from './user-log-popup.service';
 import { UserLogService } from './user-log.service';
+import { User, UserService } from '../../shared';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-user-log-dialog',
@@ -19,15 +21,34 @@ export class UserLogDialogComponent implements OnInit {
     userLog: UserLog;
     isSaving: boolean;
 
+    users: User[];
+
     constructor(
         public activeModal: NgbActiveModal,
+        private dataUtils: JhiDataUtils,
+        private jhiAlertService: JhiAlertService,
         private userLogService: UserLogService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     clear() {
@@ -58,6 +79,14 @@ export class UserLogDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackUserById(index: number, item: User) {
+        return item.id;
     }
 }
 

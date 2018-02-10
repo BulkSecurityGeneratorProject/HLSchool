@@ -1,0 +1,26 @@
+{
+    "hlSchoolApp": {
+        "subLesson" : {
+            "home": {
+                "title": "Sub Lessons",
+                "createLabel": "Create a new Sub Lesson",
+                "createOrEditLabel": "Create or edit a Sub Lesson",
+                "search": "Search for Sub Lesson"
+            },
+            "created": "A new Sub Lesson is created with identifier {{ param }}",
+            "updated": "A Sub Lesson is updated with identifier {{ param }}",
+            "deleted": "A Sub Lesson is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Sub Lesson {{ id }}?"
+            },
+            "detail": {
+                "title": "Sub Lesson"
+            },
+            "createDate": "Create Date",
+            "title": "Title",
+            "contenten": "Contenten",
+            "contentvi": "Contentvi",
+            "rawData": "Raw Data"
+        }
+    }
+}

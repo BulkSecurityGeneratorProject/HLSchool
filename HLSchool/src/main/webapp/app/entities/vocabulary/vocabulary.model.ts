@@ -10,6 +10,7 @@ export class Vocabulary implements BaseEntity {
         public image?: any,
         public audioContentType?: string,
         public audio?: any,
+        public rawData?: any,
     ) {
     }
 }

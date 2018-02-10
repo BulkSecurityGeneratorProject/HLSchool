@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "course")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "course")
 public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,6 +42,10 @@ public class Course implements Serializable {
     @Column(name = "jhi_level", nullable = false)
     private Integer level;
 
+    @NotNull
+    @Column(name = "coin", nullable = false)
+    private Integer coin;
+
     @Lob
     @Column(name = "contenten")
     private String contenten;
@@ -55,6 +61,10 @@ public class Course implements Serializable {
 
     @Column(name = "image_content_type", nullable = false)
     private String imageContentType;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -117,6 +127,19 @@ public class Course implements Serializable {
         this.level = level;
     }
 
+    public Integer getCoin() {
+        return coin;
+    }
+
+    public Course coin(Integer coin) {
+        this.coin = coin;
+        return this;
+    }
+
+    public void setCoin(Integer coin) {
+        this.coin = coin;
+    }
+
     public String getContenten() {
         return contenten;
     }
@@ -168,6 +191,19 @@ public class Course implements Serializable {
     public void setImageContentType(String imageContentType) {
         this.imageContentType = imageContentType;
     }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Course rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -198,10 +234,12 @@ public class Course implements Serializable {
             ", activated='" + isActivated() + "'" +
             ", title='" + getTitle() + "'" +
             ", level=" + getLevel() +
+            ", coin=" + getCoin() +
             ", contenten='" + getContenten() + "'" +
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

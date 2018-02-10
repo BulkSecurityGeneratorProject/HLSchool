@@ -30,6 +30,13 @@
             ]
         },
         {
+            "fieldName": "coin",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "contenten",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
@@ -46,9 +53,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130511",
+    "changelogDate": "20180210073758",
     "entityTableName": "course",
     "dto": "mapstruct",
     "pagination": "pagination",

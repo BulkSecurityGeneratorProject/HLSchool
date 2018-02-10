@@ -4,7 +4,8 @@
             "home": {
                 "title": "Feedbacks",
                 "createLabel": "Thêm mới một Feedback",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Feedback"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Feedback",
+                "search": "Tìm Feedback"
             },
             "created": "Một Feedback mới được tạo với định danh {{ param }}",
             "updated": "Một Feedback cập nhật với định danh {{ param }}",
@@ -17,6 +18,7 @@
             },
             "createDate": "Create Date",
             "content": "Content",
+            "rawData": "Raw Data",
             "question": "Question",
             "user": "User"
         }

@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "courseLog" : {
+            "home": {
+                "title": "Course Logs",
+                "createLabel": "Thêm mới một Course Log",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Course Log",
+                "search": "Tìm Course Log"
+            },
+            "created": "Một Course Log mới được tạo với định danh {{ param }}",
+            "updated": "Một Course Log cập nhật với định danh {{ param }}",
+            "deleted": "Một Course Log đã xóa với định danh {{ param }}",
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa Course Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Course Log"
+            },
+            "complete": "Complete",
+            "rawData": "Raw Data",
+            "user": "User",
+            "course": "Course"
+        }
+    }
+}

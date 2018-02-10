@@ -26,6 +26,9 @@ public class CourseDTO implements Serializable {
     @NotNull
     private Integer level;
 
+    @NotNull
+    private Integer coin;
+
     @Lob
     private String contenten;
 
@@ -36,6 +39,9 @@ public class CourseDTO implements Serializable {
     @Lob
     private byte[] image;
     private String imageContentType;
+
+    @Lob
+    private String rawData;
 
     public Long getId() {
         return id;
@@ -77,6 +83,14 @@ public class CourseDTO implements Serializable {
         this.level = level;
     }
 
+    public Integer getCoin() {
+        return coin;
+    }
+
+    public void setCoin(Integer coin) {
+        this.coin = coin;
+    }
+
     public String getContenten() {
         return contenten;
     }
@@ -109,6 +123,14 @@ public class CourseDTO implements Serializable {
         this.imageContentType = imageContentType;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,9 +160,11 @@ public class CourseDTO implements Serializable {
             ", activated='" + isActivated() + "'" +
             ", title='" + getTitle() + "'" +
             ", level=" + getLevel() +
+            ", coin=" + getCoin() +
             ", contenten='" + getContenten() + "'" +
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

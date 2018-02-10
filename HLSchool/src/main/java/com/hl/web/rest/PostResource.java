@@ -22,6 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Post.
@@ -124,4 +127,22 @@ public class PostResource {
         postService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/posts?query=:query : search for the post corresponding
+     * to the query.
+     *
+     * @param query the query of the post search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/posts")
+    @Timed
+    public ResponseEntity<List<PostDTO>> searchPosts(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Posts for query {}", query);
+        Page<PostDTO> page = postService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/posts");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

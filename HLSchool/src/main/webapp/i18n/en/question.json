@@ -4,7 +4,8 @@
             "home": {
                 "title": "Questions",
                 "createLabel": "Create a new Question",
-                "createOrEditLabel": "Create or edit a Question"
+                "createOrEditLabel": "Create or edit a Question",
+                "search": "Search for Question"
             },
             "created": "A new Question is created with identifier {{ param }}",
             "updated": "A Question is updated with identifier {{ param }}",
@@ -17,11 +18,13 @@
             },
             "createDate": "Create Date",
             "questionType": "Question Type",
+            "questionSubType": "Question Sub Type",
             "contenten": "Contenten",
             "contentvi": "Contentvi",
             "image": "Image",
             "resource": "Resource",
-            "lesson": "Lesson"
+            "rawData": "Raw Data",
+            "subLesson": "Sub Lesson"
         }
     }
 }

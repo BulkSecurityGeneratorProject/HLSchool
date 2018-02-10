@@ -18,9 +18,14 @@
         {
             "fieldName": "createDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130517",
+    "changelogDate": "20180210073805",
     "entityTableName": "gift_log",
     "dto": "mapstruct",
     "pagination": "pagination",

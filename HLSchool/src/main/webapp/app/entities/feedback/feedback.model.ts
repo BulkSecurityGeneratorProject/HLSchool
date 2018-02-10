@@ -5,6 +5,7 @@ export class Feedback implements BaseEntity {
         public id?: number,
         public createDate?: any,
         public content?: string,
+        public rawData?: any,
         public questionId?: number,
         public userId?: number,
     ) {

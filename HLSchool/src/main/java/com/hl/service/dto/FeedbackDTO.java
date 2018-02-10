@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Feedback entity.
@@ -20,6 +21,9 @@ public class FeedbackDTO implements Serializable {
     @NotNull
     @Size(min = 20)
     private String content;
+
+    @Lob
+    private String rawData;
 
     private Long questionId;
 
@@ -49,6 +53,14 @@ public class FeedbackDTO implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public Long getQuestionId() {
@@ -102,6 +114,7 @@ public class FeedbackDTO implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", content='" + getContent() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

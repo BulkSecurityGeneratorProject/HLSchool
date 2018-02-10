@@ -4,7 +4,8 @@
             "home": {
                 "title": "Rooms",
                 "createLabel": "Create a new Room",
-                "createOrEditLabel": "Create or edit a Room"
+                "createOrEditLabel": "Create or edit a Room",
+                "search": "Search for Room"
             },
             "created": "A new Room is created with identifier {{ param }}",
             "updated": "A Room is updated with identifier {{ param }}",
@@ -17,7 +18,8 @@
             },
             "createDate": "Create Date",
             "level": "Level",
-            "title": "Title"
+            "title": "Title",
+            "rawData": "Raw Data"
         }
     }
 }

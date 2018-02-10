@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "subLessonLog" : {
+            "home": {
+                "title": "Sub Lesson Logs",
+                "createLabel": "Thêm mới một Sub Lesson Log",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Sub Lesson Log",
+                "search": "Tìm Sub Lesson Log"
+            },
+            "created": "Một Sub Lesson Log mới được tạo với định danh {{ param }}",
+            "updated": "Một Sub Lesson Log cập nhật với định danh {{ param }}",
+            "deleted": "Một Sub Lesson Log đã xóa với định danh {{ param }}",
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa Sub Lesson Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Sub Lesson Log"
+            },
+            "complete": "Complete",
+            "rawData": "Raw Data",
+            "user": "User",
+            "subLesson": "Sub Lesson"
+        }
+    }
+}

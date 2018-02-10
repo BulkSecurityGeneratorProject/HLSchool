@@ -4,7 +4,8 @@
             "home": {
                 "title": "Comments",
                 "createLabel": "Thêm mới một Comment",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Comment"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Comment",
+                "search": "Tìm Comment"
             },
             "created": "Một Comment mới được tạo với định danh {{ param }}",
             "updated": "Một Comment cập nhật với định danh {{ param }}",
@@ -17,6 +18,7 @@
             },
             "createDate": "Create Date",
             "content": "Content",
+            "rawData": "Raw Data",
             "post": "Post",
             "user": "User"
         }

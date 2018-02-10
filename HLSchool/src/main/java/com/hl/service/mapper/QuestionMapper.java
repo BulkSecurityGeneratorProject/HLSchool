@@ -8,13 +8,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Question and its DTO QuestionDTO.
  */
-@Mapper(componentModel = "spring", uses = {LessonMapper.class})
+@Mapper(componentModel = "spring", uses = {SubLessonMapper.class})
 public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
 
-    @Mapping(source = "lesson.id", target = "lessonId")
+    @Mapping(source = "subLesson.id", target = "subLessonId")
     QuestionDTO toDto(Question question);
 
-    @Mapping(source = "lessonId", target = "lesson")
+    @Mapping(source = "subLessonId", target = "subLesson")
     Question toEntity(QuestionDTO questionDTO);
 
     default Question fromId(Long id) {

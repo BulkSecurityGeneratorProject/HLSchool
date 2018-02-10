@@ -26,11 +26,13 @@
         },
         {
             "fieldName": "contenten",
-            "fieldType": "String"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "contentvi",
-            "fieldType": "String"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "createDate",
@@ -46,9 +48,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130508",
+    "changelogDate": "20180210073755",
     "entityTableName": "post",
     "dto": "mapstruct",
     "pagination": "pagination",

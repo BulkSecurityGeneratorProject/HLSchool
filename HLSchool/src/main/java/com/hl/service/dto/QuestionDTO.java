@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.Objects;
 import javax.persistence.Lob;
 import com.hl.domain.enumeration.QuestionType;
+import com.hl.domain.enumeration.QuestionSubType;
 
 /**
  * A DTO for the Question entity.
@@ -21,6 +22,9 @@ public class QuestionDTO implements Serializable {
 
     @NotNull
     private QuestionType questionType;
+
+    @NotNull
+    private QuestionSubType questionSubType;
 
     @NotNull
     private String contenten;
@@ -36,7 +40,10 @@ public class QuestionDTO implements Serializable {
     private byte[] resource;
     private String resourceContentType;
 
-    private Long lessonId;
+    @Lob
+    private String rawData;
+
+    private Long subLessonId;
 
     public Long getId() {
         return id;
@@ -60,6 +67,14 @@ public class QuestionDTO implements Serializable {
 
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
+    }
+
+    public QuestionSubType getQuestionSubType() {
+        return questionSubType;
+    }
+
+    public void setQuestionSubType(QuestionSubType questionSubType) {
+        this.questionSubType = questionSubType;
     }
 
     public String getContenten() {
@@ -110,12 +125,20 @@ public class QuestionDTO implements Serializable {
         this.resourceContentType = resourceContentType;
     }
 
-    public Long getLessonId() {
-        return lessonId;
+    public String getRawData() {
+        return rawData;
     }
 
-    public void setLessonId(Long lessonId) {
-        this.lessonId = lessonId;
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
+    public Long getSubLessonId() {
+        return subLessonId;
+    }
+
+    public void setSubLessonId(Long subLessonId) {
+        this.subLessonId = subLessonId;
     }
 
     @Override
@@ -145,10 +168,12 @@ public class QuestionDTO implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", questionType='" + getQuestionType() + "'" +
+            ", questionSubType='" + getQuestionSubType() + "'" +
             ", contenten='" + getContenten() + "'" +
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
             ", resource='" + getResource() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

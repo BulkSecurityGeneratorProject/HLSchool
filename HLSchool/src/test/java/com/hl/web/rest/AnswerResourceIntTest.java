@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Answer;
 import com.hl.repository.AnswerRepository;
 import com.hl.service.AnswerService;
+import com.hl.repository.search.AnswerSearchRepository;
 import com.hl.service.dto.AnswerDTO;
 import com.hl.service.mapper.AnswerMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -52,6 +54,9 @@ public class AnswerResourceIntTest {
     private static final Boolean DEFAULT_RESULT = false;
     private static final Boolean UPDATED_RESULT = true;
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private AnswerRepository answerRepository;
 
@@ -60,6 +65,9 @@ public class AnswerResourceIntTest {
 
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private AnswerSearchRepository answerSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -97,12 +105,14 @@ public class AnswerResourceIntTest {
     public static Answer createEntity(EntityManager em) {
         Answer answer = new Answer()
             .createDate(DEFAULT_CREATE_DATE)
-            .result(DEFAULT_RESULT);
+            .result(DEFAULT_RESULT)
+            .rawData(DEFAULT_RAW_DATA);
         return answer;
     }
 
     @Before
     public void initTest() {
+        answerSearchRepository.deleteAll();
         answer = createEntity(em);
     }
 
@@ -124,6 +134,12 @@ public class AnswerResourceIntTest {
         Answer testAnswer = answerList.get(answerList.size() - 1);
         assertThat(testAnswer.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testAnswer.isResult()).isEqualTo(DEFAULT_RESULT);
+        assertThat(testAnswer.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Answer in Elasticsearch
+        Answer answerEs = answerSearchRepository.findOne(testAnswer.getId());
+        assertThat(testAnswer.getCreateDate()).isEqualTo(testAnswer.getCreateDate());
+        assertThat(answerEs).isEqualToIgnoringGivenFields(testAnswer, "createDate");
     }
 
     @Test
@@ -177,7 +193,8 @@ public class AnswerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(answer.getId().intValue())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
-            .andExpect(jsonPath("$.[*].result").value(hasItem(DEFAULT_RESULT.booleanValue())));
+            .andExpect(jsonPath("$.[*].result").value(hasItem(DEFAULT_RESULT.booleanValue())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -192,7 +209,8 @@ public class AnswerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(answer.getId().intValue()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
-            .andExpect(jsonPath("$.result").value(DEFAULT_RESULT.booleanValue()));
+            .andExpect(jsonPath("$.result").value(DEFAULT_RESULT.booleanValue()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -208,6 +226,7 @@ public class AnswerResourceIntTest {
     public void updateAnswer() throws Exception {
         // Initialize the database
         answerRepository.saveAndFlush(answer);
+        answerSearchRepository.save(answer);
         int databaseSizeBeforeUpdate = answerRepository.findAll().size();
 
         // Update the answer
@@ -216,7 +235,8 @@ public class AnswerResourceIntTest {
         em.detach(updatedAnswer);
         updatedAnswer
             .createDate(UPDATED_CREATE_DATE)
-            .result(UPDATED_RESULT);
+            .result(UPDATED_RESULT)
+            .rawData(UPDATED_RAW_DATA);
         AnswerDTO answerDTO = answerMapper.toDto(updatedAnswer);
 
         restAnswerMockMvc.perform(put("/api/answers")
@@ -230,6 +250,12 @@ public class AnswerResourceIntTest {
         Answer testAnswer = answerList.get(answerList.size() - 1);
         assertThat(testAnswer.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testAnswer.isResult()).isEqualTo(UPDATED_RESULT);
+        assertThat(testAnswer.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Answer in Elasticsearch
+        Answer answerEs = answerSearchRepository.findOne(testAnswer.getId());
+        assertThat(testAnswer.getCreateDate()).isEqualTo(testAnswer.getCreateDate());
+        assertThat(answerEs).isEqualToIgnoringGivenFields(testAnswer, "createDate");
     }
 
     @Test
@@ -256,6 +282,7 @@ public class AnswerResourceIntTest {
     public void deleteAnswer() throws Exception {
         // Initialize the database
         answerRepository.saveAndFlush(answer);
+        answerSearchRepository.save(answer);
         int databaseSizeBeforeDelete = answerRepository.findAll().size();
 
         // Get the answer
@@ -263,9 +290,30 @@ public class AnswerResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean answerExistsInEs = answerSearchRepository.exists(answer.getId());
+        assertThat(answerExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Answer> answerList = answerRepository.findAll();
         assertThat(answerList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchAnswer() throws Exception {
+        // Initialize the database
+        answerRepository.saveAndFlush(answer);
+        answerSearchRepository.save(answer);
+
+        // Search the answer
+        restAnswerMockMvc.perform(get("/api/_search/answers?query=id:" + answer.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(answer.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].result").value(hasItem(DEFAULT_RESULT.booleanValue())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

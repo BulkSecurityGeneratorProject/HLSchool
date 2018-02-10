@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "lessonLog" : {
+            "home": {
+                "title": "Lesson Logs",
+                "createLabel": "Create a new Lesson Log",
+                "createOrEditLabel": "Create or edit a Lesson Log",
+                "search": "Search for Lesson Log"
+            },
+            "created": "A new Lesson Log is created with identifier {{ param }}",
+            "updated": "A Lesson Log is updated with identifier {{ param }}",
+            "deleted": "A Lesson Log is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Lesson Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Lesson Log"
+            },
+            "complete": "Complete",
+            "rawData": "Raw Data",
+            "user": "User",
+            "lesson": "Lesson"
+        }
+    }
+}

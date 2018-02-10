@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "lesson")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "lesson")
 public class Lesson implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +57,10 @@ public class Lesson implements Serializable {
 
     @Column(name = "image_content_type", nullable = false)
     private String imageContentType;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     @ManyToOne
     private Course course;
@@ -172,6 +178,19 @@ public class Lesson implements Serializable {
         this.imageContentType = imageContentType;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Lesson rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     public Course getCourse() {
         return course;
     }
@@ -218,6 +237,7 @@ public class Lesson implements Serializable {
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

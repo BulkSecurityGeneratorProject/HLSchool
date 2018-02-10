@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "gift_log")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "giftlog")
 public class GiftLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +27,10 @@ public class GiftLog implements Serializable {
 
     @Column(name = "create_date")
     private ZonedDateTime createDate;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     @ManyToOne
     private User user;
@@ -52,6 +58,19 @@ public class GiftLog implements Serializable {
 
     public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public GiftLog rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public User getUser() {
@@ -106,6 +125,7 @@ public class GiftLog implements Serializable {
         return "GiftLog{" +
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

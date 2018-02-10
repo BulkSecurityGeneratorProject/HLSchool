@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.QuestionService;
 import com.hl.domain.Question;
 import com.hl.repository.QuestionRepository;
+import com.hl.repository.search.QuestionSearchRepository;
 import com.hl.service.dto.QuestionDTO;
 import com.hl.service.mapper.QuestionMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Question.
@@ -26,9 +29,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionMapper questionMapper;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, QuestionMapper questionMapper) {
+    private final QuestionSearchRepository questionSearchRepository;
+
+    public QuestionServiceImpl(QuestionRepository questionRepository, QuestionMapper questionMapper, QuestionSearchRepository questionSearchRepository) {
         this.questionRepository = questionRepository;
         this.questionMapper = questionMapper;
+        this.questionSearchRepository = questionSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class QuestionServiceImpl implements QuestionService {
         log.debug("Request to save Question : {}", questionDTO);
         Question question = questionMapper.toEntity(questionDTO);
         question = questionRepository.save(question);
-        return questionMapper.toDto(question);
+        QuestionDTO result = questionMapper.toDto(question);
+        questionSearchRepository.save(question);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class QuestionServiceImpl implements QuestionService {
     public void delete(Long id) {
         log.debug("Request to delete Question : {}", id);
         questionRepository.delete(id);
+        questionSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the question corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<QuestionDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Questions for query {}", query);
+        Page<Question> result = questionSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(questionMapper::toDto);
     }
 }

@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.GiftLog;
 import com.hl.repository.GiftLogRepository;
 import com.hl.service.GiftLogService;
+import com.hl.repository.search.GiftLogSearchRepository;
 import com.hl.service.dto.GiftLogDTO;
 import com.hl.service.mapper.GiftLogMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -49,6 +51,9 @@ public class GiftLogResourceIntTest {
     private static final ZonedDateTime DEFAULT_CREATE_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATE_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private GiftLogRepository giftLogRepository;
 
@@ -57,6 +62,9 @@ public class GiftLogResourceIntTest {
 
     @Autowired
     private GiftLogService giftLogService;
+
+    @Autowired
+    private GiftLogSearchRepository giftLogSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -93,12 +101,14 @@ public class GiftLogResourceIntTest {
      */
     public static GiftLog createEntity(EntityManager em) {
         GiftLog giftLog = new GiftLog()
-            .createDate(DEFAULT_CREATE_DATE);
+            .createDate(DEFAULT_CREATE_DATE)
+            .rawData(DEFAULT_RAW_DATA);
         return giftLog;
     }
 
     @Before
     public void initTest() {
+        giftLogSearchRepository.deleteAll();
         giftLog = createEntity(em);
     }
 
@@ -119,6 +129,12 @@ public class GiftLogResourceIntTest {
         assertThat(giftLogList).hasSize(databaseSizeBeforeCreate + 1);
         GiftLog testGiftLog = giftLogList.get(giftLogList.size() - 1);
         assertThat(testGiftLog.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
+        assertThat(testGiftLog.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the GiftLog in Elasticsearch
+        GiftLog giftLogEs = giftLogSearchRepository.findOne(testGiftLog.getId());
+        assertThat(testGiftLog.getCreateDate()).isEqualTo(testGiftLog.getCreateDate());
+        assertThat(giftLogEs).isEqualToIgnoringGivenFields(testGiftLog, "createDate");
     }
 
     @Test
@@ -152,7 +168,8 @@ public class GiftLogResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(giftLog.getId().intValue())))
-            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))));
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -166,7 +183,8 @@ public class GiftLogResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(giftLog.getId().intValue()))
-            .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)));
+            .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -182,6 +200,7 @@ public class GiftLogResourceIntTest {
     public void updateGiftLog() throws Exception {
         // Initialize the database
         giftLogRepository.saveAndFlush(giftLog);
+        giftLogSearchRepository.save(giftLog);
         int databaseSizeBeforeUpdate = giftLogRepository.findAll().size();
 
         // Update the giftLog
@@ -189,7 +208,8 @@ public class GiftLogResourceIntTest {
         // Disconnect from session so that the updates on updatedGiftLog are not directly saved in db
         em.detach(updatedGiftLog);
         updatedGiftLog
-            .createDate(UPDATED_CREATE_DATE);
+            .createDate(UPDATED_CREATE_DATE)
+            .rawData(UPDATED_RAW_DATA);
         GiftLogDTO giftLogDTO = giftLogMapper.toDto(updatedGiftLog);
 
         restGiftLogMockMvc.perform(put("/api/gift-logs")
@@ -202,6 +222,12 @@ public class GiftLogResourceIntTest {
         assertThat(giftLogList).hasSize(databaseSizeBeforeUpdate);
         GiftLog testGiftLog = giftLogList.get(giftLogList.size() - 1);
         assertThat(testGiftLog.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
+        assertThat(testGiftLog.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the GiftLog in Elasticsearch
+        GiftLog giftLogEs = giftLogSearchRepository.findOne(testGiftLog.getId());
+        assertThat(testGiftLog.getCreateDate()).isEqualTo(testGiftLog.getCreateDate());
+        assertThat(giftLogEs).isEqualToIgnoringGivenFields(testGiftLog, "createDate");
     }
 
     @Test
@@ -228,6 +254,7 @@ public class GiftLogResourceIntTest {
     public void deleteGiftLog() throws Exception {
         // Initialize the database
         giftLogRepository.saveAndFlush(giftLog);
+        giftLogSearchRepository.save(giftLog);
         int databaseSizeBeforeDelete = giftLogRepository.findAll().size();
 
         // Get the giftLog
@@ -235,9 +262,29 @@ public class GiftLogResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean giftLogExistsInEs = giftLogSearchRepository.exists(giftLog.getId());
+        assertThat(giftLogExistsInEs).isFalse();
+
         // Validate the database is empty
         List<GiftLog> giftLogList = giftLogRepository.findAll();
         assertThat(giftLogList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchGiftLog() throws Exception {
+        // Initialize the database
+        giftLogRepository.saveAndFlush(giftLog);
+        giftLogSearchRepository.save(giftLog);
+
+        // Search the giftLog
+        restGiftLogMockMvc.perform(get("/api/_search/gift-logs?query=id:" + giftLog.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(giftLog.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

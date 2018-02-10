@@ -1,0 +1,26 @@
+{
+    "hlSchoolApp": {
+        "subLesson" : {
+            "home": {
+                "title": "Sub Lessons",
+                "createLabel": "Thêm mới một Sub Lesson",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Sub Lesson",
+                "search": "Tìm Sub Lesson"
+            },
+            "created": "Một Sub Lesson mới được tạo với định danh {{ param }}",
+            "updated": "Một Sub Lesson cập nhật với định danh {{ param }}",
+            "deleted": "Một Sub Lesson đã xóa với định danh {{ param }}",
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa Sub Lesson {{ id }}?"
+            },
+            "detail": {
+                "title": "Sub Lesson"
+            },
+            "createDate": "Create Date",
+            "title": "Title",
+            "contenten": "Contenten",
+            "contentvi": "Contentvi",
+            "rawData": "Raw Data"
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Answer } from './answer.model';
 import { AnswerService } from './answer.service';
@@ -18,6 +18,7 @@ export class AnswerDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private eventManager: JhiEventManager,
+        private dataUtils: JhiDataUtils,
         private answerService: AnswerService,
         private route: ActivatedRoute
     ) {
@@ -34,6 +35,13 @@ export class AnswerDetailComponent implements OnInit, OnDestroy {
         this.answerService.find(id).subscribe((answer) => {
             this.answer = answer;
         });
+    }
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     previousState() {
         window.history.back();

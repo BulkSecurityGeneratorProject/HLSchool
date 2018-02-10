@@ -4,8 +4,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "comment")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "comment")
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,10 +28,13 @@ public class Comment implements Serializable {
     @Column(name = "create_date")
     private ZonedDateTime createDate;
 
-    @NotNull
-    @Size(min = 5)
-    @Column(name = "content", nullable = false)
+    @Lob
+    @Column(name = "content")
     private String content;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     @ManyToOne
     private Post post;
@@ -71,6 +75,19 @@ public class Comment implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Comment rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public Post getPost() {
@@ -126,6 +143,7 @@ public class Comment implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", content='" + getContent() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

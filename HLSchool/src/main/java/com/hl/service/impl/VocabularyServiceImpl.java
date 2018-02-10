@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.VocabularyService;
 import com.hl.domain.Vocabulary;
 import com.hl.repository.VocabularyRepository;
+import com.hl.repository.search.VocabularySearchRepository;
 import com.hl.service.dto.VocabularyDTO;
 import com.hl.service.mapper.VocabularyMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Vocabulary.
@@ -26,9 +29,12 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     private final VocabularyMapper vocabularyMapper;
 
-    public VocabularyServiceImpl(VocabularyRepository vocabularyRepository, VocabularyMapper vocabularyMapper) {
+    private final VocabularySearchRepository vocabularySearchRepository;
+
+    public VocabularyServiceImpl(VocabularyRepository vocabularyRepository, VocabularyMapper vocabularyMapper, VocabularySearchRepository vocabularySearchRepository) {
         this.vocabularyRepository = vocabularyRepository;
         this.vocabularyMapper = vocabularyMapper;
+        this.vocabularySearchRepository = vocabularySearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class VocabularyServiceImpl implements VocabularyService {
         log.debug("Request to save Vocabulary : {}", vocabularyDTO);
         Vocabulary vocabulary = vocabularyMapper.toEntity(vocabularyDTO);
         vocabulary = vocabularyRepository.save(vocabulary);
-        return vocabularyMapper.toDto(vocabulary);
+        VocabularyDTO result = vocabularyMapper.toDto(vocabulary);
+        vocabularySearchRepository.save(vocabulary);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class VocabularyServiceImpl implements VocabularyService {
     public void delete(Long id) {
         log.debug("Request to delete Vocabulary : {}", id);
         vocabularyRepository.delete(id);
+        vocabularySearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the vocabulary corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<VocabularyDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Vocabularies for query {}", query);
+        Page<Vocabulary> result = vocabularySearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(vocabularyMapper::toDto);
     }
 }

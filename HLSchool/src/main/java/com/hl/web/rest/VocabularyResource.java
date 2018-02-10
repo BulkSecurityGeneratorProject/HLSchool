@@ -22,6 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Vocabulary.
@@ -124,4 +127,22 @@ public class VocabularyResource {
         vocabularyService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/vocabularies?query=:query : search for the vocabulary corresponding
+     * to the query.
+     *
+     * @param query the query of the vocabulary search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/vocabularies")
+    @Timed
+    public ResponseEntity<List<VocabularyDTO>> searchVocabularies(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Vocabularies for query {}", query);
+        Page<VocabularyDTO> page = vocabularyService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/vocabularies");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

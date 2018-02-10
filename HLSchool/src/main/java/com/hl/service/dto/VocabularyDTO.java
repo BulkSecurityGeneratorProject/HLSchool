@@ -31,6 +31,9 @@ public class VocabularyDTO implements Serializable {
     private byte[] audio;
     private String audioContentType;
 
+    @Lob
+    private String rawData;
+
     public Long getId() {
         return id;
     }
@@ -95,6 +98,14 @@ public class VocabularyDTO implements Serializable {
         this.audioContentType = audioContentType;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -125,6 +136,7 @@ public class VocabularyDTO implements Serializable {
             ", vietnamese='" + getVietnamese() + "'" +
             ", image='" + getImage() + "'" +
             ", audio='" + getAudio() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

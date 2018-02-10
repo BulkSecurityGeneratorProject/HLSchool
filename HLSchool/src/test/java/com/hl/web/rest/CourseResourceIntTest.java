@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Course;
 import com.hl.repository.CourseRepository;
 import com.hl.service.CourseService;
+import com.hl.repository.search.CourseSearchRepository;
 import com.hl.service.dto.CourseDTO;
 import com.hl.service.mapper.CourseMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -59,6 +60,9 @@ public class CourseResourceIntTest {
     private static final Integer DEFAULT_LEVEL = 1;
     private static final Integer UPDATED_LEVEL = 2;
 
+    private static final Integer DEFAULT_COIN = 1;
+    private static final Integer UPDATED_COIN = 2;
+
     private static final String DEFAULT_CONTENTEN = "AAAAAAAAAA";
     private static final String UPDATED_CONTENTEN = "BBBBBBBBBB";
 
@@ -70,6 +74,9 @@ public class CourseResourceIntTest {
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private CourseRepository courseRepository;
 
@@ -78,6 +85,9 @@ public class CourseResourceIntTest {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private CourseSearchRepository courseSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -118,15 +128,18 @@ public class CourseResourceIntTest {
             .activated(DEFAULT_ACTIVATED)
             .title(DEFAULT_TITLE)
             .level(DEFAULT_LEVEL)
+            .coin(DEFAULT_COIN)
             .contenten(DEFAULT_CONTENTEN)
             .contentvi(DEFAULT_CONTENTVI)
             .image(DEFAULT_IMAGE)
-            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
+            .rawData(DEFAULT_RAW_DATA);
         return course;
     }
 
     @Before
     public void initTest() {
+        courseSearchRepository.deleteAll();
         course = createEntity(em);
     }
 
@@ -150,10 +163,17 @@ public class CourseResourceIntTest {
         assertThat(testCourse.isActivated()).isEqualTo(DEFAULT_ACTIVATED);
         assertThat(testCourse.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testCourse.getLevel()).isEqualTo(DEFAULT_LEVEL);
+        assertThat(testCourse.getCoin()).isEqualTo(DEFAULT_COIN);
         assertThat(testCourse.getContenten()).isEqualTo(DEFAULT_CONTENTEN);
         assertThat(testCourse.getContentvi()).isEqualTo(DEFAULT_CONTENTVI);
         assertThat(testCourse.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testCourse.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
+        assertThat(testCourse.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Course in Elasticsearch
+        Course courseEs = courseSearchRepository.findOne(testCourse.getId());
+        assertThat(testCourse.getCreateDate()).isEqualTo(testCourse.getCreateDate());
+        assertThat(courseEs).isEqualToIgnoringGivenFields(testCourse, "createDate");
     }
 
     @Test
@@ -235,6 +255,25 @@ public class CourseResourceIntTest {
 
     @Test
     @Transactional
+    public void checkCoinIsRequired() throws Exception {
+        int databaseSizeBeforeTest = courseRepository.findAll().size();
+        // set the field null
+        course.setCoin(null);
+
+        // Create the Course, which fails.
+        CourseDTO courseDTO = courseMapper.toDto(course);
+
+        restCourseMockMvc.perform(post("/api/courses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(courseDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Course> courseList = courseRepository.findAll();
+        assertThat(courseList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkImageIsRequired() throws Exception {
         int databaseSizeBeforeTest = courseRepository.findAll().size();
         // set the field null
@@ -267,10 +306,12 @@ public class CourseResourceIntTest {
             .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].coin").value(hasItem(DEFAULT_COIN)))
             .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
             .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -288,10 +329,12 @@ public class CourseResourceIntTest {
             .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.level").value(DEFAULT_LEVEL))
+            .andExpect(jsonPath("$.coin").value(DEFAULT_COIN))
             .andExpect(jsonPath("$.contenten").value(DEFAULT_CONTENTEN.toString()))
             .andExpect(jsonPath("$.contentvi").value(DEFAULT_CONTENTVI.toString()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -307,6 +350,7 @@ public class CourseResourceIntTest {
     public void updateCourse() throws Exception {
         // Initialize the database
         courseRepository.saveAndFlush(course);
+        courseSearchRepository.save(course);
         int databaseSizeBeforeUpdate = courseRepository.findAll().size();
 
         // Update the course
@@ -318,10 +362,12 @@ public class CourseResourceIntTest {
             .activated(UPDATED_ACTIVATED)
             .title(UPDATED_TITLE)
             .level(UPDATED_LEVEL)
+            .coin(UPDATED_COIN)
             .contenten(UPDATED_CONTENTEN)
             .contentvi(UPDATED_CONTENTVI)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .rawData(UPDATED_RAW_DATA);
         CourseDTO courseDTO = courseMapper.toDto(updatedCourse);
 
         restCourseMockMvc.perform(put("/api/courses")
@@ -337,10 +383,17 @@ public class CourseResourceIntTest {
         assertThat(testCourse.isActivated()).isEqualTo(UPDATED_ACTIVATED);
         assertThat(testCourse.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testCourse.getLevel()).isEqualTo(UPDATED_LEVEL);
+        assertThat(testCourse.getCoin()).isEqualTo(UPDATED_COIN);
         assertThat(testCourse.getContenten()).isEqualTo(UPDATED_CONTENTEN);
         assertThat(testCourse.getContentvi()).isEqualTo(UPDATED_CONTENTVI);
         assertThat(testCourse.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testCourse.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
+        assertThat(testCourse.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Course in Elasticsearch
+        Course courseEs = courseSearchRepository.findOne(testCourse.getId());
+        assertThat(testCourse.getCreateDate()).isEqualTo(testCourse.getCreateDate());
+        assertThat(courseEs).isEqualToIgnoringGivenFields(testCourse, "createDate");
     }
 
     @Test
@@ -367,6 +420,7 @@ public class CourseResourceIntTest {
     public void deleteCourse() throws Exception {
         // Initialize the database
         courseRepository.saveAndFlush(course);
+        courseSearchRepository.save(course);
         int databaseSizeBeforeDelete = courseRepository.findAll().size();
 
         // Get the course
@@ -374,9 +428,37 @@ public class CourseResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean courseExistsInEs = courseSearchRepository.exists(course.getId());
+        assertThat(courseExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Course> courseList = courseRepository.findAll();
         assertThat(courseList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchCourse() throws Exception {
+        // Initialize the database
+        courseRepository.saveAndFlush(course);
+        courseSearchRepository.save(course);
+
+        // Search the course
+        restCourseMockMvc.perform(get("/api/_search/courses?query=id:" + course.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(course.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].coin").value(hasItem(DEFAULT_COIN)))
+            .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
+            .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

@@ -21,18 +21,13 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.comment.content" for="field_content">Content</label>
-            <input type="text" class="form-control" name="content" id="field_content"
-                [(ngModel)]="comment.content" required minlength="5"/>
-            <div [hidden]="!(editForm.controls.content?.dirty && editForm.controls.content?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.content?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.content?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 5 }">
-                   This field is required to be at least 5 characters.
-                </small>
-            </div>
+            <textarea class="form-control" name="content" id="field_content"
+                [(ngModel)]="comment.content" ></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.comment.rawData" for="field_rawData">Raw Data</label>
+            <textarea class="form-control" name="rawData" id="field_rawData"
+                [(ngModel)]="comment.rawData" ></textarea>
         </div>
 
         <div class="form-group">

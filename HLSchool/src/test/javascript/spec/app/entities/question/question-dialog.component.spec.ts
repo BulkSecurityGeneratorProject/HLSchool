@@ -8,7 +8,7 @@ import { HlSchoolTestModule } from '../../../test.module';
 import { QuestionDialogComponent } from '../../../../../../main/webapp/app/entities/question/question-dialog.component';
 import { QuestionService } from '../../../../../../main/webapp/app/entities/question/question.service';
 import { Question } from '../../../../../../main/webapp/app/entities/question/question.model';
-import { LessonService } from '../../../../../../main/webapp/app/entities/lesson';
+import { SubLessonService } from '../../../../../../main/webapp/app/entities/sub-lesson';
 
 describe('Component Tests', () => {
 
@@ -24,7 +24,7 @@ describe('Component Tests', () => {
                 imports: [HlSchoolTestModule],
                 declarations: [QuestionDialogComponent],
                 providers: [
-                    LessonService,
+                    SubLessonService,
                     QuestionService
                 ]
             })

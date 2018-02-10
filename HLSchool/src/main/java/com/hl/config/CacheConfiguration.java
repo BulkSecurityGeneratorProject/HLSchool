@@ -50,11 +50,15 @@ public class CacheConfiguration {
             cm.createCache(com.hl.domain.Room.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Course.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Lesson.class.getName(), jcacheConfiguration);
+            cm.createCache(com.hl.domain.SubLesson.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Feedback.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Question.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Answer.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.UserLog.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.GiftLog.class.getName(), jcacheConfiguration);
+            cm.createCache(com.hl.domain.CourseLog.class.getName(), jcacheConfiguration);
+            cm.createCache(com.hl.domain.SubLessonLog.class.getName(), jcacheConfiguration);
+            cm.createCache(com.hl.domain.LessonLog.class.getName(), jcacheConfiguration);
             cm.createCache(com.hl.domain.Gift.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };

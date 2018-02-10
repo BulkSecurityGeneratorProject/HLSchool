@@ -1,49 +1,46 @@
-<div class="card jh-card">
-    <div *ngIf="answer">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.answer.detail.title">Answer</span> {{answer.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.answer.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{answer.createDate | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.answer.result">Result</span>
-            </dt>
-            <dd>
-                <span>{{answer.result}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.answer.question">Question</span>
-            </dt>
-            <dd>
-                <div *ngIf="answer.questionId">
-                    <a [routerLink]="['/question', answer.questionId]">{{answer.questionId}}</a>
-                </div>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.answer.vocabulary">Vocabulary</span>
-            </dt>
-            <dd>
-                <div *ngIf="answer.vocabularyId">
-                    <a [routerLink]="['/vocabulary', answer.vocabularyId]">{{answer.vocabularyId}}</a>
-                </div>
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="answer">
+    <h2><span jhiTranslate="hlSchoolApp.answer.detail.title">Answer</span> {{answer.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.answer.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{answer.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.answer.result">Result</span></dt>
+        <dd>
+            <span>{{answer.result}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.answer.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{answer.rawData}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.answer.question">Question</span></dt>
+        <dd>
+            <div *ngIf="answer.questionId">
+                <a [routerLink]="['/question', answer.questionId]">{{answer.questionId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.answer.vocabulary">Vocabulary</span></dt>
+        <dd>
+            <div *ngIf="answer.vocabularyId">
+                <a [routerLink]="['/vocabulary', answer.vocabularyId]">{{answer.vocabularyId}}</a>
+            </div>
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'answer/'+ answer.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'answer/'+ answer.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
             class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>

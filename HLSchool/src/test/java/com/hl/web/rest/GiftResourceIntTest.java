@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Gift;
 import com.hl.repository.GiftRepository;
 import com.hl.service.GiftService;
+import com.hl.repository.search.GiftSearchRepository;
 import com.hl.service.dto.GiftDTO;
 import com.hl.service.mapper.GiftMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -55,11 +56,17 @@ public class GiftResourceIntTest {
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_CONTENT = "AAAAAAAAAA";
-    private static final String UPDATED_CONTENT = "BBBBBBBBBB";
+    private static final String DEFAULT_CONTENTEN = "AAAAAAAAAA";
+    private static final String UPDATED_CONTENTEN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONTENTVI = "AAAAAAAAAA";
+    private static final String UPDATED_CONTENTVI = "BBBBBBBBBB";
 
     private static final ZonedDateTime DEFAULT_CREATE_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATE_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
 
     @Autowired
     private GiftRepository giftRepository;
@@ -69,6 +76,9 @@ public class GiftResourceIntTest {
 
     @Autowired
     private GiftService giftService;
+
+    @Autowired
+    private GiftSearchRepository giftSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -108,13 +118,16 @@ public class GiftResourceIntTest {
             .price(DEFAULT_PRICE)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
-            .content(DEFAULT_CONTENT)
-            .createDate(DEFAULT_CREATE_DATE);
+            .contenten(DEFAULT_CONTENTEN)
+            .contentvi(DEFAULT_CONTENTVI)
+            .createDate(DEFAULT_CREATE_DATE)
+            .rawData(DEFAULT_RAW_DATA);
         return gift;
     }
 
     @Before
     public void initTest() {
+        giftSearchRepository.deleteAll();
         gift = createEntity(em);
     }
 
@@ -137,8 +150,15 @@ public class GiftResourceIntTest {
         assertThat(testGift.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testGift.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testGift.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
-        assertThat(testGift.getContent()).isEqualTo(DEFAULT_CONTENT);
+        assertThat(testGift.getContenten()).isEqualTo(DEFAULT_CONTENTEN);
+        assertThat(testGift.getContentvi()).isEqualTo(DEFAULT_CONTENTVI);
         assertThat(testGift.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
+        assertThat(testGift.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Gift in Elasticsearch
+        Gift giftEs = giftSearchRepository.findOne(testGift.getId());
+        assertThat(testGift.getCreateDate()).isEqualTo(testGift.getCreateDate());
+        assertThat(giftEs).isEqualToIgnoringGivenFields(testGift, "createDate");
     }
 
     @Test
@@ -201,25 +221,6 @@ public class GiftResourceIntTest {
 
     @Test
     @Transactional
-    public void checkContentIsRequired() throws Exception {
-        int databaseSizeBeforeTest = giftRepository.findAll().size();
-        // set the field null
-        gift.setContent(null);
-
-        // Create the Gift, which fails.
-        GiftDTO giftDTO = giftMapper.toDto(gift);
-
-        restGiftMockMvc.perform(post("/api/gifts")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(giftDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Gift> giftList = giftRepository.findAll();
-        assertThat(giftList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllGifts() throws Exception {
         // Initialize the database
         giftRepository.saveAndFlush(gift);
@@ -232,8 +233,10 @@ public class GiftResourceIntTest {
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE)))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
-            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))));
+            .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
+            .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -250,8 +253,10 @@ public class GiftResourceIntTest {
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
-            .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)));
+            .andExpect(jsonPath("$.contenten").value(DEFAULT_CONTENTEN.toString()))
+            .andExpect(jsonPath("$.contentvi").value(DEFAULT_CONTENTVI.toString()))
+            .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -267,6 +272,7 @@ public class GiftResourceIntTest {
     public void updateGift() throws Exception {
         // Initialize the database
         giftRepository.saveAndFlush(gift);
+        giftSearchRepository.save(gift);
         int databaseSizeBeforeUpdate = giftRepository.findAll().size();
 
         // Update the gift
@@ -277,8 +283,10 @@ public class GiftResourceIntTest {
             .price(UPDATED_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
-            .content(UPDATED_CONTENT)
-            .createDate(UPDATED_CREATE_DATE);
+            .contenten(UPDATED_CONTENTEN)
+            .contentvi(UPDATED_CONTENTVI)
+            .createDate(UPDATED_CREATE_DATE)
+            .rawData(UPDATED_RAW_DATA);
         GiftDTO giftDTO = giftMapper.toDto(updatedGift);
 
         restGiftMockMvc.perform(put("/api/gifts")
@@ -293,8 +301,15 @@ public class GiftResourceIntTest {
         assertThat(testGift.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testGift.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testGift.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
-        assertThat(testGift.getContent()).isEqualTo(UPDATED_CONTENT);
+        assertThat(testGift.getContenten()).isEqualTo(UPDATED_CONTENTEN);
+        assertThat(testGift.getContentvi()).isEqualTo(UPDATED_CONTENTVI);
         assertThat(testGift.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
+        assertThat(testGift.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Gift in Elasticsearch
+        Gift giftEs = giftSearchRepository.findOne(testGift.getId());
+        assertThat(testGift.getCreateDate()).isEqualTo(testGift.getCreateDate());
+        assertThat(giftEs).isEqualToIgnoringGivenFields(testGift, "createDate");
     }
 
     @Test
@@ -321,6 +336,7 @@ public class GiftResourceIntTest {
     public void deleteGift() throws Exception {
         // Initialize the database
         giftRepository.saveAndFlush(gift);
+        giftSearchRepository.save(gift);
         int databaseSizeBeforeDelete = giftRepository.findAll().size();
 
         // Get the gift
@@ -328,9 +344,34 @@ public class GiftResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean giftExistsInEs = giftSearchRepository.exists(gift.getId());
+        assertThat(giftExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Gift> giftList = giftRepository.findAll();
         assertThat(giftList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchGift() throws Exception {
+        // Initialize the database
+        giftRepository.saveAndFlush(gift);
+        giftSearchRepository.save(gift);
+
+        // Search the gift
+        restGiftMockMvc.perform(get("/api/_search/gifts?query=id:" + gift.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(gift.getId().intValue())))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE)))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
+            .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

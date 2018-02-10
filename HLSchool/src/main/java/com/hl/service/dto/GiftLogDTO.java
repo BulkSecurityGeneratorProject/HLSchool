@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the GiftLog entity.
@@ -15,6 +16,9 @@ public class GiftLogDTO implements Serializable {
     private Long id;
 
     private ZonedDateTime createDate;
+
+    @Lob
+    private String rawData;
 
     private Long userId;
 
@@ -36,6 +40,14 @@ public class GiftLogDTO implements Serializable {
 
     public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public Long getUserId() {
@@ -88,6 +100,7 @@ public class GiftLogDTO implements Serializable {
         return "GiftLogDTO{" +
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

@@ -25,9 +25,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130515",
+    "changelogDate": "20180210073803",
     "entityTableName": "answer",
     "dto": "mapstruct",
     "pagination": "pagination",

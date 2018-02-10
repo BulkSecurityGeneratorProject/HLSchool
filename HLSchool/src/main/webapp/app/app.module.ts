@@ -12,7 +12,6 @@ import { HlSchoolAccountModule } from './account/account.module';
 import { HlSchoolEntityModule } from './entities/entity.module';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-import { HlSchoolClientModule } from './client/client.module';
 
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
@@ -36,7 +35,6 @@ import {
         HlSchoolAdminModule,
         HlSchoolAccountModule,
         HlSchoolEntityModule,
-        HlSchoolClientModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [

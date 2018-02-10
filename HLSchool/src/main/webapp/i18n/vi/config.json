@@ -4,7 +4,8 @@
             "home": {
                 "title": "Configs",
                 "createLabel": "Thêm mới một Config",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Config"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Config",
+                "search": "Tìm Config"
             },
             "created": "Một Config mới được tạo với định danh {{ param }}",
             "updated": "Một Config cập nhật với định danh {{ param }}",
@@ -16,7 +17,8 @@
                 "title": "Config"
             },
             "key": "Key",
-            "value": "Value"
+            "value": "Value",
+            "rawData": "Raw Data"
         }
     }
 }

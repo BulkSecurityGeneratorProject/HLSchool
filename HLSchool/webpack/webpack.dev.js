@@ -40,7 +40,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     entry: {
         polyfills: './src/main/webapp/app/polyfills',
         global: './src/main/webapp/content/scss/global.scss',
-        luantm: './src/main/webapp/content/scss/luantm.scss',
         main: './src/main/webapp/app/app.main'
     },
     output: {

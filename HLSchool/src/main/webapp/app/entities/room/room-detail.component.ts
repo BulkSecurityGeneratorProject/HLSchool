@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Room } from './room.model';
 import { RoomService } from './room.service';
@@ -18,6 +18,7 @@ export class RoomDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private eventManager: JhiEventManager,
+        private dataUtils: JhiDataUtils,
         private roomService: RoomService,
         private route: ActivatedRoute
     ) {
@@ -34,6 +35,13 @@ export class RoomDetailComponent implements OnInit, OnDestroy {
         this.roomService.find(id).subscribe((room) => {
             this.room = room;
         });
+    }
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     previousState() {
         window.history.back();

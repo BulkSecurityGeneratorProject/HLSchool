@@ -6,8 +6,10 @@ export class Gift implements BaseEntity {
         public price?: number,
         public imageContentType?: string,
         public image?: any,
-        public content?: string,
+        public contenten?: any,
+        public contentvi?: any,
         public createDate?: any,
+        public rawData?: any,
     ) {
     }
 }

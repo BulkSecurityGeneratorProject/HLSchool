@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.GiftLogService;
 import com.hl.domain.GiftLog;
 import com.hl.repository.GiftLogRepository;
+import com.hl.repository.search.GiftLogSearchRepository;
 import com.hl.service.dto.GiftLogDTO;
 import com.hl.service.mapper.GiftLogMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing GiftLog.
@@ -26,9 +29,12 @@ public class GiftLogServiceImpl implements GiftLogService {
 
     private final GiftLogMapper giftLogMapper;
 
-    public GiftLogServiceImpl(GiftLogRepository giftLogRepository, GiftLogMapper giftLogMapper) {
+    private final GiftLogSearchRepository giftLogSearchRepository;
+
+    public GiftLogServiceImpl(GiftLogRepository giftLogRepository, GiftLogMapper giftLogMapper, GiftLogSearchRepository giftLogSearchRepository) {
         this.giftLogRepository = giftLogRepository;
         this.giftLogMapper = giftLogMapper;
+        this.giftLogSearchRepository = giftLogSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class GiftLogServiceImpl implements GiftLogService {
         log.debug("Request to save GiftLog : {}", giftLogDTO);
         GiftLog giftLog = giftLogMapper.toEntity(giftLogDTO);
         giftLog = giftLogRepository.save(giftLog);
-        return giftLogMapper.toDto(giftLog);
+        GiftLogDTO result = giftLogMapper.toDto(giftLog);
+        giftLogSearchRepository.save(giftLog);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class GiftLogServiceImpl implements GiftLogService {
     public void delete(Long id) {
         log.debug("Request to delete GiftLog : {}", id);
         giftLogRepository.delete(id);
+        giftLogSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the giftLog corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<GiftLogDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of GiftLogs for query {}", query);
+        Page<GiftLog> result = giftLogSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(giftLogMapper::toDto);
     }
 }

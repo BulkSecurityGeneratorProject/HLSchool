@@ -4,6 +4,7 @@ package com.hl.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Config entity.
@@ -17,6 +18,9 @@ public class ConfigDTO implements Serializable {
 
     @NotNull
     private String value;
+
+    @Lob
+    private String rawData;
 
     public Long getId() {
         return id;
@@ -40,6 +44,14 @@ public class ConfigDTO implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     @Override
@@ -69,6 +81,7 @@ public class ConfigDTO implements Serializable {
             "id=" + getId() +
             ", key='" + getKey() + "'" +
             ", value='" + getValue() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

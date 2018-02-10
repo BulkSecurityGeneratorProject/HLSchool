@@ -1,50 +1,51 @@
-<div class="card jh-card">
-    <div *ngIf="gift">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.gift.detail.title">Gift</span> {{gift.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.gift.price">Price</span>
-            </dt>
-            <dd>
-                <span>{{gift.price}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.gift.image">Image</span>
-            </dt>
-            <dd>
-                <div *ngIf="gift.image">
-                    <a (click)="openFile(gift.imageContentType, gift.image)">
-                        <img [src]="'data:' + gift.imageContentType + ';base64,' + gift.image" style="max-width: 100%;" alt="gift image" />
-                    </a>
-                    {{gift.imageContentType}}, {{byteSize(gift.image)}}
-                </div>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.gift.content">Content</span>
-            </dt>
-            <dd>
-                <span>{{gift.content}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.gift.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{gift.createDate | date:'medium'}}</span>
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="gift">
+    <h2><span jhiTranslate="hlSchoolApp.gift.detail.title">Gift</span> {{gift.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.gift.price">Price</span></dt>
+        <dd>
+            <span>{{gift.price}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.gift.image">Image</span></dt>
+        <dd>
+            <div *ngIf="gift.image">
+                <a (click)="openFile(gift.imageContentType, gift.image)">
+                    <img [src]="'data:' + gift.imageContentType + ';base64,' + gift.image" style="max-width: 100%;" alt="gift image"/>
+                </a>
+                {{gift.imageContentType}}, {{byteSize(gift.image)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.gift.contenten">Contenten</span></dt>
+        <dd>
+            <span>{{gift.contenten}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.gift.contentvi">Contentvi</span></dt>
+        <dd>
+            <span>{{gift.contentvi}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.gift.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{gift.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.gift.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{gift.rawData}}</span>
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'gift/'+ gift.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'gift/'+ gift.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
             class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>

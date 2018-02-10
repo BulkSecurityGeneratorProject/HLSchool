@@ -8,6 +8,7 @@ import { HlSchoolTestModule } from '../../../test.module';
 import { UserLogDialogComponent } from '../../../../../../main/webapp/app/entities/user-log/user-log-dialog.component';
 import { UserLogService } from '../../../../../../main/webapp/app/entities/user-log/user-log.service';
 import { UserLog } from '../../../../../../main/webapp/app/entities/user-log/user-log.model';
+import { UserService } from '../../../../../../main/webapp/app/shared';
 
 describe('Component Tests', () => {
 
@@ -23,6 +24,7 @@ describe('Component Tests', () => {
                 imports: [HlSchoolTestModule],
                 declarations: [UserLogDialogComponent],
                 providers: [
+                    UserService,
                     UserLogService
                 ]
             })

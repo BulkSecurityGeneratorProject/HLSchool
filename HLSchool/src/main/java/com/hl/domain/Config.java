@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "config")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "config")
 public class Config implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +32,10 @@ public class Config implements Serializable {
     @NotNull
     @Column(name = "jhi_value", nullable = false)
     private String value;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -65,6 +71,19 @@ public class Config implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Config rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -93,6 +112,7 @@ public class Config implements Serializable {
             "id=" + getId() +
             ", key='" + getKey() + "'" +
             ", value='" + getValue() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "post")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "post")
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,9 +34,11 @@ public class Post implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Lob
     @Column(name = "contenten")
     private String contenten;
 
+    @Lob
     @Column(name = "contentvi")
     private String contentvi;
 
@@ -47,6 +51,10 @@ public class Post implements Serializable {
     @NotNull
     @Column(name = "activated", nullable = false)
     private Boolean activated;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     @ManyToOne
     private User user;
@@ -143,6 +151,19 @@ public class Post implements Serializable {
         this.activated = activated;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Post rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     public User getUser() {
         return user;
     }
@@ -212,6 +233,7 @@ public class Post implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", lastModifier='" + getLastModifier() + "'" +
             ", activated='" + isActivated() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

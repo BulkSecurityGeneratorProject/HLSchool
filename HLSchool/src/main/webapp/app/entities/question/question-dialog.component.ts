@@ -9,7 +9,7 @@ import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 import { Question } from './question.model';
 import { QuestionPopupService } from './question-popup.service';
 import { QuestionService } from './question.service';
-import { Lesson, LessonService } from '../lesson';
+import { SubLesson, SubLessonService } from '../sub-lesson';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -21,14 +21,14 @@ export class QuestionDialogComponent implements OnInit {
     question: Question;
     isSaving: boolean;
 
-    lessons: Lesson[];
+    sublessons: SubLesson[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private questionService: QuestionService,
-        private lessonService: LessonService,
+        private subLessonService: SubLessonService,
         private elementRef: ElementRef,
         private eventManager: JhiEventManager
     ) {
@@ -36,8 +36,8 @@ export class QuestionDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.lessonService.query()
-            .subscribe((res: ResponseWrapper) => { this.lessons = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.subLessonService.query()
+            .subscribe((res: ResponseWrapper) => { this.sublessons = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     byteSize(field) {
@@ -90,7 +90,7 @@ export class QuestionDialogComponent implements OnInit {
         this.jhiAlertService.error(error.message, null, null);
     }
 
-    trackLessonById(index: number, item: Lesson) {
+    trackSubLessonById(index: number, item: SubLesson) {
         return item.id;
     }
 }

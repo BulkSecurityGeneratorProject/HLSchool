@@ -1,39 +1,42 @@
-<div class="card jh-card">
-    <div *ngIf="userLog">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.userLog.detail.title">User Log</span> {{userLog.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.userLog.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{userLog.createDate | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.userLog.complete">Complete</span>
-            </dt>
-            <dd>
-                <span>{{userLog.complete}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.userLog.point">Point</span>
-            </dt>
-            <dd>
-                <span>{{userLog.point}}</span>
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="userLog">
+    <h2><span jhiTranslate="hlSchoolApp.userLog.detail.title">User Log</span> {{userLog.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.userLog.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{userLog.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.userLog.complete">Complete</span></dt>
+        <dd>
+            <span>{{userLog.complete}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.userLog.point">Point</span></dt>
+        <dd>
+            <span>{{userLog.point}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.userLog.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{userLog.rawData}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.userLog.user">User</span></dt>
+        <dd>
+            {{userLog.userLogin}}
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'user-log/'+ userLog.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'user-log/'+ userLog.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
             class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>

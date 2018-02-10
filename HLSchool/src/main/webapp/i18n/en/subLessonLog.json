@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "subLessonLog" : {
+            "home": {
+                "title": "Sub Lesson Logs",
+                "createLabel": "Create a new Sub Lesson Log",
+                "createOrEditLabel": "Create or edit a Sub Lesson Log",
+                "search": "Search for Sub Lesson Log"
+            },
+            "created": "A new Sub Lesson Log is created with identifier {{ param }}",
+            "updated": "A Sub Lesson Log is updated with identifier {{ param }}",
+            "deleted": "A Sub Lesson Log is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Sub Lesson Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Sub Lesson Log"
+            },
+            "complete": "Complete",
+            "rawData": "Raw Data",
+            "user": "User",
+            "subLesson": "Sub Lesson"
+        }
+    }
+}

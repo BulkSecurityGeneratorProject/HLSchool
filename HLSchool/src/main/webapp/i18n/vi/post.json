@@ -4,7 +4,8 @@
             "home": {
                 "title": "Posts",
                 "createLabel": "Thêm mới một Post",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Post"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Post",
+                "search": "Tìm Post"
             },
             "created": "Một Post mới được tạo với định danh {{ param }}",
             "updated": "Một Post cập nhật với định danh {{ param }}",
@@ -21,6 +22,7 @@
             "createDate": "Create Date",
             "lastModifier": "Last Modifier",
             "activated": "Activated",
+            "rawData": "Raw Data",
             "user": "User",
             "comment": "Comment"
         }

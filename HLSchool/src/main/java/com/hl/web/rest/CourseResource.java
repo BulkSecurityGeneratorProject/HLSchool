@@ -22,6 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Course.
@@ -124,4 +127,22 @@ public class CourseResource {
         courseService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/courses?query=:query : search for the course corresponding
+     * to the query.
+     *
+     * @param query the query of the course search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/courses")
+    @Timed
+    public ResponseEntity<List<CourseDTO>> searchCourses(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Courses for query {}", query);
+        Page<CourseDTO> page = courseService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/courses");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

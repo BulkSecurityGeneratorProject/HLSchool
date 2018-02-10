@@ -22,6 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Room.
@@ -124,4 +127,22 @@ public class RoomResource {
         roomService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/rooms?query=:query : search for the room corresponding
+     * to the query.
+     *
+     * @param query the query of the room search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/rooms")
+    @Timed
+    public ResponseEntity<List<RoomDTO>> searchRooms(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Rooms for query {}", query);
+        Page<RoomDTO> page = roomService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/rooms");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

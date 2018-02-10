@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { Answer } from './answer.model';
 import { AnswerService } from './answer.service';
@@ -18,6 +18,7 @@ currentAccount: any;
     error: any;
     success: any;
     eventSubscriber: Subscription;
+    currentSearch: string;
     routeData: any;
     links: any;
     totalItems: any;
@@ -34,6 +35,7 @@ currentAccount: any;
         private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
+        private dataUtils: JhiDataUtils,
         private router: Router,
         private eventManager: JhiEventManager
     ) {
@@ -44,9 +46,22 @@ currentAccount: any;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
         });
+        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?
+            this.activatedRoute.snapshot.params['search'] : '';
     }
 
     loadAll() {
+        if (this.currentSearch) {
+            this.answerService.search({
+                page: this.page - 1,
+                query: this.currentSearch,
+                size: this.itemsPerPage,
+                sort: this.sort()}).subscribe(
+                    (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                    (res: ResponseWrapper) => this.onError(res.json)
+                );
+            return;
+        }
         this.answerService.query({
             page: this.page - 1,
             size: this.itemsPerPage,
@@ -66,6 +81,7 @@ currentAccount: any;
             {
                 page: this.page,
                 size: this.itemsPerPage,
+                search: this.currentSearch,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
             }
         });
@@ -74,7 +90,21 @@ currentAccount: any;
 
     clear() {
         this.page = 0;
+        this.currentSearch = '';
         this.router.navigate(['/answer', {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        }]);
+        this.loadAll();
+    }
+    search(query) {
+        if (!query) {
+            return this.clear();
+        }
+        this.page = 0;
+        this.currentSearch = query;
+        this.router.navigate(['/answer', {
+            search: this.currentSearch,
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
@@ -94,6 +124,14 @@ currentAccount: any;
 
     trackId(index: number, item: Answer) {
         return item.id;
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     registerChangeInAnswers() {
         this.eventSubscriber = this.eventManager.subscribe('answerListModification', (response) => this.loadAll());

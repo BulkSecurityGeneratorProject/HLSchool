@@ -1,47 +1,44 @@
-<div class="card jh-card">
-    <div *ngIf="comment">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.comment.detail.title">Comment</span> {{comment.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.comment.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{comment.createDate | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.comment.content">Content</span>
-            </dt>
-            <dd>
-                <span>{{comment.content}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.comment.post">Post</span>
-            </dt>
-            <dd>
-                <div *ngIf="comment.postId">
-                    <a [routerLink]="['/post', comment.postId]">{{comment.postId}}</a>
-                </div>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.comment.user">User</span>
-            </dt>
-            <dd>
-                {{comment.userLogin}}
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="comment">
+    <h2><span jhiTranslate="hlSchoolApp.comment.detail.title">Comment</span> {{comment.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.comment.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{comment.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.comment.content">Content</span></dt>
+        <dd>
+            <span>{{comment.content}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.comment.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{comment.rawData}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.comment.post">Post</span></dt>
+        <dd>
+            <div *ngIf="comment.postId">
+                <a [routerLink]="['/post', comment.postId]">{{comment.postId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.comment.user">User</span></dt>
+        <dd>
+            {{comment.userLogin}}
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'comment/'+ comment.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'comment/'+ comment.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
             class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>

@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_log")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "userlog")
 public class UserLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +33,13 @@ public class UserLog implements Serializable {
 
     @Column(name = "point")
     private Integer point;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
+
+    @ManyToOne
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -79,6 +88,32 @@ public class UserLog implements Serializable {
     public void setPoint(Integer point) {
         this.point = point;
     }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public UserLog rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public UserLog user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -108,6 +143,7 @@ public class UserLog implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", complete='" + isComplete() + "'" +
             ", point=" + getPoint() +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

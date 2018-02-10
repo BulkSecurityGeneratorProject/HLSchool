@@ -1,63 +1,54 @@
-<div class="card jh-card">
-    <div *ngIf="post">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.post.detail.title">Post</span> {{post.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.title">Title</span>
-            </dt>
-            <dd>
-                <span>{{post.title}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.contenten">Contenten</span>
-            </dt>
-            <dd>
-                <span>{{post.contenten}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.contentvi">Contentvi</span>
-            </dt>
-            <dd>
-                <span>{{post.contentvi}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{post.createDate | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.lastModifier">Last Modifier</span>
-            </dt>
-            <dd>
-                <span>{{post.lastModifier | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.activated">Activated</span>
-            </dt>
-            <dd>
-                <span>{{post.activated}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.post.user">User</span>
-            </dt>
-            <dd>
-                {{post.userLogin}}
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="post">
+    <h2><span jhiTranslate="hlSchoolApp.post.detail.title">Post</span> {{post.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.post.title">Title</span></dt>
+        <dd>
+            <span>{{post.title}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.contenten">Contenten</span></dt>
+        <dd>
+            <span>{{post.contenten}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.contentvi">Contentvi</span></dt>
+        <dd>
+            <span>{{post.contentvi}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{post.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.lastModifier">Last Modifier</span></dt>
+        <dd>
+            <span>{{post.lastModifier | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.activated">Activated</span></dt>
+        <dd>
+            <span>{{post.activated}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{post.rawData}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.post.user">User</span></dt>
+        <dd>
+            {{post.userLogin}}
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'post/'+ post.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'post/'+ post.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
             class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>

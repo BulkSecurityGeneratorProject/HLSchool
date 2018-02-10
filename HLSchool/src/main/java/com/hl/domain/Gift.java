@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "gift")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "gift")
 public class Gift implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,12 +38,20 @@ public class Gift implements Serializable {
     @Column(name = "image_content_type", nullable = false)
     private String imageContentType;
 
-    @NotNull
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Lob
+    @Column(name = "contenten")
+    private String contenten;
+
+    @Lob
+    @Column(name = "contentvi")
+    private String contentvi;
 
     @Column(name = "create_date")
     private ZonedDateTime createDate;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -91,17 +101,30 @@ public class Gift implements Serializable {
         this.imageContentType = imageContentType;
     }
 
-    public String getContent() {
-        return content;
+    public String getContenten() {
+        return contenten;
     }
 
-    public Gift content(String content) {
-        this.content = content;
+    public Gift contenten(String contenten) {
+        this.contenten = contenten;
         return this;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContenten(String contenten) {
+        this.contenten = contenten;
+    }
+
+    public String getContentvi() {
+        return contentvi;
+    }
+
+    public Gift contentvi(String contentvi) {
+        this.contentvi = contentvi;
+        return this;
+    }
+
+    public void setContentvi(String contentvi) {
+        this.contentvi = contentvi;
     }
 
     public ZonedDateTime getCreateDate() {
@@ -115,6 +138,19 @@ public class Gift implements Serializable {
 
     public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Gift rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -145,8 +181,10 @@ public class Gift implements Serializable {
             ", price=" + getPrice() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
-            ", content='" + getContent() + "'" +
+            ", contenten='" + getContenten() + "'" +
+            ", contentvi='" + getContentvi() + "'" +
             ", createDate='" + getCreateDate() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

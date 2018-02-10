@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Comment;
 import com.hl.repository.CommentRepository;
 import com.hl.service.CommentService;
+import com.hl.repository.search.CommentSearchRepository;
 import com.hl.service.dto.CommentDTO;
 import com.hl.service.mapper.CommentMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -52,6 +54,9 @@ public class CommentResourceIntTest {
     private static final String DEFAULT_CONTENT = "AAAAAAAAAA";
     private static final String UPDATED_CONTENT = "BBBBBBBBBB";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private CommentRepository commentRepository;
 
@@ -60,6 +65,9 @@ public class CommentResourceIntTest {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CommentSearchRepository commentSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -97,12 +105,14 @@ public class CommentResourceIntTest {
     public static Comment createEntity(EntityManager em) {
         Comment comment = new Comment()
             .createDate(DEFAULT_CREATE_DATE)
-            .content(DEFAULT_CONTENT);
+            .content(DEFAULT_CONTENT)
+            .rawData(DEFAULT_RAW_DATA);
         return comment;
     }
 
     @Before
     public void initTest() {
+        commentSearchRepository.deleteAll();
         comment = createEntity(em);
     }
 
@@ -124,6 +134,12 @@ public class CommentResourceIntTest {
         Comment testComment = commentList.get(commentList.size() - 1);
         assertThat(testComment.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testComment.getContent()).isEqualTo(DEFAULT_CONTENT);
+        assertThat(testComment.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Comment in Elasticsearch
+        Comment commentEs = commentSearchRepository.findOne(testComment.getId());
+        assertThat(testComment.getCreateDate()).isEqualTo(testComment.getCreateDate());
+        assertThat(commentEs).isEqualToIgnoringGivenFields(testComment, "createDate");
     }
 
     @Test
@@ -148,25 +164,6 @@ public class CommentResourceIntTest {
 
     @Test
     @Transactional
-    public void checkContentIsRequired() throws Exception {
-        int databaseSizeBeforeTest = commentRepository.findAll().size();
-        // set the field null
-        comment.setContent(null);
-
-        // Create the Comment, which fails.
-        CommentDTO commentDTO = commentMapper.toDto(comment);
-
-        restCommentMockMvc.perform(post("/api/comments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Comment> commentList = commentRepository.findAll();
-        assertThat(commentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllComments() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
@@ -177,7 +174,8 @@ public class CommentResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -192,7 +190,8 @@ public class CommentResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(comment.getId().intValue()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -208,6 +207,7 @@ public class CommentResourceIntTest {
     public void updateComment() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
+        commentSearchRepository.save(comment);
         int databaseSizeBeforeUpdate = commentRepository.findAll().size();
 
         // Update the comment
@@ -216,7 +216,8 @@ public class CommentResourceIntTest {
         em.detach(updatedComment);
         updatedComment
             .createDate(UPDATED_CREATE_DATE)
-            .content(UPDATED_CONTENT);
+            .content(UPDATED_CONTENT)
+            .rawData(UPDATED_RAW_DATA);
         CommentDTO commentDTO = commentMapper.toDto(updatedComment);
 
         restCommentMockMvc.perform(put("/api/comments")
@@ -230,6 +231,12 @@ public class CommentResourceIntTest {
         Comment testComment = commentList.get(commentList.size() - 1);
         assertThat(testComment.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testComment.getContent()).isEqualTo(UPDATED_CONTENT);
+        assertThat(testComment.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Comment in Elasticsearch
+        Comment commentEs = commentSearchRepository.findOne(testComment.getId());
+        assertThat(testComment.getCreateDate()).isEqualTo(testComment.getCreateDate());
+        assertThat(commentEs).isEqualToIgnoringGivenFields(testComment, "createDate");
     }
 
     @Test
@@ -256,6 +263,7 @@ public class CommentResourceIntTest {
     public void deleteComment() throws Exception {
         // Initialize the database
         commentRepository.saveAndFlush(comment);
+        commentSearchRepository.save(comment);
         int databaseSizeBeforeDelete = commentRepository.findAll().size();
 
         // Get the comment
@@ -263,9 +271,30 @@ public class CommentResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean commentExistsInEs = commentSearchRepository.exists(comment.getId());
+        assertThat(commentExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchComment() throws Exception {
+        // Initialize the database
+        commentRepository.saveAndFlush(comment);
+        commentSearchRepository.save(comment);
+
+        // Search the comment
+        restCommentMockMvc.perform(get("/api/_search/comments?query=id:" + comment.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

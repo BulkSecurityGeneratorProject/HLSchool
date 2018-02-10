@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Post } from './post.model';
 import { PostService } from './post.service';
@@ -18,6 +18,7 @@ export class PostDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private eventManager: JhiEventManager,
+        private dataUtils: JhiDataUtils,
         private postService: PostService,
         private route: ActivatedRoute
     ) {
@@ -34,6 +35,13 @@ export class PostDetailComponent implements OnInit, OnDestroy {
         this.postService.find(id).subscribe((post) => {
             this.post = post;
         });
+    }
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
     previousState() {
         window.history.back();

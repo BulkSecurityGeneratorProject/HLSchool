@@ -6,11 +6,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import com.hl.domain.enumeration.QuestionType;
+
+import com.hl.domain.enumeration.QuestionSubType;
 
 /**
  * A Question.
@@ -18,6 +21,7 @@ import com.hl.domain.enumeration.QuestionType;
 @Entity
 @Table(name = "question")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "question")
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +37,11 @@ public class Question implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "question_type", nullable = false)
     private QuestionType questionType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "question_sub_type", nullable = false)
+    private QuestionSubType questionSubType;
 
     @NotNull
     @Column(name = "contenten", nullable = false)
@@ -56,8 +65,12 @@ public class Question implements Serializable {
     @Column(name = "jhi_resource_content_type")
     private String resourceContentType;
 
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
+
     @ManyToOne
-    private Lesson lesson;
+    private SubLesson subLesson;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -92,6 +105,19 @@ public class Question implements Serializable {
 
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
+    }
+
+    public QuestionSubType getQuestionSubType() {
+        return questionSubType;
+    }
+
+    public Question questionSubType(QuestionSubType questionSubType) {
+        this.questionSubType = questionSubType;
+        return this;
+    }
+
+    public void setQuestionSubType(QuestionSubType questionSubType) {
+        this.questionSubType = questionSubType;
     }
 
     public String getContenten() {
@@ -172,17 +198,30 @@ public class Question implements Serializable {
         this.resourceContentType = resourceContentType;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public String getRawData() {
+        return rawData;
     }
 
-    public Question lesson(Lesson lesson) {
-        this.lesson = lesson;
+    public Question rawData(String rawData) {
+        this.rawData = rawData;
         return this;
     }
 
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
+    public SubLesson getSubLesson() {
+        return subLesson;
+    }
+
+    public Question subLesson(SubLesson subLesson) {
+        this.subLesson = subLesson;
+        return this;
+    }
+
+    public void setSubLesson(SubLesson subLesson) {
+        this.subLesson = subLesson;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -212,12 +251,14 @@ public class Question implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", questionType='" + getQuestionType() + "'" +
+            ", questionSubType='" + getQuestionSubType() + "'" +
             ", contenten='" + getContenten() + "'" +
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
             ", resource='" + getResource() + "'" +
             ", resourceContentType='" + getResourceContentType() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

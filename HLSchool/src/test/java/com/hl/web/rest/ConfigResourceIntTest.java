@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Config;
 import com.hl.repository.ConfigRepository;
 import com.hl.service.ConfigService;
+import com.hl.repository.search.ConfigSearchRepository;
 import com.hl.service.dto.ConfigDTO;
 import com.hl.service.mapper.ConfigMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -47,6 +49,9 @@ public class ConfigResourceIntTest {
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_VALUE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private ConfigRepository configRepository;
 
@@ -55,6 +60,9 @@ public class ConfigResourceIntTest {
 
     @Autowired
     private ConfigService configService;
+
+    @Autowired
+    private ConfigSearchRepository configSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -92,12 +100,14 @@ public class ConfigResourceIntTest {
     public static Config createEntity(EntityManager em) {
         Config config = new Config()
             .key(DEFAULT_KEY)
-            .value(DEFAULT_VALUE);
+            .value(DEFAULT_VALUE)
+            .rawData(DEFAULT_RAW_DATA);
         return config;
     }
 
     @Before
     public void initTest() {
+        configSearchRepository.deleteAll();
         config = createEntity(em);
     }
 
@@ -119,6 +129,11 @@ public class ConfigResourceIntTest {
         Config testConfig = configList.get(configList.size() - 1);
         assertThat(testConfig.getKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testConfig.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testConfig.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Config in Elasticsearch
+        Config configEs = configSearchRepository.findOne(testConfig.getId());
+        assertThat(configEs).isEqualToIgnoringGivenFields(testConfig);
     }
 
     @Test
@@ -191,7 +206,8 @@ public class ConfigResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(config.getId().intValue())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -206,7 +222,8 @@ public class ConfigResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(config.getId().intValue()))
             .andExpect(jsonPath("$.key").value(DEFAULT_KEY.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -222,6 +239,7 @@ public class ConfigResourceIntTest {
     public void updateConfig() throws Exception {
         // Initialize the database
         configRepository.saveAndFlush(config);
+        configSearchRepository.save(config);
         int databaseSizeBeforeUpdate = configRepository.findAll().size();
 
         // Update the config
@@ -230,7 +248,8 @@ public class ConfigResourceIntTest {
         em.detach(updatedConfig);
         updatedConfig
             .key(UPDATED_KEY)
-            .value(UPDATED_VALUE);
+            .value(UPDATED_VALUE)
+            .rawData(UPDATED_RAW_DATA);
         ConfigDTO configDTO = configMapper.toDto(updatedConfig);
 
         restConfigMockMvc.perform(put("/api/configs")
@@ -244,6 +263,11 @@ public class ConfigResourceIntTest {
         Config testConfig = configList.get(configList.size() - 1);
         assertThat(testConfig.getKey()).isEqualTo(UPDATED_KEY);
         assertThat(testConfig.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testConfig.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Config in Elasticsearch
+        Config configEs = configSearchRepository.findOne(testConfig.getId());
+        assertThat(configEs).isEqualToIgnoringGivenFields(testConfig);
     }
 
     @Test
@@ -270,6 +294,7 @@ public class ConfigResourceIntTest {
     public void deleteConfig() throws Exception {
         // Initialize the database
         configRepository.saveAndFlush(config);
+        configSearchRepository.save(config);
         int databaseSizeBeforeDelete = configRepository.findAll().size();
 
         // Get the config
@@ -277,9 +302,30 @@ public class ConfigResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean configExistsInEs = configSearchRepository.exists(config.getId());
+        assertThat(configExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Config> configList = configRepository.findAll();
         assertThat(configList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchConfig() throws Exception {
+        // Initialize the database
+        configRepository.saveAndFlush(config);
+        configSearchRepository.save(config);
+
+        // Search the config
+        restConfigMockMvc.perform(get("/api/_search/configs?query=id:" + config.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(config.getId().intValue())))
+            .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

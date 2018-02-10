@@ -39,6 +39,9 @@ public class LessonDTO implements Serializable {
     private byte[] image;
     private String imageContentType;
 
+    @Lob
+    private String rawData;
+
     private Long courseId;
 
     public Long getId() {
@@ -113,6 +116,14 @@ public class LessonDTO implements Serializable {
         this.imageContentType = imageContentType;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     public Long getCourseId() {
         return courseId;
     }
@@ -153,6 +164,7 @@ public class LessonDTO implements Serializable {
             ", contenten='" + getContenten() + "'" +
             ", contentvi='" + getContentvi() + "'" +
             ", image='" + getImage() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

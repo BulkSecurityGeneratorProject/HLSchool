@@ -4,7 +4,8 @@
             "home": {
                 "title": "Vocabularies",
                 "createLabel": "Thêm mới một Vocabulary",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Vocabulary"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Vocabulary",
+                "search": "Tìm Vocabulary"
             },
             "created": "Một Vocabulary mới được tạo với định danh {{ param }}",
             "updated": "Một Vocabulary cập nhật với định danh {{ param }}",
@@ -19,7 +20,8 @@
             "english": "English",
             "vietnamese": "Vietnamese",
             "image": "Image",
-            "audio": "Audio"
+            "audio": "Audio",
+            "rawData": "Raw Data"
         }
     }
 }

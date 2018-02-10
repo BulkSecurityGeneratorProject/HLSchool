@@ -35,6 +35,20 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.question.questionSubType" for="field_questionSubType">Question Sub Type</label>
+            <select class="form-control" name="questionSubType" [(ngModel)]="question.questionSubType" id="field_questionSubType"  required>
+                <option value="SELECTION_IMAGE">{{'hlSchoolApp.QuestionSubType.SELECTION_IMAGE' | translate}}</option>
+                <option value="SELECTION_TEXT">{{'hlSchoolApp.QuestionSubType.SELECTION_TEXT' | translate}}</option>
+                <option value="SELECTION_SPEECH">{{'hlSchoolApp.QuestionSubType.SELECTION_SPEECH' | translate}}</option>
+            </select>
+            <div [hidden]="!(editForm.controls.questionSubType?.dirty && editForm.controls.questionSubType?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.questionSubType?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.question.contenten" for="field_contenten">Contenten</label>
             <input type="text" class="form-control" name="contenten" id="field_contenten"
                 [(ngModel)]="question.contenten" required/>
@@ -91,12 +105,17 @@
             <input type="hidden" class="form-control" name="resourceContentType" id="field_resourceContentType"
                 [(ngModel)]="question.resourceContentType" />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.question.rawData" for="field_rawData">Raw Data</label>
+            <textarea class="form-control" name="rawData" id="field_rawData"
+                [(ngModel)]="question.rawData" ></textarea>
+        </div>
 
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.question.lesson" for="field_lesson">Lesson</label>
-            <select class="form-control" id="field_lesson" name="lesson" [(ngModel)]="question.lessonId" >
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.question.subLesson" for="field_subLesson">Sub Lesson</label>
+            <select class="form-control" id="field_subLesson" name="subLesson" [(ngModel)]="question.subLessonId" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="lessonOption.id" *ngFor="let lessonOption of lessons; trackBy: trackLessonById">{{lessonOption.id}}</option>
+                <option [ngValue]="subLessonOption.id" *ngFor="let subLessonOption of sublessons; trackBy: trackSubLessonById">{{subLessonOption.id}}</option>
             </select>
         </div>
     </div>

@@ -11,6 +11,7 @@ export class Lesson implements BaseEntity {
         public contentvi?: any,
         public imageContentType?: string,
         public image?: any,
+        public rawData?: any,
         public courseId?: number,
     ) {
         this.activated = false;

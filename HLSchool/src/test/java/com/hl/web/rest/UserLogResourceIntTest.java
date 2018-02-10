@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.UserLog;
 import com.hl.repository.UserLogRepository;
 import com.hl.service.UserLogService;
+import com.hl.repository.search.UserLogSearchRepository;
 import com.hl.service.dto.UserLogDTO;
 import com.hl.service.mapper.UserLogMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -55,6 +57,9 @@ public class UserLogResourceIntTest {
     private static final Integer DEFAULT_POINT = 1;
     private static final Integer UPDATED_POINT = 2;
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private UserLogRepository userLogRepository;
 
@@ -63,6 +68,9 @@ public class UserLogResourceIntTest {
 
     @Autowired
     private UserLogService userLogService;
+
+    @Autowired
+    private UserLogSearchRepository userLogSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -101,12 +109,14 @@ public class UserLogResourceIntTest {
         UserLog userLog = new UserLog()
             .createDate(DEFAULT_CREATE_DATE)
             .complete(DEFAULT_COMPLETE)
-            .point(DEFAULT_POINT);
+            .point(DEFAULT_POINT)
+            .rawData(DEFAULT_RAW_DATA);
         return userLog;
     }
 
     @Before
     public void initTest() {
+        userLogSearchRepository.deleteAll();
         userLog = createEntity(em);
     }
 
@@ -129,6 +139,12 @@ public class UserLogResourceIntTest {
         assertThat(testUserLog.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testUserLog.isComplete()).isEqualTo(DEFAULT_COMPLETE);
         assertThat(testUserLog.getPoint()).isEqualTo(DEFAULT_POINT);
+        assertThat(testUserLog.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the UserLog in Elasticsearch
+        UserLog userLogEs = userLogSearchRepository.findOne(testUserLog.getId());
+        assertThat(testUserLog.getCreateDate()).isEqualTo(testUserLog.getCreateDate());
+        assertThat(userLogEs).isEqualToIgnoringGivenFields(testUserLog, "createDate");
     }
 
     @Test
@@ -164,7 +180,8 @@ public class UserLogResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userLog.getId().intValue())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
             .andExpect(jsonPath("$.[*].complete").value(hasItem(DEFAULT_COMPLETE.booleanValue())))
-            .andExpect(jsonPath("$.[*].point").value(hasItem(DEFAULT_POINT)));
+            .andExpect(jsonPath("$.[*].point").value(hasItem(DEFAULT_POINT)))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -180,7 +197,8 @@ public class UserLogResourceIntTest {
             .andExpect(jsonPath("$.id").value(userLog.getId().intValue()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
             .andExpect(jsonPath("$.complete").value(DEFAULT_COMPLETE.booleanValue()))
-            .andExpect(jsonPath("$.point").value(DEFAULT_POINT));
+            .andExpect(jsonPath("$.point").value(DEFAULT_POINT))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -196,6 +214,7 @@ public class UserLogResourceIntTest {
     public void updateUserLog() throws Exception {
         // Initialize the database
         userLogRepository.saveAndFlush(userLog);
+        userLogSearchRepository.save(userLog);
         int databaseSizeBeforeUpdate = userLogRepository.findAll().size();
 
         // Update the userLog
@@ -205,7 +224,8 @@ public class UserLogResourceIntTest {
         updatedUserLog
             .createDate(UPDATED_CREATE_DATE)
             .complete(UPDATED_COMPLETE)
-            .point(UPDATED_POINT);
+            .point(UPDATED_POINT)
+            .rawData(UPDATED_RAW_DATA);
         UserLogDTO userLogDTO = userLogMapper.toDto(updatedUserLog);
 
         restUserLogMockMvc.perform(put("/api/user-logs")
@@ -220,6 +240,12 @@ public class UserLogResourceIntTest {
         assertThat(testUserLog.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testUserLog.isComplete()).isEqualTo(UPDATED_COMPLETE);
         assertThat(testUserLog.getPoint()).isEqualTo(UPDATED_POINT);
+        assertThat(testUserLog.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the UserLog in Elasticsearch
+        UserLog userLogEs = userLogSearchRepository.findOne(testUserLog.getId());
+        assertThat(testUserLog.getCreateDate()).isEqualTo(testUserLog.getCreateDate());
+        assertThat(userLogEs).isEqualToIgnoringGivenFields(testUserLog, "createDate");
     }
 
     @Test
@@ -246,6 +272,7 @@ public class UserLogResourceIntTest {
     public void deleteUserLog() throws Exception {
         // Initialize the database
         userLogRepository.saveAndFlush(userLog);
+        userLogSearchRepository.save(userLog);
         int databaseSizeBeforeDelete = userLogRepository.findAll().size();
 
         // Get the userLog
@@ -253,9 +280,31 @@ public class UserLogResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean userLogExistsInEs = userLogSearchRepository.exists(userLog.getId());
+        assertThat(userLogExistsInEs).isFalse();
+
         // Validate the database is empty
         List<UserLog> userLogList = userLogRepository.findAll();
         assertThat(userLogList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchUserLog() throws Exception {
+        // Initialize the database
+        userLogRepository.saveAndFlush(userLog);
+        userLogSearchRepository.save(userLog);
+
+        // Search the userLog
+        restUserLogMockMvc.perform(get("/api/_search/user-logs?query=id:" + userLog.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(userLog.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].complete").value(hasItem(DEFAULT_COMPLETE.booleanValue())))
+            .andExpect(jsonPath("$.[*].point").value(hasItem(DEFAULT_POINT)))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

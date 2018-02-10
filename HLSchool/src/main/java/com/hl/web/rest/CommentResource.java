@@ -16,12 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Comment.
@@ -49,7 +51,7 @@ public class CommentResource {
      */
     @PostMapping("/comments")
     @Timed
-    public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", commentDTO);
         if (commentDTO.getId() != null) {
             throw new BadRequestAlertException("A new comment cannot already have an ID", ENTITY_NAME, "idexists");
@@ -71,7 +73,7 @@ public class CommentResource {
      */
     @PutMapping("/comments")
     @Timed
-    public ResponseEntity<CommentDTO> updateComment(@Valid @RequestBody CommentDTO commentDTO) throws URISyntaxException {
+    public ResponseEntity<CommentDTO> updateComment(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
         log.debug("REST request to update Comment : {}", commentDTO);
         if (commentDTO.getId() == null) {
             return createComment(commentDTO);
@@ -124,4 +126,22 @@ public class CommentResource {
         commentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/comments?query=:query : search for the comment corresponding
+     * to the query.
+     *
+     * @param query the query of the comment search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/comments")
+    @Timed
+    public ResponseEntity<List<CommentDTO>> searchComments(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Comments for query {}", query);
+        Page<CommentDTO> page = commentService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/comments");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

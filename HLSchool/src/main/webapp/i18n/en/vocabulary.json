@@ -4,7 +4,8 @@
             "home": {
                 "title": "Vocabularies",
                 "createLabel": "Create a new Vocabulary",
-                "createOrEditLabel": "Create or edit a Vocabulary"
+                "createOrEditLabel": "Create or edit a Vocabulary",
+                "search": "Search for Vocabulary"
             },
             "created": "A new Vocabulary is created with identifier {{ param }}",
             "updated": "A Vocabulary is updated with identifier {{ param }}",
@@ -19,7 +20,8 @@
             "english": "English",
             "vietnamese": "Vietnamese",
             "image": "Image",
-            "audio": "Audio"
+            "audio": "Audio",
+            "rawData": "Raw Data"
         }
     }
 }

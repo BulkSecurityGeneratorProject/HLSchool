@@ -35,9 +35,14 @@
             "fieldName": "audio",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130507",
+    "changelogDate": "20180210073754",
     "entityTableName": "vocabulary",
     "dto": "mapstruct",
     "pagination": "pagination",

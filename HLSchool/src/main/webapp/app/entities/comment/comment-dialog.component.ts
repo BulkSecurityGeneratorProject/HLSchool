@@ -4,7 +4,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { Comment } from './comment.model';
 import { CommentPopupService } from './comment-popup.service';
@@ -28,6 +28,7 @@ export class CommentDialogComponent implements OnInit {
 
     constructor(
         public activeModal: NgbActiveModal,
+        private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private commentService: CommentService,
         private postService: PostService,
@@ -42,6 +43,18 @@ export class CommentDialogComponent implements OnInit {
             .subscribe((res: ResponseWrapper) => { this.posts = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.userService.query()
             .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     clear() {

@@ -8,10 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity UserLog and its DTO UserLogDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface UserLogMapper extends EntityMapper<UserLogDTO, UserLog> {
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.login", target = "userLogin")
+    UserLogDTO toDto(UserLog userLog);
 
+    @Mapping(source = "userId", target = "user")
+    UserLog toEntity(UserLogDTO userLogDTO);
 
     default UserLog fromId(Long id) {
         if (id == null) {

@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Room entity.
@@ -21,6 +22,9 @@ public class RoomDTO implements Serializable {
     @NotNull
     @Size(min = 5)
     private String title;
+
+    @Lob
+    private String rawData;
 
     public Long getId() {
         return id;
@@ -54,6 +58,14 @@ public class RoomDTO implements Serializable {
         this.title = title;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -82,6 +94,7 @@ public class RoomDTO implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", level=" + getLevel() +
             ", title='" + getTitle() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

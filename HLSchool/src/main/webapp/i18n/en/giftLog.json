@@ -4,7 +4,8 @@
             "home": {
                 "title": "Gift Logs",
                 "createLabel": "Create a new Gift Log",
-                "createOrEditLabel": "Create or edit a Gift Log"
+                "createOrEditLabel": "Create or edit a Gift Log",
+                "search": "Search for Gift Log"
             },
             "created": "A new Gift Log is created with identifier {{ param }}",
             "updated": "A Gift Log is updated with identifier {{ param }}",
@@ -16,6 +17,7 @@
                 "title": "Gift Log"
             },
             "createDate": "Create Date",
+            "rawData": "Raw Data",
             "user": "User",
             "gift": "Gift"
         }

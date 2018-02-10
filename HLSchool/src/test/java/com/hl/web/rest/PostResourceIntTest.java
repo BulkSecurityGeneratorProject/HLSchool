@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Post;
 import com.hl.repository.PostRepository;
 import com.hl.service.PostService;
+import com.hl.repository.search.PostSearchRepository;
 import com.hl.service.dto.PostDTO;
 import com.hl.service.mapper.PostMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -64,6 +66,9 @@ public class PostResourceIntTest {
     private static final Boolean DEFAULT_ACTIVATED = false;
     private static final Boolean UPDATED_ACTIVATED = true;
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private PostRepository postRepository;
 
@@ -72,6 +77,9 @@ public class PostResourceIntTest {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private PostSearchRepository postSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -113,12 +121,14 @@ public class PostResourceIntTest {
             .contentvi(DEFAULT_CONTENTVI)
             .createDate(DEFAULT_CREATE_DATE)
             .lastModifier(DEFAULT_LAST_MODIFIER)
-            .activated(DEFAULT_ACTIVATED);
+            .activated(DEFAULT_ACTIVATED)
+            .rawData(DEFAULT_RAW_DATA);
         return post;
     }
 
     @Before
     public void initTest() {
+        postSearchRepository.deleteAll();
         post = createEntity(em);
     }
 
@@ -144,6 +154,13 @@ public class PostResourceIntTest {
         assertThat(testPost.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testPost.getLastModifier()).isEqualTo(DEFAULT_LAST_MODIFIER);
         assertThat(testPost.isActivated()).isEqualTo(DEFAULT_ACTIVATED);
+        assertThat(testPost.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Post in Elasticsearch
+        Post postEs = postSearchRepository.findOne(testPost.getId());
+        assertThat(testPost.getCreateDate()).isEqualTo(testPost.getCreateDate());
+        assertThat(testPost.getLastModifier()).isEqualTo(testPost.getLastModifier());
+        assertThat(postEs).isEqualToIgnoringGivenFields(testPost, "createDate", "lastModifier");
     }
 
     @Test
@@ -220,7 +237,8 @@ public class PostResourceIntTest {
             .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
             .andExpect(jsonPath("$.[*].lastModifier").value(hasItem(sameInstant(DEFAULT_LAST_MODIFIER))))
-            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())));
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -239,7 +257,8 @@ public class PostResourceIntTest {
             .andExpect(jsonPath("$.contentvi").value(DEFAULT_CONTENTVI.toString()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
             .andExpect(jsonPath("$.lastModifier").value(sameInstant(DEFAULT_LAST_MODIFIER)))
-            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()));
+            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -255,6 +274,7 @@ public class PostResourceIntTest {
     public void updatePost() throws Exception {
         // Initialize the database
         postRepository.saveAndFlush(post);
+        postSearchRepository.save(post);
         int databaseSizeBeforeUpdate = postRepository.findAll().size();
 
         // Update the post
@@ -267,7 +287,8 @@ public class PostResourceIntTest {
             .contentvi(UPDATED_CONTENTVI)
             .createDate(UPDATED_CREATE_DATE)
             .lastModifier(UPDATED_LAST_MODIFIER)
-            .activated(UPDATED_ACTIVATED);
+            .activated(UPDATED_ACTIVATED)
+            .rawData(UPDATED_RAW_DATA);
         PostDTO postDTO = postMapper.toDto(updatedPost);
 
         restPostMockMvc.perform(put("/api/posts")
@@ -285,6 +306,13 @@ public class PostResourceIntTest {
         assertThat(testPost.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testPost.getLastModifier()).isEqualTo(UPDATED_LAST_MODIFIER);
         assertThat(testPost.isActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(testPost.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Post in Elasticsearch
+        Post postEs = postSearchRepository.findOne(testPost.getId());
+        assertThat(testPost.getCreateDate()).isEqualTo(testPost.getCreateDate());
+        assertThat(testPost.getLastModifier()).isEqualTo(testPost.getLastModifier());
+        assertThat(postEs).isEqualToIgnoringGivenFields(testPost, "createDate", "lastModifier");
     }
 
     @Test
@@ -311,6 +339,7 @@ public class PostResourceIntTest {
     public void deletePost() throws Exception {
         // Initialize the database
         postRepository.saveAndFlush(post);
+        postSearchRepository.save(post);
         int databaseSizeBeforeDelete = postRepository.findAll().size();
 
         // Get the post
@@ -318,9 +347,34 @@ public class PostResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean postExistsInEs = postSearchRepository.exists(post.getId());
+        assertThat(postExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Post> postList = postRepository.findAll();
         assertThat(postList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchPost() throws Exception {
+        // Initialize the database
+        postRepository.saveAndFlush(post);
+        postSearchRepository.save(post);
+
+        // Search the post
+        restPostMockMvc.perform(get("/api/_search/posts?query=id:" + post.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(post.getId().intValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+            .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
+            .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].lastModifier").value(hasItem(sameInstant(DEFAULT_LAST_MODIFIER))))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

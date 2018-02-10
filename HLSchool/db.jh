@@ -1,6 +1,7 @@
 entity Config {
     key String required,
-    value String required
+    value String required,
+    rawData TextBlob
 }
 
 entity Vocabulary {
@@ -9,26 +10,30 @@ entity Vocabulary {
     vietnamese String required,
     image ImageBlob required,
     audio AnyBlob,
+    rawData TextBlob
 }
 
 entity Post {
     title String required minlength(20),
-    content_en String,
-    content_vi String,
+    content_en TextBlob,
+    content_vi TextBlob,
     createDate ZonedDateTime,
     lastModifier ZonedDateTime,
-    activated Boolean required
+    activated Boolean required,
+    rawData TextBlob
 }
 
 entity Comment {
     createDate ZonedDateTime,
-    content String required minlength(5)
+    content TextBlob,
+    rawData TextBlob
 }
 
 entity Room {
     createDate ZonedDateTime,
     level Integer required,
-    title String required minlength(5)
+    title String required minlength(5),
+    rawData TextBlob
 }
 
 entity Course {
@@ -36,9 +41,11 @@ entity Course {
     activated Boolean required,
     title String required minlength(5),
     level Integer required,
+    coin Integer required,
     content_en TextBlob,
     content_vi TextBlob,
-    image ImageBlob required
+    image ImageBlob required,
+    rawData TextBlob
 }
 
 entity Lesson {
@@ -48,62 +55,105 @@ entity Lesson {
     level Integer required,
     content_en TextBlob,
     content_vi TextBlob,
-    image ImageBlob required
+    image ImageBlob required,
+    rawData TextBlob
+}
+
+entity SubLesson{
+    createDate ZonedDateTime
+    title String required minlength(5),
+    content_en TextBlob,
+    content_vi TextBlob,
+    rawData TextBlob
 }
 
 entity Feedback {
     createDate ZonedDateTime,
-    content String required minlength(20)
+    content String required minlength(20),
+    rawData TextBlob
 }
 
 enum QuestionType {
     TRANSLATION, LISTENING, SELECTION, SPEECH
 }
+enum QuestionSubType{
+    SELECTION_IMAGE,
+    SELECTION_TEXT,
+    SELECTION_SPEECH
+}
 
 entity Question {
     createDate ZonedDateTime,
     questionType QuestionType required,
+    questionSubType QuestionSubType required,
     content_en String required,
     content_vi String required,
     image ImageBlob,
-    resource AnyBlob
+    resource AnyBlob,
+    rawData TextBlob
 }
 
 entity Answer {
     createDate ZonedDateTime,
-    result Boolean required
+    result Boolean required,
+    rawData TextBlob
 }
-
 
 entity UserLog {
     createDate ZonedDateTime,
     complete Boolean,
-    point Integer
+    point Integer,
+    rawData TextBlob
 }
 
 entity GiftLog {
-    createDate ZonedDateTime
+    createDate ZonedDateTime,
+    rawData TextBlob
 }
+entity CourseLog{
+    complete Boolean,
+    rawData TextBlob
+}
+entity SubLessonLog{
+    complete Boolean,
+    rawData TextBlob
+}
+entity LessonLog{
+    complete Boolean,
+    rawData TextBlob
+}
+
 
 entity Gift {
     price Integer required,
     image ImageBlob required,
-    content String required,
-    createDate ZonedDateTime
+    content_en TextBlob,
+    content_vi TextBlob,
+    createDate ZonedDateTime,
+    rawData TextBlob
 }
 
 relationship ManyToOne {
     Post{user(login)} to User,
     Comment{post} to Post{comment},
     Comment{user(login)} to User,
-    Question{lesson} to Lesson,
+    Question{subLesson} to SubLesson,
     Answer{question} to Question,
     Answer{vocabulary} to Vocabulary,
     Feedback{question} to Question,
     Feedback{user(login)} to User,
     Lesson{course} to Course,
     GiftLog{user(login)} to User,
-    GiftLog{gift} to Gift
+    GiftLog{gift} to Gift,
+
+    UserLog{user(login)} to User,
+    CourseLog{user(login)} to User,
+    LessonLog{user(login)} to User,
+    SubLessonLog{user(login)} to User,
+
+    CourseLog{course} to Course,
+    LessonLog{lesson} to Lesson,
+    SubLessonLog{subLesson} to SubLesson
 }
 
 paginate * with pagination

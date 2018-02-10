@@ -4,7 +4,8 @@
             "home": {
                 "title": "Comments",
                 "createLabel": "Create a new Comment",
-                "createOrEditLabel": "Create or edit a Comment"
+                "createOrEditLabel": "Create or edit a Comment",
+                "search": "Search for Comment"
             },
             "created": "A new Comment is created with identifier {{ param }}",
             "updated": "A Comment is updated with identifier {{ param }}",
@@ -17,6 +18,7 @@
             },
             "createDate": "Create Date",
             "content": "Content",
+            "rawData": "Raw Data",
             "post": "Post",
             "user": "User"
         }

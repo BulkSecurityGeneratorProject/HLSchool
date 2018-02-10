@@ -22,6 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Answer.
@@ -124,4 +127,22 @@ public class AnswerResource {
         answerService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/answers?query=:query : search for the answer corresponding
+     * to the query.
+     *
+     * @param query the query of the answer search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/_search/answers")
+    @Timed
+    public ResponseEntity<List<AnswerDTO>> searchAnswers(@RequestParam String query, Pageable pageable) {
+        log.debug("REST request to search for a page of Answers for query {}", query);
+        Page<AnswerDTO> page = answerService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/answers");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 }

@@ -61,6 +61,21 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.course.coin" for="field_coin">Coin</label>
+            <input type="number" class="form-control" name="coin" id="field_coin"
+                [(ngModel)]="course.coin" required/>
+            <div [hidden]="!(editForm.controls.coin?.dirty && editForm.controls.coin?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.coin?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.coin?.errors?.number" jhiTranslate="entity.validation.number">
+                    This field should be a number.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.course.contenten" for="field_contenten">Contenten</label>
             <textarea class="form-control" name="contenten" id="field_contenten"
                 [(ngModel)]="course.contenten" ></textarea>
@@ -92,6 +107,11 @@
                    This field is required.
                 </small>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.course.rawData" for="field_rawData">Raw Data</label>
+            <textarea class="form-control" name="rawData" id="field_rawData"
+                [(ngModel)]="course.rawData" ></textarea>
         </div>
 
     </div>

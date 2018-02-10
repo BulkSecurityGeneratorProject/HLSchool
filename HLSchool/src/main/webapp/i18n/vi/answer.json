@@ -4,7 +4,8 @@
             "home": {
                 "title": "Answers",
                 "createLabel": "Thêm mới một Answer",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Answer"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Answer",
+                "search": "Tìm Answer"
             },
             "created": "Một Answer mới được tạo với định danh {{ param }}",
             "updated": "Một Answer cập nhật với định danh {{ param }}",
@@ -17,6 +18,7 @@
             },
             "createDate": "Create Date",
             "result": "Result",
+            "rawData": "Raw Data",
             "question": "Question",
             "vocabulary": "Vocabulary"
         }

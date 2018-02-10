@@ -29,13 +29,13 @@
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contenten" for="field_contenten">Contenten</label>
-            <input type="text" class="form-control" name="contenten" id="field_contenten"
-                [(ngModel)]="post.contenten" />
+            <textarea class="form-control" name="contenten" id="field_contenten"
+                [(ngModel)]="post.contenten" ></textarea>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contentvi" for="field_contentvi">Contentvi</label>
-            <input type="text" class="form-control" name="contentvi" id="field_contentvi"
-                [(ngModel)]="post.contentvi" />
+            <textarea class="form-control" name="contentvi" id="field_contentvi"
+                [(ngModel)]="post.contentvi" ></textarea>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.post.createDate" for="field_createDate">Create Date</label>
@@ -61,6 +61,11 @@
                    This field is required.
                 </small>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.rawData" for="field_rawData">Raw Data</label>
+            <textarea class="form-control" name="rawData" id="field_rawData"
+                [(ngModel)]="post.rawData" ></textarea>
         </div>
 
         <div class="form-group">

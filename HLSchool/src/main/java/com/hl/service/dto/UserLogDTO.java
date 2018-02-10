@@ -3,7 +3,10 @@ package com.hl.service.dto;
 
 import java.time.ZonedDateTime;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the UserLog entity.
@@ -17,6 +20,13 @@ public class UserLogDTO implements Serializable {
     private Boolean complete;
 
     private Integer point;
+
+    @Lob
+    private String rawData;
+
+    private Long userId;
+
+    private String userLogin;
 
     public Long getId() {
         return id;
@@ -50,6 +60,30 @@ public class UserLogDTO implements Serializable {
         this.point = point;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,6 +112,7 @@ public class UserLogDTO implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", complete='" + isComplete() + "'" +
             ", point=" + getPoint() +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

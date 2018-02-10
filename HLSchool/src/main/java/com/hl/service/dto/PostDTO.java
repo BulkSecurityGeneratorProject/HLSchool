@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Post entity.
@@ -19,8 +20,10 @@ public class PostDTO implements Serializable {
     @Size(min = 20)
     private String title;
 
+    @Lob
     private String contenten;
 
+    @Lob
     private String contentvi;
 
     private ZonedDateTime createDate;
@@ -29,6 +32,9 @@ public class PostDTO implements Serializable {
 
     @NotNull
     private Boolean activated;
+
+    @Lob
+    private String rawData;
 
     private Long userId;
 
@@ -90,6 +96,14 @@ public class PostDTO implements Serializable {
         this.activated = activated;
     }
 
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -137,6 +151,7 @@ public class PostDTO implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", lastModifier='" + getLastModifier() + "'" +
             ", activated='" + isActivated() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

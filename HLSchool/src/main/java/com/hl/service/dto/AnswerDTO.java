@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Answer entity.
@@ -19,6 +20,9 @@ public class AnswerDTO implements Serializable {
 
     @NotNull
     private Boolean result;
+
+    @Lob
+    private String rawData;
 
     private Long questionId;
 
@@ -46,6 +50,14 @@ public class AnswerDTO implements Serializable {
 
     public void setResult(Boolean result) {
         this.result = result;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     public Long getQuestionId() {
@@ -91,6 +103,7 @@ public class AnswerDTO implements Serializable {
             "id=" + getId() +
             ", createDate='" + getCreateDate() + "'" +
             ", result='" + isResult() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

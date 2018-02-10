@@ -4,7 +4,8 @@
             "home": {
                 "title": "Posts",
                 "createLabel": "Create a new Post",
-                "createOrEditLabel": "Create or edit a Post"
+                "createOrEditLabel": "Create or edit a Post",
+                "search": "Search for Post"
             },
             "created": "A new Post is created with identifier {{ param }}",
             "updated": "A Post is updated with identifier {{ param }}",
@@ -21,6 +22,7 @@
             "createDate": "Create Date",
             "lastModifier": "Last Modifier",
             "activated": "Activated",
+            "rawData": "Raw Data",
             "user": "User",
             "comment": "Comment"
         }

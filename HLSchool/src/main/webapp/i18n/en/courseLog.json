@@ -1,0 +1,25 @@
+{
+    "hlSchoolApp": {
+        "courseLog" : {
+            "home": {
+                "title": "Course Logs",
+                "createLabel": "Create a new Course Log",
+                "createOrEditLabel": "Create or edit a Course Log",
+                "search": "Search for Course Log"
+            },
+            "created": "A new Course Log is created with identifier {{ param }}",
+            "updated": "A Course Log is updated with identifier {{ param }}",
+            "deleted": "A Course Log is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Course Log {{ id }}?"
+            },
+            "detail": {
+                "title": "Course Log"
+            },
+            "complete": "Complete",
+            "rawData": "Raw Data",
+            "user": "User",
+            "course": "Course"
+        }
+    }
+}

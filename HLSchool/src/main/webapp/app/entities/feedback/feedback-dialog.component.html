@@ -34,6 +34,11 @@
                 </small>
             </div>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="hlSchoolApp.feedback.rawData" for="field_rawData">Raw Data</label>
+            <textarea class="form-control" name="rawData" id="field_rawData"
+                [(ngModel)]="feedback.rawData" ></textarea>
+        </div>
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="hlSchoolApp.feedback.question" for="field_question">Question</label>

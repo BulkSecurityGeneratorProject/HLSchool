@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Room;
 import com.hl.repository.RoomRepository;
 import com.hl.service.RoomService;
+import com.hl.repository.search.RoomSearchRepository;
 import com.hl.service.dto.RoomDTO;
 import com.hl.service.mapper.RoomMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -55,6 +57,9 @@ public class RoomResourceIntTest {
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private RoomRepository roomRepository;
 
@@ -63,6 +68,9 @@ public class RoomResourceIntTest {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomSearchRepository roomSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -101,12 +109,14 @@ public class RoomResourceIntTest {
         Room room = new Room()
             .createDate(DEFAULT_CREATE_DATE)
             .level(DEFAULT_LEVEL)
-            .title(DEFAULT_TITLE);
+            .title(DEFAULT_TITLE)
+            .rawData(DEFAULT_RAW_DATA);
         return room;
     }
 
     @Before
     public void initTest() {
+        roomSearchRepository.deleteAll();
         room = createEntity(em);
     }
 
@@ -129,6 +139,12 @@ public class RoomResourceIntTest {
         assertThat(testRoom.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
         assertThat(testRoom.getLevel()).isEqualTo(DEFAULT_LEVEL);
         assertThat(testRoom.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testRoom.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Room in Elasticsearch
+        Room roomEs = roomSearchRepository.findOne(testRoom.getId());
+        assertThat(testRoom.getCreateDate()).isEqualTo(testRoom.getCreateDate());
+        assertThat(roomEs).isEqualToIgnoringGivenFields(testRoom, "createDate");
     }
 
     @Test
@@ -202,7 +218,8 @@ public class RoomResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(room.getId().intValue())))
             .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
             .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
-            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())));
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -218,7 +235,8 @@ public class RoomResourceIntTest {
             .andExpect(jsonPath("$.id").value(room.getId().intValue()))
             .andExpect(jsonPath("$.createDate").value(sameInstant(DEFAULT_CREATE_DATE)))
             .andExpect(jsonPath("$.level").value(DEFAULT_LEVEL))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()));
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -234,6 +252,7 @@ public class RoomResourceIntTest {
     public void updateRoom() throws Exception {
         // Initialize the database
         roomRepository.saveAndFlush(room);
+        roomSearchRepository.save(room);
         int databaseSizeBeforeUpdate = roomRepository.findAll().size();
 
         // Update the room
@@ -243,7 +262,8 @@ public class RoomResourceIntTest {
         updatedRoom
             .createDate(UPDATED_CREATE_DATE)
             .level(UPDATED_LEVEL)
-            .title(UPDATED_TITLE);
+            .title(UPDATED_TITLE)
+            .rawData(UPDATED_RAW_DATA);
         RoomDTO roomDTO = roomMapper.toDto(updatedRoom);
 
         restRoomMockMvc.perform(put("/api/rooms")
@@ -258,6 +278,12 @@ public class RoomResourceIntTest {
         assertThat(testRoom.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
         assertThat(testRoom.getLevel()).isEqualTo(UPDATED_LEVEL);
         assertThat(testRoom.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testRoom.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Room in Elasticsearch
+        Room roomEs = roomSearchRepository.findOne(testRoom.getId());
+        assertThat(testRoom.getCreateDate()).isEqualTo(testRoom.getCreateDate());
+        assertThat(roomEs).isEqualToIgnoringGivenFields(testRoom, "createDate");
     }
 
     @Test
@@ -284,6 +310,7 @@ public class RoomResourceIntTest {
     public void deleteRoom() throws Exception {
         // Initialize the database
         roomRepository.saveAndFlush(room);
+        roomSearchRepository.save(room);
         int databaseSizeBeforeDelete = roomRepository.findAll().size();
 
         // Get the room
@@ -291,9 +318,31 @@ public class RoomResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean roomExistsInEs = roomSearchRepository.exists(room.getId());
+        assertThat(roomExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Room> roomList = roomRepository.findAll();
         assertThat(roomList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchRoom() throws Exception {
+        // Initialize the database
+        roomRepository.saveAndFlush(room);
+        roomSearchRepository.save(room);
+
+        // Search the room
+        restRoomMockMvc.perform(get("/api/_search/rooms?query=id:" + room.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(room.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.LessonService;
 import com.hl.domain.Lesson;
 import com.hl.repository.LessonRepository;
+import com.hl.repository.search.LessonSearchRepository;
 import com.hl.service.dto.LessonDTO;
 import com.hl.service.mapper.LessonMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Lesson.
@@ -26,9 +29,12 @@ public class LessonServiceImpl implements LessonService {
 
     private final LessonMapper lessonMapper;
 
-    public LessonServiceImpl(LessonRepository lessonRepository, LessonMapper lessonMapper) {
+    private final LessonSearchRepository lessonSearchRepository;
+
+    public LessonServiceImpl(LessonRepository lessonRepository, LessonMapper lessonMapper, LessonSearchRepository lessonSearchRepository) {
         this.lessonRepository = lessonRepository;
         this.lessonMapper = lessonMapper;
+        this.lessonSearchRepository = lessonSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class LessonServiceImpl implements LessonService {
         log.debug("Request to save Lesson : {}", lessonDTO);
         Lesson lesson = lessonMapper.toEntity(lessonDTO);
         lesson = lessonRepository.save(lesson);
-        return lessonMapper.toDto(lesson);
+        LessonDTO result = lessonMapper.toDto(lesson);
+        lessonSearchRepository.save(lesson);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class LessonServiceImpl implements LessonService {
     public void delete(Long id) {
         log.debug("Request to delete Lesson : {}", id);
         lessonRepository.delete(id);
+        lessonSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the lesson corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<LessonDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Lessons for query {}", query);
+        Page<Lesson> result = lessonSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(lessonMapper::toDto);
     }
 }

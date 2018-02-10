@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.AnswerService;
 import com.hl.domain.Answer;
 import com.hl.repository.AnswerRepository;
+import com.hl.repository.search.AnswerSearchRepository;
 import com.hl.service.dto.AnswerDTO;
 import com.hl.service.mapper.AnswerMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Answer.
@@ -26,9 +29,12 @@ public class AnswerServiceImpl implements AnswerService {
 
     private final AnswerMapper answerMapper;
 
-    public AnswerServiceImpl(AnswerRepository answerRepository, AnswerMapper answerMapper) {
+    private final AnswerSearchRepository answerSearchRepository;
+
+    public AnswerServiceImpl(AnswerRepository answerRepository, AnswerMapper answerMapper, AnswerSearchRepository answerSearchRepository) {
         this.answerRepository = answerRepository;
         this.answerMapper = answerMapper;
+        this.answerSearchRepository = answerSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class AnswerServiceImpl implements AnswerService {
         log.debug("Request to save Answer : {}", answerDTO);
         Answer answer = answerMapper.toEntity(answerDTO);
         answer = answerRepository.save(answer);
-        return answerMapper.toDto(answer);
+        AnswerDTO result = answerMapper.toDto(answer);
+        answerSearchRepository.save(answer);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class AnswerServiceImpl implements AnswerService {
     public void delete(Long id) {
         log.debug("Request to delete Answer : {}", id);
         answerRepository.delete(id);
+        answerSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the answer corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AnswerDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Answers for query {}", query);
+        Page<Answer> result = answerSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(answerMapper::toDto);
     }
 }

@@ -12,6 +12,7 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 export class RoomService {
 
     private resourceUrl =  SERVER_API_URL + 'api/rooms';
+    private resourceSearchUrl = SERVER_API_URL + 'api/_search/rooms';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
@@ -46,6 +47,12 @@ export class RoomService {
 
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
+    }
+
+    search(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.resourceSearchUrl, options)
+            .map((res: any) => this.convertResponse(res));
     }
 
     private convertResponse(res: Response): ResponseWrapper {

@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.PostService;
 import com.hl.domain.Post;
 import com.hl.repository.PostRepository;
+import com.hl.repository.search.PostSearchRepository;
 import com.hl.service.dto.PostDTO;
 import com.hl.service.mapper.PostMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Post.
@@ -26,9 +29,12 @@ public class PostServiceImpl implements PostService {
 
     private final PostMapper postMapper;
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper) {
+    private final PostSearchRepository postSearchRepository;
+
+    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, PostSearchRepository postSearchRepository) {
         this.postRepository = postRepository;
         this.postMapper = postMapper;
+        this.postSearchRepository = postSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class PostServiceImpl implements PostService {
         log.debug("Request to save Post : {}", postDTO);
         Post post = postMapper.toEntity(postDTO);
         post = postRepository.save(post);
-        return postMapper.toDto(post);
+        PostDTO result = postMapper.toDto(post);
+        postSearchRepository.save(post);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class PostServiceImpl implements PostService {
     public void delete(Long id) {
         log.debug("Request to delete Post : {}", id);
         postRepository.delete(id);
+        postSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the post corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Posts for query {}", query);
+        Page<Post> result = postSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(postMapper::toDto);
     }
 }

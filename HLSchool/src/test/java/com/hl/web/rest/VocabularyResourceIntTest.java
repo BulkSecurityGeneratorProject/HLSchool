@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Vocabulary;
 import com.hl.repository.VocabularyRepository;
 import com.hl.service.VocabularyService;
+import com.hl.repository.search.VocabularySearchRepository;
 import com.hl.service.dto.VocabularyDTO;
 import com.hl.service.mapper.VocabularyMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -61,6 +62,9 @@ public class VocabularyResourceIntTest {
     private static final String DEFAULT_AUDIO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_AUDIO_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private VocabularyRepository vocabularyRepository;
 
@@ -69,6 +73,9 @@ public class VocabularyResourceIntTest {
 
     @Autowired
     private VocabularyService vocabularyService;
+
+    @Autowired
+    private VocabularySearchRepository vocabularySearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -111,12 +118,14 @@ public class VocabularyResourceIntTest {
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .audio(DEFAULT_AUDIO)
-            .audioContentType(DEFAULT_AUDIO_CONTENT_TYPE);
+            .audioContentType(DEFAULT_AUDIO_CONTENT_TYPE)
+            .rawData(DEFAULT_RAW_DATA);
         return vocabulary;
     }
 
     @Before
     public void initTest() {
+        vocabularySearchRepository.deleteAll();
         vocabulary = createEntity(em);
     }
 
@@ -143,6 +152,11 @@ public class VocabularyResourceIntTest {
         assertThat(testVocabulary.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testVocabulary.getAudio()).isEqualTo(DEFAULT_AUDIO);
         assertThat(testVocabulary.getAudioContentType()).isEqualTo(DEFAULT_AUDIO_CONTENT_TYPE);
+        assertThat(testVocabulary.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Vocabulary in Elasticsearch
+        Vocabulary vocabularyEs = vocabularySearchRepository.findOne(testVocabulary.getId());
+        assertThat(vocabularyEs).isEqualToIgnoringGivenFields(testVocabulary);
     }
 
     @Test
@@ -258,7 +272,8 @@ public class VocabularyResourceIntTest {
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].audioContentType").value(hasItem(DEFAULT_AUDIO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].audio").value(hasItem(Base64Utils.encodeToString(DEFAULT_AUDIO))));
+            .andExpect(jsonPath("$.[*].audio").value(hasItem(Base64Utils.encodeToString(DEFAULT_AUDIO))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -278,7 +293,8 @@ public class VocabularyResourceIntTest {
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.audioContentType").value(DEFAULT_AUDIO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.audio").value(Base64Utils.encodeToString(DEFAULT_AUDIO)));
+            .andExpect(jsonPath("$.audio").value(Base64Utils.encodeToString(DEFAULT_AUDIO)))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -294,6 +310,7 @@ public class VocabularyResourceIntTest {
     public void updateVocabulary() throws Exception {
         // Initialize the database
         vocabularyRepository.saveAndFlush(vocabulary);
+        vocabularySearchRepository.save(vocabulary);
         int databaseSizeBeforeUpdate = vocabularyRepository.findAll().size();
 
         // Update the vocabulary
@@ -307,7 +324,8 @@ public class VocabularyResourceIntTest {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .audio(UPDATED_AUDIO)
-            .audioContentType(UPDATED_AUDIO_CONTENT_TYPE);
+            .audioContentType(UPDATED_AUDIO_CONTENT_TYPE)
+            .rawData(UPDATED_RAW_DATA);
         VocabularyDTO vocabularyDTO = vocabularyMapper.toDto(updatedVocabulary);
 
         restVocabularyMockMvc.perform(put("/api/vocabularies")
@@ -326,6 +344,11 @@ public class VocabularyResourceIntTest {
         assertThat(testVocabulary.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testVocabulary.getAudio()).isEqualTo(UPDATED_AUDIO);
         assertThat(testVocabulary.getAudioContentType()).isEqualTo(UPDATED_AUDIO_CONTENT_TYPE);
+        assertThat(testVocabulary.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Vocabulary in Elasticsearch
+        Vocabulary vocabularyEs = vocabularySearchRepository.findOne(testVocabulary.getId());
+        assertThat(vocabularyEs).isEqualToIgnoringGivenFields(testVocabulary);
     }
 
     @Test
@@ -352,6 +375,7 @@ public class VocabularyResourceIntTest {
     public void deleteVocabulary() throws Exception {
         // Initialize the database
         vocabularyRepository.saveAndFlush(vocabulary);
+        vocabularySearchRepository.save(vocabulary);
         int databaseSizeBeforeDelete = vocabularyRepository.findAll().size();
 
         // Get the vocabulary
@@ -359,9 +383,35 @@ public class VocabularyResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean vocabularyExistsInEs = vocabularySearchRepository.exists(vocabulary.getId());
+        assertThat(vocabularyExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Vocabulary> vocabularyList = vocabularyRepository.findAll();
         assertThat(vocabularyList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchVocabulary() throws Exception {
+        // Initialize the database
+        vocabularyRepository.saveAndFlush(vocabulary);
+        vocabularySearchRepository.save(vocabulary);
+
+        // Search the vocabulary
+        restVocabularyMockMvc.perform(get("/api/_search/vocabularies?query=id:" + vocabulary.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(vocabulary.getId().intValue())))
+            .andExpect(jsonPath("$.[*].japanese").value(hasItem(DEFAULT_JAPANESE.toString())))
+            .andExpect(jsonPath("$.[*].english").value(hasItem(DEFAULT_ENGLISH.toString())))
+            .andExpect(jsonPath("$.[*].vietnamese").value(hasItem(DEFAULT_VIETNAMESE.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].audioContentType").value(hasItem(DEFAULT_AUDIO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].audio").value(hasItem(Base64Utils.encodeToString(DEFAULT_AUDIO))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

@@ -21,15 +21,16 @@
         },
         {
             "fieldName": "content",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "minlength"
-            ],
-            "fieldValidateRulesMinlength": 5
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130509",
+    "changelogDate": "20180210073756",
     "entityTableName": "comment",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -6,6 +6,7 @@ export class Room implements BaseEntity {
         public createDate?: any,
         public level?: number,
         public title?: string,
+        public rawData?: any,
     ) {
     }
 }

@@ -4,7 +4,8 @@
             "home": {
                 "title": "Rooms",
                 "createLabel": "Thêm mới một Room",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Room"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Room",
+                "search": "Tìm Room"
             },
             "created": "Một Room mới được tạo với định danh {{ param }}",
             "updated": "Một Room cập nhật với định danh {{ param }}",
@@ -17,7 +18,8 @@
             },
             "createDate": "Create Date",
             "level": "Level",
-            "title": "Title"
+            "title": "Title",
+            "rawData": "Raw Data"
         }
     }
 }

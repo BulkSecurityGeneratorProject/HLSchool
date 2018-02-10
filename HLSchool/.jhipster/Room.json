@@ -21,9 +21,14 @@
                 "minlength"
             ],
             "fieldValidateRulesMinlength": 5
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130510",
+    "changelogDate": "20180210073757",
     "entityTableName": "room",
     "dto": "mapstruct",
     "pagination": "pagination",

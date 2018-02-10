@@ -4,7 +4,8 @@
             "home": {
                 "title": "Feedbacks",
                 "createLabel": "Create a new Feedback",
-                "createOrEditLabel": "Create or edit a Feedback"
+                "createOrEditLabel": "Create or edit a Feedback",
+                "search": "Search for Feedback"
             },
             "created": "A new Feedback is created with identifier {{ param }}",
             "updated": "A Feedback is updated with identifier {{ param }}",
@@ -17,6 +18,7 @@
             },
             "createDate": "Create Date",
             "content": "Content",
+            "rawData": "Raw Data",
             "question": "Question",
             "user": "User"
         }

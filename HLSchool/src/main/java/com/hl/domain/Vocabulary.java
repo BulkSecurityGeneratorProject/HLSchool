@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "vocabulary")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "vocabulary")
 public class Vocabulary implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +51,10 @@ public class Vocabulary implements Serializable {
 
     @Column(name = "audio_content_type")
     private String audioContentType;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -149,6 +155,19 @@ public class Vocabulary implements Serializable {
     public void setAudioContentType(String audioContentType) {
         this.audioContentType = audioContentType;
     }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Vocabulary rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -182,6 +201,7 @@ public class Vocabulary implements Serializable {
             ", imageContentType='" + getImageContentType() + "'" +
             ", audio='" + getAudio() + "'" +
             ", audioContentType='" + getAudioContentType() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

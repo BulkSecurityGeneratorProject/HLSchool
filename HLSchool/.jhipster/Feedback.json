@@ -27,9 +27,14 @@
                 "minlength"
             ],
             "fieldValidateRulesMinlength": 20
+        },
+        {
+            "fieldName": "rawData",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
-    "changelogDate": "20180207130513",
+    "changelogDate": "20180210073801",
     "entityTableName": "feedback",
     "dto": "mapstruct",
     "pagination": "pagination",

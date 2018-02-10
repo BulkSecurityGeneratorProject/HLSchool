@@ -4,7 +4,8 @@
             "home": {
                 "title": "Questions",
                 "createLabel": "Thêm mới một Question",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Question"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Question",
+                "search": "Tìm Question"
             },
             "created": "Một Question mới được tạo với định danh {{ param }}",
             "updated": "Một Question cập nhật với định danh {{ param }}",
@@ -17,11 +18,13 @@
             },
             "createDate": "Create Date",
             "questionType": "Question Type",
+            "questionSubType": "Question Sub Type",
             "contenten": "Contenten",
             "contentvi": "Contentvi",
             "image": "Image",
             "resource": "Resource",
-            "lesson": "Lesson"
+            "rawData": "Raw Data",
+            "subLesson": "Sub Lesson"
         }
     }
 }

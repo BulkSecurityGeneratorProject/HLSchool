@@ -6,6 +6,8 @@ export class UserLog implements BaseEntity {
         public createDate?: any,
         public complete?: boolean,
         public point?: number,
+        public rawData?: any,
+        public userId?: number,
     ) {
         this.complete = false;
     }

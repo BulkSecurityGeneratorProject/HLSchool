@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.RoomService;
 import com.hl.domain.Room;
 import com.hl.repository.RoomRepository;
+import com.hl.repository.search.RoomSearchRepository;
 import com.hl.service.dto.RoomDTO;
 import com.hl.service.mapper.RoomMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Room.
@@ -26,9 +29,12 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
 
-    public RoomServiceImpl(RoomRepository roomRepository, RoomMapper roomMapper) {
+    private final RoomSearchRepository roomSearchRepository;
+
+    public RoomServiceImpl(RoomRepository roomRepository, RoomMapper roomMapper, RoomSearchRepository roomSearchRepository) {
         this.roomRepository = roomRepository;
         this.roomMapper = roomMapper;
+        this.roomSearchRepository = roomSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class RoomServiceImpl implements RoomService {
         log.debug("Request to save Room : {}", roomDTO);
         Room room = roomMapper.toEntity(roomDTO);
         room = roomRepository.save(room);
-        return roomMapper.toDto(room);
+        RoomDTO result = roomMapper.toDto(room);
+        roomSearchRepository.save(room);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class RoomServiceImpl implements RoomService {
     public void delete(Long id) {
         log.debug("Request to delete Room : {}", id);
         roomRepository.delete(id);
+        roomSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the room corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<RoomDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Rooms for query {}", query);
+        Page<Room> result = roomSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(roomMapper::toDto);
     }
 }

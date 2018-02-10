@@ -5,6 +5,7 @@ import com.hl.HlSchoolApp;
 import com.hl.domain.Lesson;
 import com.hl.repository.LessonRepository;
 import com.hl.service.LessonService;
+import com.hl.repository.search.LessonSearchRepository;
 import com.hl.service.dto.LessonDTO;
 import com.hl.service.mapper.LessonMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -70,6 +71,9 @@ public class LessonResourceIntTest {
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_IMAGE_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_RAW_DATA = "AAAAAAAAAA";
+    private static final String UPDATED_RAW_DATA = "BBBBBBBBBB";
+
     @Autowired
     private LessonRepository lessonRepository;
 
@@ -78,6 +82,9 @@ public class LessonResourceIntTest {
 
     @Autowired
     private LessonService lessonService;
+
+    @Autowired
+    private LessonSearchRepository lessonSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -121,12 +128,14 @@ public class LessonResourceIntTest {
             .contenten(DEFAULT_CONTENTEN)
             .contentvi(DEFAULT_CONTENTVI)
             .image(DEFAULT_IMAGE)
-            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+            .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
+            .rawData(DEFAULT_RAW_DATA);
         return lesson;
     }
 
     @Before
     public void initTest() {
+        lessonSearchRepository.deleteAll();
         lesson = createEntity(em);
     }
 
@@ -154,6 +163,12 @@ public class LessonResourceIntTest {
         assertThat(testLesson.getContentvi()).isEqualTo(DEFAULT_CONTENTVI);
         assertThat(testLesson.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testLesson.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
+        assertThat(testLesson.getRawData()).isEqualTo(DEFAULT_RAW_DATA);
+
+        // Validate the Lesson in Elasticsearch
+        Lesson lessonEs = lessonSearchRepository.findOne(testLesson.getId());
+        assertThat(testLesson.getCreateDate()).isEqualTo(testLesson.getCreateDate());
+        assertThat(lessonEs).isEqualToIgnoringGivenFields(testLesson, "createDate");
     }
 
     @Test
@@ -270,7 +285,8 @@ public class LessonResourceIntTest {
             .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
             .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test
@@ -291,7 +307,8 @@ public class LessonResourceIntTest {
             .andExpect(jsonPath("$.contenten").value(DEFAULT_CONTENTEN.toString()))
             .andExpect(jsonPath("$.contentvi").value(DEFAULT_CONTENTVI.toString()))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
+            .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
+            .andExpect(jsonPath("$.rawData").value(DEFAULT_RAW_DATA.toString()));
     }
 
     @Test
@@ -307,6 +324,7 @@ public class LessonResourceIntTest {
     public void updateLesson() throws Exception {
         // Initialize the database
         lessonRepository.saveAndFlush(lesson);
+        lessonSearchRepository.save(lesson);
         int databaseSizeBeforeUpdate = lessonRepository.findAll().size();
 
         // Update the lesson
@@ -321,7 +339,8 @@ public class LessonResourceIntTest {
             .contenten(UPDATED_CONTENTEN)
             .contentvi(UPDATED_CONTENTVI)
             .image(UPDATED_IMAGE)
-            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+            .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
+            .rawData(UPDATED_RAW_DATA);
         LessonDTO lessonDTO = lessonMapper.toDto(updatedLesson);
 
         restLessonMockMvc.perform(put("/api/lessons")
@@ -341,6 +360,12 @@ public class LessonResourceIntTest {
         assertThat(testLesson.getContentvi()).isEqualTo(UPDATED_CONTENTVI);
         assertThat(testLesson.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testLesson.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
+        assertThat(testLesson.getRawData()).isEqualTo(UPDATED_RAW_DATA);
+
+        // Validate the Lesson in Elasticsearch
+        Lesson lessonEs = lessonSearchRepository.findOne(testLesson.getId());
+        assertThat(testLesson.getCreateDate()).isEqualTo(testLesson.getCreateDate());
+        assertThat(lessonEs).isEqualToIgnoringGivenFields(testLesson, "createDate");
     }
 
     @Test
@@ -367,6 +392,7 @@ public class LessonResourceIntTest {
     public void deleteLesson() throws Exception {
         // Initialize the database
         lessonRepository.saveAndFlush(lesson);
+        lessonSearchRepository.save(lesson);
         int databaseSizeBeforeDelete = lessonRepository.findAll().size();
 
         // Get the lesson
@@ -374,9 +400,36 @@ public class LessonResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean lessonExistsInEs = lessonSearchRepository.exists(lesson.getId());
+        assertThat(lessonExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Lesson> lessonList = lessonRepository.findAll();
         assertThat(lessonList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchLesson() throws Exception {
+        // Initialize the database
+        lessonRepository.saveAndFlush(lesson);
+        lessonSearchRepository.save(lesson);
+
+        // Search the lesson
+        restLessonMockMvc.perform(get("/api/_search/lessons?query=id:" + lesson.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(lesson.getId().intValue())))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(sameInstant(DEFAULT_CREATE_DATE))))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].contenten").value(hasItem(DEFAULT_CONTENTEN.toString())))
+            .andExpect(jsonPath("$.[*].contentvi").value(hasItem(DEFAULT_CONTENTVI.toString())))
+            .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
+            .andExpect(jsonPath("$.[*].rawData").value(hasItem(DEFAULT_RAW_DATA.toString())));
     }
 
     @Test

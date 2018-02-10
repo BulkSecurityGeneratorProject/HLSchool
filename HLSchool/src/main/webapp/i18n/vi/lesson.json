@@ -4,7 +4,8 @@
             "home": {
                 "title": "Lessons",
                 "createLabel": "Thêm mới một Lesson",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Lesson"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Lesson",
+                "search": "Tìm Lesson"
             },
             "created": "Một Lesson mới được tạo với định danh {{ param }}",
             "updated": "Một Lesson cập nhật với định danh {{ param }}",
@@ -22,6 +23,7 @@
             "contenten": "Contenten",
             "contentvi": "Contentvi",
             "image": "Image",
+            "rawData": "Raw Data",
             "course": "Course"
         }
     }

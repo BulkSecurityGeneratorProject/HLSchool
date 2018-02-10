@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "room")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "room")
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +37,10 @@ public class Room implements Serializable {
     @Size(min = 5)
     @Column(name = "title", nullable = false)
     private String title;
+
+    @Lob
+    @Column(name = "raw_data")
+    private String rawData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -83,6 +89,19 @@ public class Room implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public Room rawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -112,6 +131,7 @@ public class Room implements Serializable {
             ", createDate='" + getCreateDate() + "'" +
             ", level=" + getLevel() +
             ", title='" + getTitle() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.UserLogService;
 import com.hl.domain.UserLog;
 import com.hl.repository.UserLogRepository;
+import com.hl.repository.search.UserLogSearchRepository;
 import com.hl.service.dto.UserLogDTO;
 import com.hl.service.mapper.UserLogMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing UserLog.
@@ -26,9 +29,12 @@ public class UserLogServiceImpl implements UserLogService {
 
     private final UserLogMapper userLogMapper;
 
-    public UserLogServiceImpl(UserLogRepository userLogRepository, UserLogMapper userLogMapper) {
+    private final UserLogSearchRepository userLogSearchRepository;
+
+    public UserLogServiceImpl(UserLogRepository userLogRepository, UserLogMapper userLogMapper, UserLogSearchRepository userLogSearchRepository) {
         this.userLogRepository = userLogRepository;
         this.userLogMapper = userLogMapper;
+        this.userLogSearchRepository = userLogSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class UserLogServiceImpl implements UserLogService {
         log.debug("Request to save UserLog : {}", userLogDTO);
         UserLog userLog = userLogMapper.toEntity(userLogDTO);
         userLog = userLogRepository.save(userLog);
-        return userLogMapper.toDto(userLog);
+        UserLogDTO result = userLogMapper.toDto(userLog);
+        userLogSearchRepository.save(userLog);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class UserLogServiceImpl implements UserLogService {
     public void delete(Long id) {
         log.debug("Request to delete UserLog : {}", id);
         userLogRepository.delete(id);
+        userLogSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the userLog corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserLogDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of UserLogs for query {}", query);
+        Page<UserLog> result = userLogSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(userLogMapper::toDto);
     }
 }

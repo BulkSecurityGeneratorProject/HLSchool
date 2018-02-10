@@ -1,0 +1,10 @@
+{
+    "hlSchoolApp": {
+        "QuestionSubType" : {
+            "null": "",
+            "SELECTION_IMAGE": "SELECTION_IMAGE",
+            "SELECTION_TEXT": "SELECTION_TEXT",
+            "SELECTION_SPEECH": "SELECTION_SPEECH"
+        }
+    }
+}

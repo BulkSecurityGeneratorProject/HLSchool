@@ -4,7 +4,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { GiftLog } from './gift-log.model';
 import { GiftLogPopupService } from './gift-log-popup.service';
@@ -28,6 +28,7 @@ export class GiftLogDialogComponent implements OnInit {
 
     constructor(
         public activeModal: NgbActiveModal,
+        private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private giftLogService: GiftLogService,
         private userService: UserService,
@@ -42,6 +43,18 @@ export class GiftLogDialogComponent implements OnInit {
             .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.giftService.query()
             .subscribe((res: ResponseWrapper) => { this.gifts = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     clear() {

@@ -4,7 +4,8 @@
             "home": {
                 "title": "Courses",
                 "createLabel": "Create a new Course",
-                "createOrEditLabel": "Create or edit a Course"
+                "createOrEditLabel": "Create or edit a Course",
+                "search": "Search for Course"
             },
             "created": "A new Course is created with identifier {{ param }}",
             "updated": "A Course is updated with identifier {{ param }}",
@@ -19,9 +20,11 @@
             "activated": "Activated",
             "title": "Title",
             "level": "Level",
+            "coin": "Coin",
             "contenten": "Contenten",
             "contentvi": "Contentvi",
-            "image": "Image"
+            "image": "Image",
+            "rawData": "Raw Data"
         }
     }
 }

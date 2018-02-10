@@ -22,10 +22,16 @@ public class GiftDTO implements Serializable {
     private byte[] image;
     private String imageContentType;
 
-    @NotNull
-    private String content;
+    @Lob
+    private String contenten;
+
+    @Lob
+    private String contentvi;
 
     private ZonedDateTime createDate;
+
+    @Lob
+    private String rawData;
 
     public Long getId() {
         return id;
@@ -59,12 +65,20 @@ public class GiftDTO implements Serializable {
         this.imageContentType = imageContentType;
     }
 
-    public String getContent() {
-        return content;
+    public String getContenten() {
+        return contenten;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContenten(String contenten) {
+        this.contenten = contenten;
+    }
+
+    public String getContentvi() {
+        return contentvi;
+    }
+
+    public void setContentvi(String contentvi) {
+        this.contentvi = contentvi;
     }
 
     public ZonedDateTime getCreateDate() {
@@ -73,6 +87,14 @@ public class GiftDTO implements Serializable {
 
     public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 
     @Override
@@ -102,8 +124,10 @@ public class GiftDTO implements Serializable {
             "id=" + getId() +
             ", price=" + getPrice() +
             ", image='" + getImage() + "'" +
-            ", content='" + getContent() + "'" +
+            ", contenten='" + getContenten() + "'" +
+            ", contentvi='" + getContentvi() + "'" +
             ", createDate='" + getCreateDate() + "'" +
+            ", rawData='" + getRawData() + "'" +
             "}";
     }
 }

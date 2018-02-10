@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.ConfigService;
 import com.hl.domain.Config;
 import com.hl.repository.ConfigRepository;
+import com.hl.repository.search.ConfigSearchRepository;
 import com.hl.service.dto.ConfigDTO;
 import com.hl.service.mapper.ConfigMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Config.
@@ -26,9 +29,12 @@ public class ConfigServiceImpl implements ConfigService {
 
     private final ConfigMapper configMapper;
 
-    public ConfigServiceImpl(ConfigRepository configRepository, ConfigMapper configMapper) {
+    private final ConfigSearchRepository configSearchRepository;
+
+    public ConfigServiceImpl(ConfigRepository configRepository, ConfigMapper configMapper, ConfigSearchRepository configSearchRepository) {
         this.configRepository = configRepository;
         this.configMapper = configMapper;
+        this.configSearchRepository = configSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class ConfigServiceImpl implements ConfigService {
         log.debug("Request to save Config : {}", configDTO);
         Config config = configMapper.toEntity(configDTO);
         config = configRepository.save(config);
-        return configMapper.toDto(config);
+        ConfigDTO result = configMapper.toDto(config);
+        configSearchRepository.save(config);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class ConfigServiceImpl implements ConfigService {
     public void delete(Long id) {
         log.debug("Request to delete Config : {}", id);
         configRepository.delete(id);
+        configSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the config corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ConfigDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Configs for query {}", query);
+        Page<Config> result = configSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(configMapper::toDto);
     }
 }

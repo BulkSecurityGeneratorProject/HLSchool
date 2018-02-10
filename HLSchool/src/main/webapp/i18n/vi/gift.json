@@ -4,7 +4,8 @@
             "home": {
                 "title": "Gifts",
                 "createLabel": "Thêm mới một Gift",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift",
+                "search": "Tìm Gift"
             },
             "created": "Một Gift mới được tạo với định danh {{ param }}",
             "updated": "Một Gift cập nhật với định danh {{ param }}",
@@ -17,8 +18,10 @@
             },
             "price": "Price",
             "image": "Image",
-            "content": "Content",
-            "createDate": "Create Date"
+            "contenten": "Contenten",
+            "contentvi": "Contentvi",
+            "createDate": "Create Date",
+            "rawData": "Raw Data"
         }
     }
 }

@@ -4,7 +4,8 @@
             "home": {
                 "title": "User Logs",
                 "createLabel": "Thêm mới một User Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật User Log"
+                "createOrEditLabel": "Thêm mới hoặc cập nhật User Log",
+                "search": "Tìm User Log"
             },
             "created": "Một User Log mới được tạo với định danh {{ param }}",
             "updated": "Một User Log cập nhật với định danh {{ param }}",
@@ -17,7 +18,9 @@
             },
             "createDate": "Create Date",
             "complete": "Complete",
-            "point": "Point"
+            "point": "Point",
+            "rawData": "Raw Data",
+            "user": "User"
         }
     }
 }

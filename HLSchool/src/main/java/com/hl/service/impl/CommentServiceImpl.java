@@ -3,6 +3,7 @@ package com.hl.service.impl;
 import com.hl.service.CommentService;
 import com.hl.domain.Comment;
 import com.hl.repository.CommentRepository;
+import com.hl.repository.search.CommentSearchRepository;
 import com.hl.service.dto.CommentDTO;
 import com.hl.service.mapper.CommentMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Comment.
@@ -26,9 +29,12 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
+    private final CommentSearchRepository commentSearchRepository;
+
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, CommentSearchRepository commentSearchRepository) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.commentSearchRepository = commentSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
         comment = commentRepository.save(comment);
-        return commentMapper.toDto(comment);
+        CommentDTO result = commentMapper.toDto(comment);
+        commentSearchRepository.save(comment);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long id) {
         log.debug("Request to delete Comment : {}", id);
         commentRepository.delete(id);
+        commentSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the comment corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CommentDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Comments for query {}", query);
+        Page<Comment> result = commentSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(commentMapper::toDto);
     }
 }
