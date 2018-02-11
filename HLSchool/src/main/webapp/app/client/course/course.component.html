@@ -1,63 +1,19 @@
 <div class="row">
-        <div class="col-md-8" id="content">
-            <div class="ltm-box">
-                <div class="ltm-pd-35 ltm-box-header ltm-box">
-                    <div class="l-home">
-                        <img class="l-japan" src="./../../../content/images/japan.png" alt="">
-                        <div>
-                            <p class="ltm-text-lg">Japanese skills</p>
-                            <p class="l-level">Level 5</p>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="ltm-btn ltm-default" routerLink="/client/shop" routerLinkActive="active"> Shop</button>
+    <div class="col-md-12" id="content">
+        <jhi-alert></jhi-alert>
+        <div class="ltm-box">
+            <div class="ltm-pd-35 ltm-box-header">
+                <h2>User Course</h2>
+            </div>
+            <div class="row ltm-pd-35 ltm-course">
+                <div *ngFor="let course of courses;" class="col-md-4 ltm-course-item" (click)="onClickCourse(course)">
+                    <img [src]="'data:' + course.imageContentType + ';base64,' + course.image" alt="">
+                    <div class="ltm-course-item-footer">
+                        <span class="t-item-name">{{course.title}}</span>
+                        <span class="t-item-status">{{course.coin}}</span>
                     </div>
                 </div>
-                
-                <div class="ltm-lesson ltm-pd-35">
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/complete.PNG" alt="">
-                            hello
-                        </div>
-                    </div>
-                    <div class="ltm-lesson ltm-pd-35">
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/progress.PNG" alt="">
-                            hello
-                        </div>
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/start.PNG" alt="">
-                            hello
-                        </div>
-                    </div>
-                    <div class="ltm-lesson ltm-pd-35">
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/start.PNG" alt="">
-                            hello
-                        </div>
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/start.PNG" alt="">
-                            hello
-                        </div>
-                        <div class="ltm-lesson-item">
-                            <img src="./../../../content/images/block.PNG" alt="">
-                            hello
-                        </div>
-                    </div>
-            </div>
-        </div>
-        <div class="col-md-4" id="sidebar">
-            <div class="ltm-box ltm-pd-30">
-                <h5>Daily Goal</h5>
-
-                <div>
-                    hêlo
-                </div>
-            </div>
-
-            <div class="ltm-box ltm-pd-30">
-                <h5>Leader board</h5>
-                <div>content</div>
             </div>
         </div>
     </div>
+</div>

@@ -179,3 +179,37 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.ltm-course .ltm-course-item {
+  cursor: pointer;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.ltm-course .ltm-course-item img {
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.ltm-course .ltm-course-item .ltm-course-item-footer {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 70px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.ltm-course .ltm-course-item .ltm-course-item-footer .t-item-name {
+  color: #1caff6;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ltm-course .ltm-course-item .ltm-course-item-footer .t-item-status {
+  color: #1caff6;
+  font-size: 16px;
+  font-weight: 500;
+}

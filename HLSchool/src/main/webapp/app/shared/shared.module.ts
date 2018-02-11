@@ -1,6 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
+import { StoreService } from './store/store.service';
 import {
     HlSchoolSharedLibsModule,
     HlSchoolSharedCommonModule,
@@ -14,7 +15,7 @@ import {
     JhiLoginModalComponent,
     Principal,
     JhiTrackerService,
-    HasAnyAuthorityDirective,
+    HasAnyAuthorityDirective
 } from './';
 
 @NgModule({
@@ -36,7 +37,8 @@ import {
         JhiTrackerService,
         AuthServerProvider,
         UserService,
-        DatePipe
+        DatePipe,
+        StoreService
     ],
     entryComponents: [JhiLoginModalComponent],
     exports: [

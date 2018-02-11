@@ -2,12 +2,12 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { HlSchoolSharedModule } from '../../shared';
-import { courseRoute } from './course.route';
-import { ClientCourseComponent} from './course.component';
-import { CourseService } from './course.service';
+import { lessonRoute } from './lesson.route';
+import { ClientLessonComponent} from './lesson.component';
+import { LessonService } from './lesson.service';
 
 const ENTITY_STATES = [
-    ...courseRoute
+    ...lessonRoute
 ];
 
 @NgModule({
@@ -16,14 +16,14 @@ const ENTITY_STATES = [
         RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
-        ClientCourseComponent
+        ClientLessonComponent
     ],
     entryComponents: [
-        ClientCourseComponent,
+        ClientLessonComponent,
     ],
     providers: [
-        CourseService
+        LessonService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ClientCourseModule {}
+export class ClientLessonModule {}

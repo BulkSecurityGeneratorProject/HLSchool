@@ -5,6 +5,7 @@
 }
 $bg-grey: #f0f0f0;
 $bg-blue: rgba(32,166,231,.8) linear-gradient(180deg,#20a8e9,rgba(30,158,220,.5)) repeat-x;
+$bg-blue3: rgba(32,166,231,.8) ;
 $bg-yellow: #ffcb1f;
 $bg-yellow2: linear-gradient(135deg,#fbb430,#fbb430 26%,#faa919 0,#faa919 39%,#fbb430 0,#fbb430 52%,#faa919 0,#faa919 57%,#fbb430 0,#fbb430 78%,#faa919 0,#faa919 90%,#fbb430 0,#fbb430);
 $bg-blue2: linear-gradient(170deg,#20a2e2,#79d9e8);
@@ -174,6 +175,41 @@ body{
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+    }
+}
+
+.ltm-course{
+    .ltm-course-item{
+        cursor: pointer;
+        text-align: center;
+        padding-bottom: 30px;
+        img{
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .ltm-course-item-footer{
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            height: 70px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+
+
+            .t-item-name{
+                color: #1caff6;
+                font-size: 18px;
+                font-weight: 700;
+            }
+            .t-item-status{
+                color: #1caff6;
+                font-size: 16px;
+                font-weight: 500;
+            }
         }
     }
 }
