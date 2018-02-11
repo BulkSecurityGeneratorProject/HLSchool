@@ -1,104 +1,131 @@
-<div>
-    <h2>
-        <span jhiTranslate="hlSchoolApp.lesson.home.title">Lessons</span>
-        <button class="btn btn-primary float-right jh-create-entity create-lesson" [routerLink]="['/', { outlets: { popup: ['lesson-new'] } }]">
-            <span class="fa fa-plus"></span>
-            <span class="hidden-sm-down"  jhiTranslate="hlSchoolApp.lesson.home.createLabel">
-            Create new Lesson
-            </span>
-        </button>
-    </h2>
-    <jhi-alert></jhi-alert>
-    <div class="row">
-        <div class="col-sm-12">
-            <form name="searchForm" class="form-inline">
-                <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'hlSchoolApp.lesson.home.search' | translate }}">
-                    <button class="input-group-addon btn btn-info" (click)="search(currentSearch)">
-                        <span class="fa fa-search"></span>
-                    </button>
-                    <button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">
-                        <span class="fa fa-trash-o"></span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <br/>
-    <div class="table-responsive" *ngIf="lessons">
-        <table class="table table-striped">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="createDate"><span jhiTranslate="hlSchoolApp.lesson.createDate">Create Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="activated"><span jhiTranslate="hlSchoolApp.lesson.activated">Activated</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="title"><span jhiTranslate="hlSchoolApp.lesson.title">Title</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="level"><span jhiTranslate="hlSchoolApp.lesson.level">Level</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="contenten"><span jhiTranslate="hlSchoolApp.lesson.contenten">Contenten</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="contentvi"><span jhiTranslate="hlSchoolApp.lesson.contentvi">Contentvi</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="image"><span jhiTranslate="hlSchoolApp.lesson.image">Image</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="rawData"><span jhiTranslate="hlSchoolApp.lesson.rawData">Raw Data</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="courseId"><span jhiTranslate="hlSchoolApp.lesson.course">Course</span> <span class="fa fa-sort"></span></th>
-            <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let lesson of lessons ;trackBy: trackId">
-                <td><a [routerLink]="['../lesson', lesson.id ]">{{lesson.id}}</a></td>
-                <td>{{lesson.createDate | date:'medium'}}</td>
-                <td>{{lesson.activated}}</td>
-                <td>{{lesson.title}}</td>
-                <td>{{lesson.level}}</td>
-                <td>{{lesson.contenten}}</td>
-                <td>{{lesson.contentvi}}</td>
-                <td>
-                    <a *ngIf="lesson.image" (click)="openFile(lesson.imageContentType, lesson.image)">
-                        <img [src]="'data:' + lesson.imageContentType + ';base64,' + lesson.image" style="max-height: 30px;" alt="lesson image"/>
-                    </a>
-                    <span *ngIf="lesson.image">{{lesson.imageContentType}}, {{byteSize(lesson.image)}}</span>
-                </td>
-                <td>{{lesson.rawData}}</td>
-                <td>
-                    <div *ngIf="lesson.courseId">
-                        <a [routerLink]="['../course', lesson.courseId  ]" >{{lesson.courseId}}</a>
-                    </div>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['../lesson', lesson.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+<div class="card jh-card">
+    <div>
+        <h2>
+            <span jhiTranslate="hlSchoolApp.lesson.home.title">Lessons</span>
+            <button class="btn btn-primary float-right jh-create-entity create-lesson" [routerLink]="['/', { outlets: { popup: ['lesson-new'] } }]">
+                <span class="fa fa-plus"></span>
+                <span class="hidden-sm-down" jhiTranslate="hlSchoolApp.lesson.home.createLabel">
+                    Create new Lesson
+                </span>
+            </button>
+        </h2>
+        <jhi-alert></jhi-alert>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group w-100 mt-3">
+                        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'hlSchoolApp.lesson.home.search' | translate }}">
+                        <button class="input-group-addon btn btn-info" (click)="search(currentSearch)">
+                            <span class="fa fa-search"></span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'lesson/'+ lesson.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'lesson/'+ lesson.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        <button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                            <span class="fa fa-trash-o"></span>
                         </button>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="lessons && lessons.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+                </form>
+            </div>
         </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        <br/>
+        <div class="table-responsive" *ngIf="lessons">
+            <table class="table table-striped">
+                <thead>
+                    <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                        <th jhiSortBy="id">
+                            <span jhiTranslate="global.field.id">ID</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="createDate">
+                            <span jhiTranslate="hlSchoolApp.lesson.createDate">Create Date</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="activated">
+                            <span jhiTranslate="hlSchoolApp.lesson.activated">Activated</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="title">
+                            <span jhiTranslate="hlSchoolApp.lesson.title">Title</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="level">
+                            <span jhiTranslate="hlSchoolApp.lesson.level">Level</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="contenten">
+                            <span jhiTranslate="hlSchoolApp.lesson.contenten">Contenten</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="contentvi">
+                            <span jhiTranslate="hlSchoolApp.lesson.contentvi">Contentvi</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="image">
+                            <span jhiTranslate="hlSchoolApp.lesson.image">Image</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="rawData">
+                            <span jhiTranslate="hlSchoolApp.lesson.rawData">Raw Data</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th jhiSortBy="courseId">
+                            <span jhiTranslate="hlSchoolApp.lesson.course">Course</span>
+                            <span class="fa fa-sort"></span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let lesson of lessons ;trackBy: trackId">
+                        <td>
+                            <a [routerLink]="['../lesson', lesson.id ]">{{lesson.id}}</a>
+                        </td>
+                        <td>{{lesson.createDate | date:'medium'}}</td>
+                        <td>{{lesson.activated}}</td>
+                        <td>{{lesson.title}}</td>
+                        <td>{{lesson.level}}</td>
+                        <td>{{lesson.contenten}}</td>
+                        <td>{{lesson.contentvi}}</td>
+                        <td>
+                            <a *ngIf="lesson.image" (click)="openFile(lesson.imageContentType, lesson.image)">
+                                <img [src]="'data:' + lesson.imageContentType + ';base64,' + lesson.image" style="max-height: 30px;" alt="lesson image" />
+                            </a>
+                            <span *ngIf="lesson.image">{{lesson.imageContentType}}, {{byteSize(lesson.image)}}</span>
+                        </td>
+                        <td>{{lesson.rawData}}</td>
+                        <td>
+                            <div *ngIf="lesson.courseId">
+                                <a [routerLink]="['../course', lesson.courseId  ]">{{lesson.courseId}}</a>
+                            </div>
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" [routerLink]="['../lesson', lesson.id ]" class="btn btn-info btn-sm">
+                                    <span class="fa fa-eye"></span>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                </button>
+                                <button type="submit" [routerLink]="['/', { outlets: { popup: 'lesson/'+ lesson.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
+                                    class="btn btn-primary btn-sm">
+                                    <span class="fa fa-pencil"></span>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                </button>
+                                <button type="submit" [routerLink]="['/', { outlets: { popup: 'lesson/'+ lesson.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge"
+                                    class="btn btn-danger btn-sm">
+                                    <span class="fa fa-remove"></span>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="lessons && lessons.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                    (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
     </div>
 </div>

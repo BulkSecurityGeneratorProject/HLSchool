@@ -1,40 +1,47 @@
+<div class="card jh-card">
+    <div *ngIf="giftLog">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.giftLog.detail.title">Gift Log</span> {{giftLog.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.giftLog.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{giftLog.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.giftLog.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{giftLog.rawData}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.giftLog.user">User</span>
+            </dt>
+            <dd>
+                {{giftLog.userLogin}}
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.giftLog.gift">Gift</span>
+            </dt>
+            <dd>
+                <div *ngIf="giftLog.giftId">
+                    <a [routerLink]="['/gift', giftLog.giftId]">{{giftLog.giftId}}</a>
+                </div>
+            </dd>
+        </dl>
 
-<div *ngIf="giftLog">
-    <h2><span jhiTranslate="hlSchoolApp.giftLog.detail.title">Gift Log</span> {{giftLog.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.giftLog.createDate">Create Date</span></dt>
-        <dd>
-            <span>{{giftLog.createDate | date:'medium'}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.giftLog.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{giftLog.rawData}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.giftLog.user">User</span></dt>
-        <dd>
-            {{giftLog.userLogin}}
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.giftLog.gift">Gift</span></dt>
-        <dd>
-            <div *ngIf="giftLog.giftId">
-                <a [routerLink]="['/gift', giftLog.giftId]">{{giftLog.giftId}}</a>
-            </div>
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'gift-log/'+ giftLog.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'gift-log/'+ giftLog.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
             class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>

@@ -1,40 +1,47 @@
+<div class="card jh-card">
+    <div *ngIf="subLessonLog">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.subLessonLog.detail.title">Sub Lesson Log</span> {{subLessonLog.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.subLessonLog.complete">Complete</span>
+            </dt>
+            <dd>
+                <span>{{subLessonLog.complete}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.subLessonLog.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{subLessonLog.rawData}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.subLessonLog.user">User</span>
+            </dt>
+            <dd>
+                {{subLessonLog.userLogin}}
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.subLessonLog.subLesson">Sub Lesson</span>
+            </dt>
+            <dd>
+                <div *ngIf="subLessonLog.subLessonId">
+                    <a [routerLink]="['/sub-lesson', subLessonLog.subLessonId]">{{subLessonLog.subLessonId}}</a>
+                </div>
+            </dd>
+        </dl>
 
-<div *ngIf="subLessonLog">
-    <h2><span jhiTranslate="hlSchoolApp.subLessonLog.detail.title">Sub Lesson Log</span> {{subLessonLog.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.subLessonLog.complete">Complete</span></dt>
-        <dd>
-            <span>{{subLessonLog.complete}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.subLessonLog.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{subLessonLog.rawData}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.subLessonLog.user">User</span></dt>
-        <dd>
-            {{subLessonLog.userLogin}}
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.subLessonLog.subLesson">Sub Lesson</span></dt>
-        <dd>
-            <div *ngIf="subLessonLog.subLessonId">
-                <a [routerLink]="['/sub-lesson', subLessonLog.subLessonId]">{{subLessonLog.subLessonId}}</a>
-            </div>
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'sub-lesson-log/'+ subLessonLog.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'sub-lesson-log/'+ subLessonLog.id + '/edit'} }]" replaceUrl="true"
+            queryParamsHandling="merge" class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>

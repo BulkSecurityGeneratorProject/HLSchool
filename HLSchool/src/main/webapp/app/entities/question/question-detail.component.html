@@ -1,68 +1,86 @@
+<div class="card jh-card">
+    <div *ngIf="question">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.question.detail.title">Question</span> {{question.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{question.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.questionType">Question Type</span>
+            </dt>
+            <dd>
+                <span jhiTranslate="{{'hlSchoolApp.QuestionType.' + question.questionType}}">{{question.questionType}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.questionSubType">Question Sub Type</span>
+            </dt>
+            <dd>
+                <span jhiTranslate="{{'hlSchoolApp.QuestionSubType.' + question.questionSubType}}">{{question.questionSubType}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.contenten">Contenten</span>
+            </dt>
+            <dd>
+                <span>{{question.contenten}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.contentvi">Contentvi</span>
+            </dt>
+            <dd>
+                <span>{{question.contentvi}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.image">Image</span>
+            </dt>
+            <dd>
+                <div *ngIf="question.image">
+                    <a (click)="openFile(question.imageContentType, question.image)">
+                        <img [src]="'data:' + question.imageContentType + ';base64,' + question.image" style="max-width: 100%;" alt="question image"
+                        />
+                    </a>
+                    {{question.imageContentType}}, {{byteSize(question.image)}}
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.resource">Resource</span>
+            </dt>
+            <dd>
+                <div *ngIf="question.resource">
+                    <a (click)="openFile(question.resourceContentType, question.resource)" jhiTranslate="entity.action.open">open</a>
+                    {{question.resourceContentType}}, {{byteSize(question.resource)}}
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{question.rawData}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.question.subLesson">Sub Lesson</span>
+            </dt>
+            <dd>
+                <div *ngIf="question.subLessonId">
+                    <a [routerLink]="['/sub-lesson', question.subLessonId]">{{question.subLessonId}}</a>
+                </div>
+            </dd>
+        </dl>
 
-<div *ngIf="question">
-    <h2><span jhiTranslate="hlSchoolApp.question.detail.title">Question</span> {{question.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.question.createDate">Create Date</span></dt>
-        <dd>
-            <span>{{question.createDate | date:'medium'}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.questionType">Question Type</span></dt>
-        <dd>
-            <span jhiTranslate="{{'hlSchoolApp.QuestionType.' + question.questionType}}">{{question.questionType}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.questionSubType">Question Sub Type</span></dt>
-        <dd>
-            <span jhiTranslate="{{'hlSchoolApp.QuestionSubType.' + question.questionSubType}}">{{question.questionSubType}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.contenten">Contenten</span></dt>
-        <dd>
-            <span>{{question.contenten}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.contentvi">Contentvi</span></dt>
-        <dd>
-            <span>{{question.contentvi}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.image">Image</span></dt>
-        <dd>
-            <div *ngIf="question.image">
-                <a (click)="openFile(question.imageContentType, question.image)">
-                    <img [src]="'data:' + question.imageContentType + ';base64,' + question.image" style="max-width: 100%;" alt="question image"/>
-                </a>
-                {{question.imageContentType}}, {{byteSize(question.image)}}
-            </div>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.resource">Resource</span></dt>
-        <dd>
-            <div *ngIf="question.resource">
-                <a (click)="openFile(question.resourceContentType, question.resource)" jhiTranslate="entity.action.open">open</a>
-                {{question.resourceContentType}}, {{byteSize(question.resource)}}
-            </div>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{question.rawData}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.question.subLesson">Sub Lesson</span></dt>
-        <dd>
-            <div *ngIf="question.subLessonId">
-                <a [routerLink]="['/sub-lesson', question.subLessonId]">{{question.subLessonId}}</a>
-            </div>
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'question/'+ question.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'question/'+ question.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
             class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>

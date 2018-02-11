@@ -1,44 +1,53 @@
+<div class="card jh-card">
+    <div *ngIf="feedback">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.feedback.detail.title">Feedback</span> {{feedback.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.feedback.createDate">Create Date</span>
+            </dt>
+            <dd>
+                <span>{{feedback.createDate | date:'medium'}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.feedback.content">Content</span>
+            </dt>
+            <dd>
+                <span>{{feedback.content}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.feedback.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{feedback.rawData}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.feedback.question">Question</span>
+            </dt>
+            <dd>
+                <div *ngIf="feedback.questionId">
+                    <a [routerLink]="['/question', feedback.questionId]">{{feedback.questionId}}</a>
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.feedback.user">User</span>
+            </dt>
+            <dd>
+                {{feedback.userLogin}}
+            </dd>
+        </dl>
 
-<div *ngIf="feedback">
-    <h2><span jhiTranslate="hlSchoolApp.feedback.detail.title">Feedback</span> {{feedback.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.feedback.createDate">Create Date</span></dt>
-        <dd>
-            <span>{{feedback.createDate | date:'medium'}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.feedback.content">Content</span></dt>
-        <dd>
-            <span>{{feedback.content}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.feedback.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{feedback.rawData}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.feedback.question">Question</span></dt>
-        <dd>
-            <div *ngIf="feedback.questionId">
-                <a [routerLink]="['/question', feedback.questionId]">{{feedback.questionId}}</a>
-            </div>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.feedback.user">User</span></dt>
-        <dd>
-            {{feedback.userLogin}}
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'feedback/'+ feedback.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'feedback/'+ feedback.id + '/edit'} }]" replaceUrl="true" queryParamsHandling="merge"
             class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>

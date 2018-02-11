@@ -1,54 +1,66 @@
+<div class="card jh-card">
+    <div *ngIf="vocabulary">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.vocabulary.detail.title">Vocabulary</span> {{vocabulary.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.japanese">Japanese</span>
+            </dt>
+            <dd>
+                <span>{{vocabulary.japanese}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.english">English</span>
+            </dt>
+            <dd>
+                <span>{{vocabulary.english}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.vietnamese">Vietnamese</span>
+            </dt>
+            <dd>
+                <span>{{vocabulary.vietnamese}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.image">Image</span>
+            </dt>
+            <dd>
+                <div *ngIf="vocabulary.image">
+                    <a (click)="openFile(vocabulary.imageContentType, vocabulary.image)">
+                        <img [src]="'data:' + vocabulary.imageContentType + ';base64,' + vocabulary.image" style="max-width: 100%;" alt="vocabulary image"
+                        />
+                    </a>
+                    {{vocabulary.imageContentType}}, {{byteSize(vocabulary.image)}}
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.audio">Audio</span>
+            </dt>
+            <dd>
+                <div *ngIf="vocabulary.audio">
+                    <a (click)="openFile(vocabulary.audioContentType, vocabulary.audio)" jhiTranslate="entity.action.open">open</a>
+                    {{vocabulary.audioContentType}}, {{byteSize(vocabulary.audio)}}
+                </div>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.vocabulary.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{vocabulary.rawData}}</span>
+            </dd>
+        </dl>
 
-<div *ngIf="vocabulary">
-    <h2><span jhiTranslate="hlSchoolApp.vocabulary.detail.title">Vocabulary</span> {{vocabulary.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.japanese">Japanese</span></dt>
-        <dd>
-            <span>{{vocabulary.japanese}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.english">English</span></dt>
-        <dd>
-            <span>{{vocabulary.english}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.vietnamese">Vietnamese</span></dt>
-        <dd>
-            <span>{{vocabulary.vietnamese}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.image">Image</span></dt>
-        <dd>
-            <div *ngIf="vocabulary.image">
-                <a (click)="openFile(vocabulary.imageContentType, vocabulary.image)">
-                    <img [src]="'data:' + vocabulary.imageContentType + ';base64,' + vocabulary.image" style="max-width: 100%;" alt="vocabulary image"/>
-                </a>
-                {{vocabulary.imageContentType}}, {{byteSize(vocabulary.image)}}
-            </div>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.audio">Audio</span></dt>
-        <dd>
-            <div *ngIf="vocabulary.audio">
-                <a (click)="openFile(vocabulary.audioContentType, vocabulary.audio)" jhiTranslate="entity.action.open">open</a>
-                {{vocabulary.audioContentType}}, {{byteSize(vocabulary.audio)}}
-            </div>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.vocabulary.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{vocabulary.rawData}}</span>
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'vocabulary/'+ vocabulary.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'vocabulary/'+ vocabulary.id + '/edit'} }]" replaceUrl="true"
+            queryParamsHandling="merge" class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>

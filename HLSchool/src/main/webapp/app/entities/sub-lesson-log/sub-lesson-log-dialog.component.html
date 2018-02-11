@@ -1,49 +1,49 @@
-<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+<div class="card jh-card">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
-    <div class="modal-header">
-        <h4 class="modal-title" id="mySubLessonLogLabel" jhiTranslate="hlSchoolApp.subLessonLog.home.createOrEditLabel">Create or edit a Sub Lesson Log</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="clear()">&times;</button>
-    </div>
-    <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!subLessonLog.id">
-            <label for="id" jhiTranslate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="subLessonLog.id" readonly />
+        <div class="modal-header">
+            <h4 class="modal-title" id="mySubLessonLogLabel" jhiTranslate="hlSchoolApp.subLessonLog.home.createOrEditLabel">Create or edit a Sub Lesson Log</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.complete" for="field_complete">Complete</label>
-            <input type="checkbox" class="form-control" name="complete" id="field_complete"
-                [(ngModel)]="subLessonLog.complete" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.rawData" for="field_rawData">Raw Data</label>
-            <textarea class="form-control" name="rawData" id="field_rawData"
-                [(ngModel)]="subLessonLog.rawData" ></textarea>
-        </div>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" [hidden]="!subLessonLog.id">
+                <label for="id" jhiTranslate="global.field.id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" [(ngModel)]="subLessonLog.id" readonly />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.complete" for="field_complete">Complete</label>
+                <input type="checkbox" class="form-control" name="complete" id="field_complete" [(ngModel)]="subLessonLog.complete" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.rawData" for="field_rawData">Raw Data</label>
+                <textarea class="form-control" name="rawData" id="field_rawData" [(ngModel)]="subLessonLog.rawData"></textarea>
+            </div>
 
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.user" for="field_user">User</label>
-            <select class="form-control" id="field_user" name="user" [(ngModel)]="subLessonLog.userId" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
-            </select>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.user" for="field_user">User</label>
+                <select class="form-control" id="field_user" name="user" [(ngModel)]="subLessonLog.userId">
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.subLesson" for="field_subLesson">Sub Lesson</label>
+                <select class="form-control" id="field_subLesson" name="subLesson" [(ngModel)]="subLessonLog.subLessonId">
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="subLessonOption.id" *ngFor="let subLessonOption of sublessons; trackBy: trackSubLessonById">{{subLessonOption.id}}</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.subLessonLog.subLesson" for="field_subLesson">Sub Lesson</label>
-            <select class="form-control" id="field_subLesson" name="subLesson" [(ngModel)]="subLessonLog.subLessonId" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="subLessonOption.id" *ngFor="let subLessonOption of sublessons; trackBy: trackSubLessonById">{{subLessonOption.id}}</option>
-            </select>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+                <span class="fa fa-ban"></span>&nbsp;
+                <span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <span class="fa fa-save"></span>&nbsp;
+                <span jhiTranslate="entity.action.save">Save</span>
+            </button>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-    </div>
-</form>
+    </form>
+</div>

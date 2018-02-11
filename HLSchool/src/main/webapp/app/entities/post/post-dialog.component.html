@@ -1,87 +1,81 @@
-<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+<div class="card jh-card">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
-    <div class="modal-header">
-        <h4 class="modal-title" id="myPostLabel" jhiTranslate="hlSchoolApp.post.home.createOrEditLabel">Create or edit a Post</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="clear()">&times;</button>
-    </div>
-    <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!post.id">
-            <label for="id" jhiTranslate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="post.id" readonly />
+        <div class="modal-header">
+            <h4 class="modal-title" id="myPostLabel" jhiTranslate="hlSchoolApp.post.home.createOrEditLabel">Create or edit a Post</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.title" for="field_title">Title</label>
-            <input type="text" class="form-control" name="title" id="field_title"
-                [(ngModel)]="post.title" required minlength="20"/>
-            <div [hidden]="!(editForm.controls.title?.dirty && editForm.controls.title?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.title?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.title?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 20 }">
-                   This field is required to be at least 20 characters.
-                </small>
+        <div class="modal-body">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="form-group" [hidden]="!post.id">
+                <label for="id" jhiTranslate="global.field.id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" [(ngModel)]="post.id" readonly />
             </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contenten" for="field_contenten">Contenten</label>
-            <textarea class="form-control" name="contenten" id="field_contenten"
-                [(ngModel)]="post.contenten" ></textarea>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contentvi" for="field_contentvi">Contentvi</label>
-            <textarea class="form-control" name="contentvi" id="field_contentvi"
-                [(ngModel)]="post.contentvi" ></textarea>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.createDate" for="field_createDate">Create Date</label>
-            <div class="d-flex">
-                <input id="field_createDate" type="datetime-local" class="form-control" name="createDate" [(ngModel)]="post.createDate"
-                />
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.title" for="field_title">Title</label>
+                <input type="text" class="form-control" name="title" id="field_title" [(ngModel)]="post.title" required minlength="20" />
+                <div [hidden]="!(editForm.controls.title?.dirty && editForm.controls.title?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.title?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.title?.errors?.minlength" jhiTranslate="entity.validation.minlength"
+                        translateValues="{ min: 20 }">
+                        This field is required to be at least 20 characters.
+                    </small>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.lastModifier" for="field_lastModifier">Last Modifier</label>
-            <div class="d-flex">
-                <input id="field_lastModifier" type="datetime-local" class="form-control" name="lastModifier" [(ngModel)]="post.lastModifier"
-                />
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contenten" for="field_contenten">Contenten</label>
+                <textarea class="form-control" name="contenten" id="field_contenten" [(ngModel)]="post.contenten"></textarea>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.activated" for="field_activated">Activated</label>
-            <input type="checkbox" class="form-control" name="activated" id="field_activated"
-                [(ngModel)]="post.activated" />
-            <div [hidden]="!(editForm.controls.activated?.dirty && editForm.controls.activated?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.activated?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.contentvi" for="field_contentvi">Contentvi</label>
+                <textarea class="form-control" name="contentvi" id="field_contentvi" [(ngModel)]="post.contentvi"></textarea>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.rawData" for="field_rawData">Raw Data</label>
-            <textarea class="form-control" name="rawData" id="field_rawData"
-                [(ngModel)]="post.rawData" ></textarea>
-        </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.createDate" for="field_createDate">Create Date</label>
+                <div class="d-flex">
+                    <input id="field_createDate" type="datetime-local" class="form-control" name="createDate" [(ngModel)]="post.createDate" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.lastModifier" for="field_lastModifier">Last Modifier</label>
+                <div class="d-flex">
+                    <input id="field_lastModifier" type="datetime-local" class="form-control" name="lastModifier" [(ngModel)]="post.lastModifier"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.activated" for="field_activated">Activated</label>
+                <input type="checkbox" class="form-control" name="activated" id="field_activated" [(ngModel)]="post.activated" />
+                <div [hidden]="!(editForm.controls.activated?.dirty && editForm.controls.activated?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!editForm.controls.activated?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.rawData" for="field_rawData">Raw Data</label>
+                <textarea class="form-control" name="rawData" id="field_rawData" [(ngModel)]="post.rawData"></textarea>
+            </div>
 
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="hlSchoolApp.post.user" for="field_user">User</label>
-            <select class="form-control" id="field_user" name="user" [(ngModel)]="post.userId" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
-            </select>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.user" for="field_user">User</label>
+                <select class="form-control" id="field_user" name="user" [(ngModel)]="post.userId">
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-    </div>
-</form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+                <span class="fa fa-ban"></span>&nbsp;
+                <span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <span class="fa fa-save"></span>&nbsp;
+                <span jhiTranslate="entity.action.save">Save</span>
+            </button>
+        </div>
+    </form>
+</div>

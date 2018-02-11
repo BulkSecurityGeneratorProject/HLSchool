@@ -1,40 +1,47 @@
+<div class="card jh-card">
+    <div *ngIf="lessonLog">
+        <h2>
+            <span jhiTranslate="hlSchoolApp.lessonLog.detail.title">Lesson Log</span> {{lessonLog.id}}</h2>
+        <hr>
+        <jhi-alert-error></jhi-alert-error>
+        <dl class="row-md jh-entity-details">
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lessonLog.complete">Complete</span>
+            </dt>
+            <dd>
+                <span>{{lessonLog.complete}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lessonLog.rawData">Raw Data</span>
+            </dt>
+            <dd>
+                <span>{{lessonLog.rawData}}</span>
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lessonLog.user">User</span>
+            </dt>
+            <dd>
+                {{lessonLog.userLogin}}
+            </dd>
+            <dt>
+                <span jhiTranslate="hlSchoolApp.lessonLog.lesson">Lesson</span>
+            </dt>
+            <dd>
+                <div *ngIf="lessonLog.lessonId">
+                    <a [routerLink]="['/lesson', lessonLog.lessonId]">{{lessonLog.lessonId}}</a>
+                </div>
+            </dd>
+        </dl>
 
-<div *ngIf="lessonLog">
-    <h2><span jhiTranslate="hlSchoolApp.lessonLog.detail.title">Lesson Log</span> {{lessonLog.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="hlSchoolApp.lessonLog.complete">Complete</span></dt>
-        <dd>
-            <span>{{lessonLog.complete}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.lessonLog.rawData">Raw Data</span></dt>
-        <dd>
-            <span>{{lessonLog.rawData}}</span>
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.lessonLog.user">User</span></dt>
-        <dd>
-            {{lessonLog.userLogin}}
-        </dd>
-        <dt><span jhiTranslate="hlSchoolApp.lessonLog.lesson">Lesson</span></dt>
-        <dd>
-            <div *ngIf="lessonLog.lessonId">
-                <a [routerLink]="['/lesson', lessonLog.lessonId]">{{lessonLog.lessonId}}</a>
-            </div>
-        </dd>
-    </dl>
+        <button type="submit" (click)="previousState()" class="btn btn-info">
+            <span class="fa fa-arrow-left"></span>&nbsp;
+            <span jhiTranslate="entity.action.back"> Back</span>
+        </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'lesson-log/'+ lessonLog.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+        <button type="button" [routerLink]="['/', { outlets: { popup: 'lesson-log/'+ lessonLog.id + '/edit'} }]" replaceUrl="true"
+            queryParamsHandling="merge" class="btn btn-primary">
+            <span class="fa fa-pencil"></span>&nbsp;
+            <span jhiTranslate="entity.action.edit"> Edit</span>
+        </button>
+    </div>
 </div>
