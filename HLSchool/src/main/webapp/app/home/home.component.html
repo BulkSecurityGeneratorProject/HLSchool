@@ -4,8 +4,8 @@
             <span class="hipster img-fluid rounded"></span>
         </div>
         <div class="col-md-9">
-            <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
-            <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
+            <h1 class="display-4">Chào mừng bạn đến với HLSchool</h1>
+            <p class="lead">Học tiếng nhật thật đơn giản</p>
 
             <div [ngSwitch]="isAuthenticated()">
                 <div class="alert alert-success" *ngSwitchCase="true">
@@ -25,8 +25,8 @@
                 </div>
             </div>
 
-            <p jhiTranslate="home.question">
-                If you have any question on JHipster:
+            <p>
+                Các trang đang được xây dựng
             </p>
 
             <ul>
@@ -39,11 +39,31 @@
                 <li>
                     <a routerLink="client/shop" routerLinkActive="active">Shop</a>
                 </li>
+                <li>
+                    <a routerLink="client/room" routerLinkActive="active">Room</a>
+                </li>
             </ul>
-            <p>
-                <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span>
-                <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener" jhiTranslate="home.github">GitHub</a>!
-            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="content">
+            <div class="" style="padding-left: 35px">
+                <h2>Bảng thông báo</h2>
+            </div>
+
+            <div class="ltm-pd-35">
+                <div class="ltm-post" *ngFor="let post of posts">
+                    <div class="ltm-post-title">
+                        <a href="#">{{post.title}}</a>
+                    </div>
+                    <div class="ltm-post-content">
+                        {{post.contenten.substring(0, 500)}}
+                    </div>
+                    <div class="ltm-post-bottom">
+                        by {{post.user}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

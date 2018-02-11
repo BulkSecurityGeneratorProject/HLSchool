@@ -6,12 +6,14 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ClientCourseModule } from './course/course.module';
 import { ClientShopModule } from './shop/shop.module';
 import { ClientLessonModule } from './lesson/lesson.module';
+import { ClientRoomModule } from './room/room.module';
 
 @NgModule({
     imports: [
         ClientCourseModule,
         ClientShopModule,
-        ClientLessonModule
+        ClientLessonModule,
+        ClientRoomModule
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

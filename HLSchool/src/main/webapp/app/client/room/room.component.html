@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-12" id="content">
+        <jhi-alert></jhi-alert>
+        <div class="ltm-box">
+            <div class="ltm-pd-35">
+                <h2>User Course</h2>
+            </div>
+            <div class="row ltm-pd-35">
+                <div style="display:inline-block;" *ngFor="let room of rooms ;trackBy: trackId" class="col-lg-4 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box" ngClass="{{room.rawData}}">
+                        <div class="inner">
+                            <p>{{room.title}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-address-book-o" aria-hidden="true"></i>
+                        </div>
+                        <a class="small-box-footer" [routerLink]="['../room', room.id ]">Join
+                            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -56,6 +57,7 @@ public class UserLogResource {
         if (userLogDTO.getId() != null) {
             throw new BadRequestAlertException("A new userLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        userLogDTO.setCreateDate(ZonedDateTime.now());
         UserLogDTO result = userLogService.save(userLogDTO);
         return ResponseEntity.created(new URI("/api/user-logs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

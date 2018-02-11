@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { HlSchoolSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
+import { Post } from './post.model';
+import { PostService } from './post.service';
 
 @NgModule({
     imports: [
@@ -16,6 +18,7 @@ import { HOME_ROUTE, HomeComponent } from './';
     entryComponents: [
     ],
     providers: [
+        PostService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

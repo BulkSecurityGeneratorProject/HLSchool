@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -57,6 +58,7 @@ public class LessonResource {
         if (lessonDTO.getId() != null) {
             throw new BadRequestAlertException("A new lesson cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        lessonDTO.setCreateDate(ZonedDateTime.now());
         LessonDTO result = lessonService.save(lessonDTO);
         return ResponseEntity.created(new URI("/api/lessons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

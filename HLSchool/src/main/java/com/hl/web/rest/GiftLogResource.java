@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -56,6 +57,7 @@ public class GiftLogResource {
         if (giftLogDTO.getId() != null) {
             throw new BadRequestAlertException("A new giftLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        giftLogDTO.setCreateDate(ZonedDateTime.now());
         GiftLogDTO result = giftLogService.save(giftLogDTO);
         return ResponseEntity.created(new URI("/api/gift-logs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

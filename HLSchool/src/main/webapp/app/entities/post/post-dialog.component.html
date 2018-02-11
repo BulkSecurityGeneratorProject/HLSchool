@@ -33,19 +33,6 @@
                 <textarea class="form-control" name="contentvi" id="field_contentvi" [(ngModel)]="post.contentvi"></textarea>
             </div>
             <div class="form-group">
-                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.createDate" for="field_createDate">Create Date</label>
-                <div class="d-flex">
-                    <input id="field_createDate" type="datetime-local" class="form-control" name="createDate" [(ngModel)]="post.createDate" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-control-label" jhiTranslate="hlSchoolApp.post.lastModifier" for="field_lastModifier">Last Modifier</label>
-                <div class="d-flex">
-                    <input id="field_lastModifier" type="datetime-local" class="form-control" name="lastModifier" [(ngModel)]="post.lastModifier"
-                    />
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="form-control-label" jhiTranslate="hlSchoolApp.post.activated" for="field_activated">Activated</label>
                 <input type="checkbox" class="form-control" name="activated" id="field_activated" [(ngModel)]="post.activated" />
                 <div [hidden]="!(editForm.controls.activated?.dirty && editForm.controls.activated?.invalid)">

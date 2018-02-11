@@ -213,3 +213,26 @@ body{
         }
     }
 }
+
+.ltm-post{
+    padding-top: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    .ltm-post-title{
+        a{
+            color: #1caff6;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        padding-bottom:10px;
+    }
+    .ltm-post-content{
+        height:100px;
+        padding: 10px 0;
+        overflow:hidden;
+    }
+    .ltm-post-bottom{
+        padding-right: 50px;
+        color: #999;
+    }
+}

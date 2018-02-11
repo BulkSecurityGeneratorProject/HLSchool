@@ -1,6 +1,7 @@
 package com.hl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hl.security.SecurityUtils;
 import com.hl.service.PostService;
 import com.hl.web.rest.errors.BadRequestAlertException;
 import com.hl.web.rest.util.HeaderUtil;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -57,6 +59,10 @@ public class PostResource {
         if (postDTO.getId() != null) {
             throw new BadRequestAlertException("A new post cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        postDTO.setCreateDate(ZonedDateTime.now());
+        if(SecurityUtils.getCurrentUserLogin() != null){
+            postDTO.setUserLogin(SecurityUtils.getCurrentUserLogin().toString());
+        }
         PostDTO result = postService.save(postDTO);
         return ResponseEntity.created(new URI("/api/posts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -79,6 +85,7 @@ public class PostResource {
         if (postDTO.getId() == null) {
             return createPost(postDTO);
         }
+        postDTO.setLastModifier(ZonedDateTime.now());
         PostDTO result = postService.save(postDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, postDTO.getId().toString()))

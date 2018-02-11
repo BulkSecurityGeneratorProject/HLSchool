@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -57,6 +58,7 @@ public class FeedbackResource {
         if (feedbackDTO.getId() != null) {
             throw new BadRequestAlertException("A new feedback cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        feedbackDTO.setCreateDate(ZonedDateTime.now());
         FeedbackDTO result = feedbackService.save(feedbackDTO);
         return ResponseEntity.created(new URI("/api/feedbacks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

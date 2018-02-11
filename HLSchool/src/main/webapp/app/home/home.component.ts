@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal } from '../shared';
+import { Account, LoginModalService, Principal, ResponseWrapper } from '../shared';
+import { Post } from './post.model';
+import { PostService } from './post.service';
 
 @Component({
     selector: 'jhi-home',
@@ -15,11 +17,13 @@ import { Account, LoginModalService, Principal } from '../shared';
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
+    posts: Post[];
 
     constructor(
         private principal: Principal,
         private loginModalService: LoginModalService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private postService: PostService
     ) {
     }
 
@@ -28,6 +32,7 @@ export class HomeComponent implements OnInit {
             this.account = account;
         });
         this.registerAuthenticationSuccess();
+        this.loadAll();
     }
 
     registerAuthenticationSuccess() {
@@ -44,5 +49,21 @@ export class HomeComponent implements OnInit {
 
     login() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    loadAll() {
+        this.postService.query({
+            page: 0,
+            size: 10,
+            sort: ['rawData', 'desc']}).subscribe(
+            (res: ResponseWrapper) => this.onLoadSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onLoadError(res.json)
+        );
+    }
+    private onLoadSuccess(data, headers) {
+        this.posts = data;
+    }
+    private onLoadError(error) {
+        console.log(error)
     }
 }

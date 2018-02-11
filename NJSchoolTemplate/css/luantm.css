@@ -213,3 +213,30 @@ body {
   font-size: 16px;
   font-weight: 500;
 }
+
+.ltm-post {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.ltm-post .ltm-post-title {
+  padding-bottom: 10px;
+}
+
+.ltm-post .ltm-post-title a {
+  color: #1caff6;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.ltm-post .ltm-post-content {
+  height: 100px;
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.ltm-post .ltm-post-bottom {
+  padding-right: 50px;
+  color: #999;
+}
