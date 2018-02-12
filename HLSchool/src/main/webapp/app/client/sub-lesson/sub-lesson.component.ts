@@ -4,36 +4,36 @@ import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper, StoreService } from '../../shared';
-import { Lesson } from './lesson.model';
-import { Course } from './../course/course.model';
-import { LessonService } from './lesson.service';
+import { Lesson } from './../lesson/lesson.model';
+import { SubLesson } from './sub-lesson.model';
+import { SubLessonService } from './sub-lesson.service';
 
 @Component({
-    selector: 'jhi-client-lesson',
-    templateUrl: './lesson.component.html',
+    selector: 'jhi-client-sub-lesson',
+    templateUrl: './sub-lesson.component.html',
     styleUrls: [
-        'lesson.scss'
+        'sub-lesson.scss'
     ]
 })
-export class ClientLessonComponent implements OnInit, OnDestroy {
-    course: Course;
-    lessons: Lesson[];
+export class ClientSubLessonComponent implements OnInit, OnDestroy {
+    lesson: Lesson;
+    subLessons: SubLesson[];
     i = 2;
     constructor(
         private router: Router,
         private storeService: StoreService,
-        private lessonService: LessonService
+        private subLessonService: SubLessonService
     ) {
     }
     ngOnInit() {
-        this.course = this.storeService.course;
+        this.lesson = this.storeService.course;
         this.loadAll();
     }
 
     ngOnDestroy() {
     }
     loadAll() {
-        this.lessonService.getLessonsByCourseId(this.course.id, {
+        this.subLessonService.getLessonsByCourseId(this.lesson.id, {
             page: 0,
             size: 50,
             sort: null}).subscribe(
@@ -43,12 +43,8 @@ export class ClientLessonComponent implements OnInit, OnDestroy {
     }
     private onLoadSuccess(data, headers) {
         // this.page = pagingParams.page;
-        this.lessons = data;
+        this.subLessons = data;
     }
     private onLoadError(error) {
-    }
-    onClickLesson(lesson) {
-        this.storeService.lesson = lesson;
-        this.router.navigateByUrl('/client/sub-lesson');
     }
 }

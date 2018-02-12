@@ -7,13 +7,15 @@ import { ClientCourseModule } from './course/course.module';
 import { ClientShopModule } from './shop/shop.module';
 import { ClientLessonModule } from './lesson/lesson.module';
 import { ClientRoomModule } from './room/room.module';
+import { ClientSubLessonModule } from './sub-lesson/sub-lesson.module';
 
 @NgModule({
     imports: [
         ClientCourseModule,
         ClientShopModule,
         ClientLessonModule,
-        ClientRoomModule
+        ClientRoomModule,
+        ClientSubLessonModule
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

@@ -100,6 +100,15 @@ public class SubLessonResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/sublessonsByLessonId/{id}")
+    @Timed
+    public ResponseEntity<List<SubLessonDTO>> getSubLessonsByLessonId(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get a page of SubLessons");
+        Page<SubLessonDTO> page = subLessonService.findSubLessonsByLessonId(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/sub-lessons");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * GET  /sub-lessons/:id : get the "id" subLesson.
      *

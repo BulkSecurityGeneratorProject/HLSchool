@@ -16,7 +16,7 @@
 
             <div *ngFor="let lesson of lessons ;trackBy: trackId">
                 <div class="ltm-lesson ltm-pd-35">
-                    <div class="ltm-lesson-item">
+                    <div class="ltm-lesson-item" (click)="onClickLesson(lesson)">
                         <img src="./../../../content/images/complete.PNG" alt=""> hello {{trackBy}}
                     </div>
                 </div>

@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-8" id="content">
+        <div class="ltm-box">
+            <div class="ltm-pd-35 ltm-box-header ltm-bg-yellow2">
+                <div class="l-home">
+                    <div>
+                        <p class="ltm-text-lg">Japanese skills</p>
+                        <p class="l-level">Level 5</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ltm-pd-35">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6" *ngFor="let subLesson of subLessons ;trackBy: trackId">
+                        <div class="ltm-lesson-box">
+                            <h5>{{subLesson.title}}</h5>
+                            <p>{{subLesson.contenten}}</p>
+                            <button class="ltm-btn ltm-btn-yellow ltm-btn-lg">Learn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" id="sidebar">
+        <div class="ltm-box ltm-pd-30">
+            <h5>Daily Goal</h5>
+
+            <div>
+                hêlo
+            </div>
+        </div>
+
+        <div class="ltm-box ltm-pd-30">
+            <h5>Leader board</h5>
+            <div>content</div>
+        </div>
+    </div>
+</div>
