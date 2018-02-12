@@ -1,5 +1,6 @@
 package com.hl.service;
 
+import com.hl.domain.SubLesson;
 import com.hl.service.dto.SubLessonDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,9 +45,10 @@ public interface SubLessonService {
      * Search for the subLesson corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<SubLessonDTO> search(String query, Pageable pageable);
+    Page<SubLessonDTO> findSubLessonsByLessonId(Long id, Pageable pageable);
 }

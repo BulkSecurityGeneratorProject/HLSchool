@@ -12,6 +12,7 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 export class LessonService {
 
     private resourceUrl =  SERVER_API_URL + 'api/lessons';
+    private LessonByCourseIdUrl = SERVER_API_URL + 'api/lessonsByCourseId';
     private resourceSearchUrl = SERVER_API_URL + 'api/_search/lessons';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
@@ -42,6 +43,12 @@ export class LessonService {
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
+    getLessonsByCourseId(id: number, req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.LessonByCourseIdUrl + '/' + id, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

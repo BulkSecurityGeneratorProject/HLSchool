@@ -17,6 +17,8 @@ import { LessonService } from './lesson.service';
 })
 export class ClientLessonComponent implements OnInit, OnDestroy {
     course: Course;
+    lessons: Lesson[];
+    i = 2;
     constructor(
         private router: Router,
         private storeService: StoreService,
@@ -25,9 +27,24 @@ export class ClientLessonComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.course = this.storeService.course;
+        this.loadAll();
     }
 
     ngOnDestroy() {
     }
-
+    loadAll() {
+        this.lessonService.getLessonsByCourseId(this.course.id, {
+            page: 0,
+            size: 50,
+            sort: null}).subscribe(
+            (res: ResponseWrapper) => this.onLoadSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onLoadError(res.json)
+        );
+    }
+    private onLoadSuccess(data, headers) {
+        // this.page = pagingParams.page;
+        this.lessons = data;
+    }
+    private onLoadError(error) {
+    }
 }

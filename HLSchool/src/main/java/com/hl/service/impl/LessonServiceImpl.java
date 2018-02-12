@@ -76,9 +76,10 @@ public class LessonServiceImpl implements LessonService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Lesson> findLessonsByCourseId(Long id) {
+    public Page<LessonDTO> findLessonsByCourseId(Long id, Pageable pageable) {
         log.debug("Request to get lessons by course id");
-        return lessonRepository.findLessonsByCourseId(id);
+        return lessonRepository.findLessonsByCourseId(id, pageable)
+            .map(lessonMapper::toDto);
     }
 
     /**

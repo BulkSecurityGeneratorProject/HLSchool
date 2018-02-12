@@ -53,5 +53,5 @@ public interface LessonService {
      */
     Page<LessonDTO> search(String query, Pageable pageable);
 
-    List<Lesson> findLessonsByCourseId(Long id);
+    Page<LessonDTO> findLessonsByCourseId(Long id, Pageable pageable);
 }

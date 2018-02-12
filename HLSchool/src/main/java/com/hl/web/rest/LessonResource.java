@@ -102,6 +102,15 @@ public class LessonResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/lessonsByCourseId/{id}")
+    @Timed
+    public ResponseEntity<List<LessonDTO>> getLessonsByCourseId(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get a page of Lessons");
+        Page<LessonDTO> page = lessonService.findLessonsByCourseId(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/lessons");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * GET  /lessons/:id : get the "id" lesson.
      *

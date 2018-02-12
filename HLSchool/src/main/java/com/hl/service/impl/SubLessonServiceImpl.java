@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -64,6 +66,14 @@ public class SubLessonServiceImpl implements SubLessonService {
     public Page<SubLessonDTO> findAll(Pageable pageable) {
         log.debug("Request to get all SubLessons");
         return subLessonRepository.findAll(pageable)
+            .map(subLessonMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<SubLessonDTO> findSubLessonsByLessonId(Long id, Pageable pageable) {
+        log.debug("Request to get all SubLessons");
+        return subLessonRepository.findSublessonsByLessonId(id, pageable)
             .map(subLessonMapper::toDto);
     }
 
