@@ -8,16 +8,21 @@ import { AuthServerProvider } from '../auth/auth-jwt.service';
 
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
+import { Message } from './Message.model';
 
 @Injectable()
 export class JhiTrackerService {
     stompClient = null;
     subscriber = null;
+    subscriberMessage = null;
     connection: Promise<any>;
     connectedPromise: any;
     listener: Observable<any>;
     listenerObserver: Observer<any>;
     alreadyConnectedOnce = false;
+    roomId = 0;
+
+    messages: Message[] = [];
     private subscription: Subscription;
 
     constructor(
@@ -86,6 +91,25 @@ export class JhiTrackerService {
             );
         }
     }
+    subscribeMessage(roomId, callback) {
+        this.connection.then(() => {
+            if (roomId !== this.roomId) {
+                this.messages = [];
+                this.unsubscribeMessage();
+                this.subscriberMessage = this.stompClient.subscribe('/topic/' + roomId, callback);
+                this.roomId = roomId;
+            }
+        });
+    }
+    sendMessage(message, roomId) {
+        if (this.stompClient !== null && this.stompClient.connected) {
+            this.stompClient.send(
+                '/chat.sendMessage', // destination
+                JSON.stringify({'roomId': roomId, 'message': message}), // body
+                {} // header
+            );
+        }
+    }
 
     subscribe() {
         this.connection.then(() => {
@@ -100,6 +124,13 @@ export class JhiTrackerService {
             this.subscriber.unsubscribe();
         }
         this.listener = this.createListener();
+    }
+    unsubscribeMessage() {
+        if (this.subscriberMessage !== null) {
+            this.subscriberMessage.unsubscribe();
+        }
+        this.listener = this.createListener();
+        this.roomId = 0;
     }
 
     private createListener(): Observable<any> {
