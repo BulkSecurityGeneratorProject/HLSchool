@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -65,6 +67,18 @@ public class LessonServiceImpl implements LessonService {
         log.debug("Request to get all Lessons");
         return lessonRepository.findAll(pageable)
             .map(lessonMapper::toDto);
+    }
+
+    /**
+     * Get all the lessons by course id.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Lesson> findLessonsByCourseId(Long id) {
+        log.debug("Request to get lessons by course id");
+        return lessonRepository.findLessonsByCourseId(id);
     }
 
     /**

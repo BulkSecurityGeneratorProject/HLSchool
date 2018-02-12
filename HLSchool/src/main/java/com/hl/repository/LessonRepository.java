@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.util.List;
+
 
 /**
  * Spring Data JPA repository for the Lesson entity.
@@ -12,5 +14,6 @@ import org.springframework.data.jpa.repository.*;
 @SuppressWarnings("unused")
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
-
+    @Query("select l from Lesson l where l.course.id = ?1")
+    List<Lesson> findLessonsByCourseId(Long id);
 }

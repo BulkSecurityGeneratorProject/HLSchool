@@ -1,8 +1,11 @@
 package com.hl.service;
 
+import com.hl.domain.Lesson;
 import com.hl.service.dto.LessonDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * Service Interface for managing Lesson.
@@ -44,9 +47,11 @@ public interface LessonService {
      * Search for the lesson corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<LessonDTO> search(String query, Pageable pageable);
+
+    List<Lesson> findLessonsByCourseId(Long id);
 }
