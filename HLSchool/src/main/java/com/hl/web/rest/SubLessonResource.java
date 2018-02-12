@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -58,7 +57,6 @@ public class SubLessonResource {
         if (subLessonDTO.getId() != null) {
             throw new BadRequestAlertException("A new subLesson cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        subLessonDTO.setCreateDate(ZonedDateTime.now());
         SubLessonDTO result = subLessonService.save(subLessonDTO);
         return ResponseEntity.created(new URI("/api/sub-lessons/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

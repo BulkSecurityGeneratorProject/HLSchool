@@ -4,11 +4,13 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { SubLesson } from './sub-lesson.model';
 import { SubLessonPopupService } from './sub-lesson-popup.service';
 import { SubLessonService } from './sub-lesson.service';
+import { Lesson, LessonService } from '../lesson';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-sub-lesson-dialog',
@@ -19,16 +21,22 @@ export class SubLessonDialogComponent implements OnInit {
     subLesson: SubLesson;
     isSaving: boolean;
 
+    lessons: Lesson[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private dataUtils: JhiDataUtils,
+        private jhiAlertService: JhiAlertService,
         private subLessonService: SubLessonService,
+        private lessonService: LessonService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.lessonService.query()
+            .subscribe((res: ResponseWrapper) => { this.lessons = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     byteSize(field) {
@@ -71,6 +79,14 @@ export class SubLessonDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackLessonById(index: number, item: Lesson) {
+        return item.id;
     }
 }
 

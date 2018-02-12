@@ -1,6 +1,13 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "lesson",
+            "otherEntityName": "lesson",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
     "fields": [
         {
             "fieldName": "createDate",
@@ -32,9 +39,9 @@
         }
     ],
     "changelogDate": "20180210073800",
-    "entityTableName": "sub_lesson",
     "dto": "mapstruct",
-    "pagination": "pagination",
     "service": "serviceImpl",
-    "jpaMetamodelFiltering": false
+    "entityTableName": "sub_lesson",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
 }

@@ -46,6 +46,9 @@ public class SubLesson implements Serializable {
     @Column(name = "raw_data")
     private String rawData;
 
+    @ManyToOne
+    private Lesson lesson;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -118,6 +121,19 @@ public class SubLesson implements Serializable {
 
     public void setRawData(String rawData) {
         this.rawData = rawData;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public SubLesson lesson(Lesson lesson) {
+        this.lesson = lesson;
+        return this;
+    }
+
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

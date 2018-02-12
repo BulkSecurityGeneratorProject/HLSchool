@@ -8,6 +8,7 @@ export class SubLesson implements BaseEntity {
         public contenten?: any,
         public contentvi?: any,
         public rawData?: any,
+        public lessonId?: number,
     ) {
     }
 }

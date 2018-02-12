@@ -4,6 +4,8 @@ package com.hl.service.dto;
 import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 import javax.persistence.Lob;
 
@@ -28,6 +30,8 @@ public class SubLessonDTO implements Serializable {
 
     @Lob
     private String rawData;
+
+    private Long lessonId;
 
     public Long getId() {
         return id;
@@ -75,6 +79,14 @@ public class SubLessonDTO implements Serializable {
 
     public void setRawData(String rawData) {
         this.rawData = rawData;
+    }
+
+    public Long getLessonId() {
+        return lessonId;
+    }
+
+    public void setLessonId(Long lessonId) {
+        this.lessonId = lessonId;
     }
 
     @Override

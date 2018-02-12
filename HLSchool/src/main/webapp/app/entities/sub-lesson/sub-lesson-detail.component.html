@@ -1,51 +1,48 @@
-<div class="card jh-card">
-    <div *ngIf="subLesson">
-        <h2>
-            <span jhiTranslate="hlSchoolApp.subLesson.detail.title">Sub Lesson</span> {{subLesson.id}}</h2>
-        <hr>
-        <jhi-alert-error></jhi-alert-error>
-        <dl class="row-md jh-entity-details">
-            <dt>
-                <span jhiTranslate="hlSchoolApp.subLesson.createDate">Create Date</span>
-            </dt>
-            <dd>
-                <span>{{subLesson.createDate | date:'medium'}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.subLesson.title">Title</span>
-            </dt>
-            <dd>
-                <span>{{subLesson.title}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.subLesson.contenten">Contenten</span>
-            </dt>
-            <dd>
-                <span>{{subLesson.contenten}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.subLesson.contentvi">Contentvi</span>
-            </dt>
-            <dd>
-                <span>{{subLesson.contentvi}}</span>
-            </dd>
-            <dt>
-                <span jhiTranslate="hlSchoolApp.subLesson.rawData">Raw Data</span>
-            </dt>
-            <dd>
-                <span>{{subLesson.rawData}}</span>
-            </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info">
-            <span class="fa fa-arrow-left"></span>&nbsp;
-            <span jhiTranslate="entity.action.back"> Back</span>
-        </button>
+<div *ngIf="subLesson">
+    <h2><span jhiTranslate="hlSchoolApp.subLesson.detail.title">Sub Lesson</span> {{subLesson.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.createDate">Create Date</span></dt>
+        <dd>
+            <span>{{subLesson.createDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.title">Title</span></dt>
+        <dd>
+            <span>{{subLesson.title}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.contenten">Contenten</span></dt>
+        <dd>
+            <span>{{subLesson.contenten}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.contentvi">Contentvi</span></dt>
+        <dd>
+            <span>{{subLesson.contentvi}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.rawData">Raw Data</span></dt>
+        <dd>
+            <span>{{subLesson.rawData}}</span>
+        </dd>
+        <dt><span jhiTranslate="hlSchoolApp.subLesson.lesson">Lesson</span></dt>
+        <dd>
+            <div *ngIf="subLesson.lessonId">
+                <a [routerLink]="['/lesson', subLesson.lessonId]">{{subLesson.lessonId}}</a>
+            </div>
+        </dd>
+    </dl>
 
-        <button type="button" [routerLink]="['/', { outlets: { popup: 'sub-lesson/'+ subLesson.id + '/edit'} }]" replaceUrl="true"
-            queryParamsHandling="merge" class="btn btn-primary">
-            <span class="fa fa-pencil"></span>&nbsp;
-            <span jhiTranslate="entity.action.edit"> Edit</span>
-        </button>
-    </div>
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'sub-lesson/'+ subLesson.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
 </div>
