@@ -159,25 +159,56 @@ body {
 }
 
 .ltm-play .ltm-play-header {
-  height: 100px;
-  display: flex;
-  align-items: center;
+  font-size: 18px;
+  padding-bottom: 10px;
+  font-weight: 700;
 }
 
-.ltm-play .ltm-play-footer {
-  position: absolute;
-  height: 120px;
+.ltm-play .ltm-play-body .ltm-play-question {
+  font-size: 24px;
+  padding-bottom: 10px;
+  font-weight: 700;
+}
+
+.ltm-play .ltm-play-body .ltm-info-1 {
+  border-radius: 40px;
+  height: 160px;
+  width: 160px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: inherit;
+  font-family: museo-sans-rounded, sans-serif !important;
+  color: #3c3c3c;
+  font-size: 70px;
+  line-height: 100px;
+}
+
+.ltm-play .ltm-play-body .ltm-play-1 {
+  margin: 10px 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ltm-play .ltm-play-body .ltm-play-1 ul {
+  margin-top: 20px;
+  margin-left: 20px;
+  list-style: none;
+}
+
+.ltm-play .ltm-play-body .ltm-play-1 ul li {
+  width: 160px;
+  margin-top: 10px;
+}
+
+.ltm-play .ltm-play-body .ltm-play-1 ul li label {
   width: 100%;
-  background: #e7e7e7;
-  bottom: 0;
-}
-
-.ltm-play .ltm-play-footer div {
-  padding: 30px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  cursor: pointer;
+  padding: 7px 20px;
+  border: 2px solid #dadada;
+  border-radius: 98px;
 }
 
 .ltm-course .ltm-course-item {

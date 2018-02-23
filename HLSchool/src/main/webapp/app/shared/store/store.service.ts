@@ -4,4 +4,5 @@ import { Injectable } from '@angular/core';
 export class StoreService {
     public course;
     public lesson;
+    public subLesson;
 }

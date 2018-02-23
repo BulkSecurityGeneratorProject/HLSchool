@@ -46,7 +46,7 @@ export class SubLessonService {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    getLessonsByCourseId(id: number, req?: any): Observable<ResponseWrapper> {
+    getSubLessonsByLessonId(id: number, req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.SubLessonByLessonIdUrl + '/' + id, options)
             .map((res: Response) => this.convertResponse(res));

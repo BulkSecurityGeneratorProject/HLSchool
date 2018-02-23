@@ -26,14 +26,15 @@ export class ClientSubLessonComponent implements OnInit, OnDestroy {
     ) {
     }
     ngOnInit() {
-        this.lesson = this.storeService.course;
+        this.lesson = this.storeService.lesson;
         this.loadAll();
     }
 
     ngOnDestroy() {
     }
     loadAll() {
-        this.subLessonService.getLessonsByCourseId(this.lesson.id, {
+        console.log(this.lesson.id);
+        this.subLessonService.getSubLessonsByLessonId(this.lesson.id, {
             page: 0,
             size: 50,
             sort: null}).subscribe(
@@ -46,5 +47,9 @@ export class ClientSubLessonComponent implements OnInit, OnDestroy {
         this.subLessons = data;
     }
     private onLoadError(error) {
+    }
+    private onClickSubLesson(subLesson) {
+        this.storeService.subLesson = subLesson;
+        this.router.navigateByUrl('/client/play');
     }
 }
