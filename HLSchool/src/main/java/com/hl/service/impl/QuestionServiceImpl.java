@@ -67,6 +67,13 @@ public class QuestionServiceImpl implements QuestionService {
             .map(questionMapper::toDto);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Question> findAllFullInfoBySubLessonId(Long id, Pageable pageable) {
+        log.debug("Request to get all Questions");
+        return questionRepository.findAllFullInfoBySubLessonId(id, pageable);
+    }
+
     /**
      * Get one question by id.
      *
@@ -79,6 +86,14 @@ public class QuestionServiceImpl implements QuestionService {
         log.debug("Request to get Question : {}", id);
         Question question = questionRepository.findOne(id);
         return questionMapper.toDto(question);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Question findFullInfoOne(Long id) {
+        log.debug("Request to get Question : {}", id);
+        Question question = questionRepository.findOne(id);
+        return question;
     }
 
     /**

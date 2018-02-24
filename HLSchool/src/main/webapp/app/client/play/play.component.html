@@ -2,48 +2,47 @@
     <div class="col-md-12" id="content">
         <div class="ltm-box">
             <div class="ltm-pd-35 ltm-box-header ltm-box">
-                <h3>Play</h3>
+                <h3>{{subLesson.title ? subLesson.title: 'Load'}}</h3>
             </div>
 
             <div class="ltm-play ltm-pd-35">
                 <div class="ltm-play-header">
-                    3/10
+                    {{i + 1}}/{{questionFulls.length ? questionFulls.length : 'Load'}}
                 </div>
-                <div class="ltm-play-body">
+                <div class="ltm-play-result">
+                    <div *ngIf="result==true">
+                        <img src="./images/true.jpg" alt="">
+                    </div>
+                    <div *ngIf="result==false">
+                        <img src="./images/false.jpg" alt="">
+                    </div>
+                </div>
+                <div class="ltm-play-body" *ngIf="!complete">
                     <div class="ltm-play-question">
-                        What sound does this make?
+                        {{translateService.currentLang == 'en' ? questionFulls[i].contenten : questionFulls[i].contentvi}}
                     </div>
                     <div class="ltm-play-1">
                         <div>
                             <div class="ltm-info-1">
-                                に
+                                {{questionFulls[i].rawData}}
                             </div>
                         </div>
                         <div>
                             <ul>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="answer"> chi</label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="answer"> ni</label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="answer"> i</label>
+                                <li *ngFor="let answer of answers ;trackBy: trackId">
+                                    <label><input type="radio" [(ngModel)]="result" [value]="answer"> {{translateService.currentLang == 'en' ? answer.vocabulary.english : answer.vocabulary.vietnamese}}</label>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
-
+                <div class="ltm-play-complete" *ngIf="complete">
+                    <span>Lesson Complete {{trueAnswers*100}} XP</span>
+                </div>
                 <div class="ltm-play-footer">
-                    <button class="btn btn-primary">Next</button>
+                    <button class="btn btn-primary" (click)="next()">Next</button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

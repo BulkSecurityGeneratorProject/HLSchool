@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { HlSchoolSharedModule } from '../../shared';
 import { playRoute } from './play.route';
 import { ClientPlayComponent} from './play.component';
+import { QuestionService } from './question.service';
+import { AnswerService } from './answer.service';
 
 const ENTITY_STATES = [
     ...playRoute
@@ -21,6 +23,8 @@ const ENTITY_STATES = [
         ClientPlayComponent,
     ],
     providers: [
+        QuestionService,
+        AnswerService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

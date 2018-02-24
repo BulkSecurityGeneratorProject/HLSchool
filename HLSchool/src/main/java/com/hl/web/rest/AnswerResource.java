@@ -1,6 +1,7 @@
 package com.hl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hl.domain.Answer;
 import com.hl.service.AnswerService;
 import com.hl.web.rest.errors.BadRequestAlertException;
 import com.hl.web.rest.util.HeaderUtil;
@@ -101,6 +102,25 @@ public class AnswerResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/answers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+    @GetMapping("/answersByQuestionId/{id}")
+    @Timed
+    public ResponseEntity<List<AnswerDTO>> getAllAnswersByQuestion(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get a page of Answers");
+        Page<AnswerDTO> page = answerService.findAllAnswersByQuestion(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/answers");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/answersFullInfoByQuestionId/{id}")
+    @Timed
+    public ResponseEntity<List<Answer>> getAllAnswersFullInfoByQuestion(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get a page of Answers");
+        Page<Answer> page = answerService.findAllAnswersFullInfoByQuestion(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/answers");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
 
     /**
      * GET  /answers/:id : get the "id" answer.

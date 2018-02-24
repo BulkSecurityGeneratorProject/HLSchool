@@ -1,6 +1,7 @@
 package com.hl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hl.domain.Question;
 import com.hl.service.QuestionService;
 import com.hl.web.rest.errors.BadRequestAlertException;
 import com.hl.web.rest.util.HeaderUtil;
@@ -102,6 +103,15 @@ public class QuestionResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/questionsFullInfoBySubLesson/{id}")
+    @Timed
+    public ResponseEntity<List<Question>> getAllQuestionsFullInfoBySubLessonId(@PathVariable Long id, Pageable pageable) {
+        log.debug("REST request to get a page of Questions");
+        Page<Question> page = questionService.findAllFullInfoBySubLessonId(id, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/questions");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * GET  /questions/:id : get the "id" question.
      *
@@ -115,6 +125,15 @@ public class QuestionResource {
         QuestionDTO questionDTO = questionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(questionDTO));
     }
+
+    @GetMapping("/fullInfoQuestion/{id}")
+    @Timed
+    public ResponseEntity<Question> getFullInfoQuestion(@PathVariable Long id) {
+        log.debug("REST request to get Question : {}", id);
+        Question question = questionService.findFullInfoOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(question));
+    }
+
 
     /**
      * DELETE  /questions/:id : delete the "id" question.

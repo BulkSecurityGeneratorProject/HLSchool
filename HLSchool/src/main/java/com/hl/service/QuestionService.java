@@ -1,5 +1,6 @@
 package com.hl.service;
 
+import com.hl.domain.Question;
 import com.hl.service.dto.QuestionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,15 +39,20 @@ public interface QuestionService {
      *
      * @param id the id of the entity
      */
+
+    Question findFullInfoOne(Long id);
+
     void delete(Long id);
 
     /**
      * Search for the question corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<QuestionDTO> search(String query, Pageable pageable);
+
+    Page<Question> findAllFullInfoBySubLessonId(Long id, Pageable pageable);
 }

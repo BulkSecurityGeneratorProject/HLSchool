@@ -107,4 +107,16 @@ public class AnswerServiceImpl implements AnswerService {
         Page<Answer> result = answerSearchRepository.search(queryStringQuery(query), pageable);
         return result.map(answerMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AnswerDTO> findAllAnswersByQuestion(Long id, Pageable pageable){
+        log.debug("Request to get all Answers");
+        return answerRepository.findAllAnswersByQuestion(id, pageable)
+            .map(answerMapper::toDto);
+    }
+
+    public Page<Answer> findAllAnswersFullInfoByQuestion(Long id, Pageable pageable){
+        return answerRepository.findAllAnswersByQuestion(id, pageable);
+    }
 }

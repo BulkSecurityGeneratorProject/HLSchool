@@ -1,5 +1,6 @@
 package com.hl.service;
 
+import com.hl.domain.Answer;
 import com.hl.service.dto.AnswerDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,9 +45,13 @@ public interface AnswerService {
      * Search for the answer corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<AnswerDTO> search(String query, Pageable pageable);
+
+    Page<AnswerDTO> findAllAnswersByQuestion(Long id, Pageable pageable);
+
+    Page<Answer> findAllAnswersFullInfoByQuestion(Long id, Pageable pageable);
 }
