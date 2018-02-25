@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-12" id="content">
+        <jhi-alert></jhi-alert>
+        <div class="ltm-box">
+            <div class="ltm-pd-35 ltm-box-header">
+                <h2>Course Detail</h2>
+            </div>
+            <div class="ltm-pd-35" *ngIf="course">
+                <div class="ltm-course">
+                    <div class="ltm-course-title">
+                        {{course ? course.title : 'Load'}}
+                    </div>
+                    <div class="ltm-course-content">
+                        {{translateService.currentLang == 'en' ? course.contenten : course.contentvi}}
+                    </div>
+                    <div class="ltm-course-footer">
+                        <button class="ltm-btn ltm-btn-lg ltm-btn-yellow" (click)="buy()">Buy with {{course.coin}} coin</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

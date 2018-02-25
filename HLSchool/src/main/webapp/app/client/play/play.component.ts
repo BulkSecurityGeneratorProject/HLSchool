@@ -12,6 +12,8 @@ import { Answer } from './answer.model';
 import { AnswerService } from './answer.service';
 import { AnswerFull } from './answerFull.model';
 import { TranslateService } from '@ngx-translate/core';
+import { UserLogService } from './user-log.service';
+import { UserLog } from './user-log.model';
 // import { CourseService } from './course.service';
 
 @Component({
@@ -34,7 +36,8 @@ export class ClientPlayComponent implements OnInit, OnDestroy {
         private storeService: StoreService,
         private questionService: QuestionService,
         private answerService: AnswerService,
-        private translateService: TranslateService
+        private translateService: TranslateService,
+        private userLogService: UserLogService
     ) {
     }
     ngOnInit() {
@@ -86,17 +89,22 @@ export class ClientPlayComponent implements OnInit, OnDestroy {
     }
 
     next() {
-        if(this.complete) {// TODO save score
+        if (this.complete) {
             this.router.navigateByUrl('/client/sub-lesson');
         }
-        if(this.result === true || this.result === false) {
-            if(this.result) {
+        if (this.result === true || this.result === false) {
+            if (this.result) {
                 this.trueAnswers ++;
             }
             this.i ++;
-            if(this.questionFulls.length <= this.i) {
+            if (this.questionFulls.length <= this.i) {
                 console.log('complete');
                 this.complete = true;
+                const userLog: UserLog = new UserLog();
+                userLog.point = this.trueAnswers * 100;
+                userLog.complete = this.trueAnswers === this.questionFulls.length;
+                this.userLogService.create(userLog)
+                    .subscribe((res: UserLog) => console.log(res), (res: Response) => console.log(res));
             } else {
                 this.loadAllAnwserFullInfoByQuestionId(this.questionFulls[this.i].id);
             }

@@ -6,6 +6,7 @@ import { playRoute } from './play.route';
 import { ClientPlayComponent} from './play.component';
 import { QuestionService } from './question.service';
 import { AnswerService } from './answer.service';
+import { UserLogService } from './user-log.service';
 
 const ENTITY_STATES = [
     ...playRoute
@@ -24,7 +25,8 @@ const ENTITY_STATES = [
     ],
     providers: [
         QuestionService,
-        AnswerService
+        AnswerService,
+        UserLogService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

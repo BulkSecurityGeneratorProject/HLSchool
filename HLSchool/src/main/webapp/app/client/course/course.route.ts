@@ -4,6 +4,7 @@ import { JhiPaginationUtil } from 'ng-jhipster';
 
 import { UserRouteAccessService } from '../../shared';
 import { ClientCourseComponent } from './course.component';
+import { ClientCourseDetailComponent } from './course-detail.component';
 
 export const courseRoute: Routes = [
     {
@@ -18,7 +19,7 @@ export const courseRoute: Routes = [
         canActivate: [UserRouteAccessService]
     }, {
         path: 'client/course/:id',
-        component: ClientCourseComponent,
+        component: ClientCourseDetailComponent,
         data: {
             authorities: [],
             pageTitle: 'hlSchoolApp.config.home.title'

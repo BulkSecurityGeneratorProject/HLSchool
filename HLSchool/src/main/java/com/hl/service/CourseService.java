@@ -44,9 +44,13 @@ public interface CourseService {
      * Search for the course corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<CourseDTO> search(String query, Pageable pageable);
+
+    Page<CourseDTO> findAllInLog(Pageable pageable);
+
+    Page<CourseDTO> findAllNotInLog(Pageable pageable);
 }

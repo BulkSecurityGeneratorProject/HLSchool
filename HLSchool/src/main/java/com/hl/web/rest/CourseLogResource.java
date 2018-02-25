@@ -1,7 +1,13 @@
 package com.hl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hl.domain.User;
+import com.hl.repository.UserRepository;
+import com.hl.security.SecurityUtils;
 import com.hl.service.CourseLogService;
+import com.hl.service.CourseService;
+import com.hl.service.UserService;
+import com.hl.service.dto.CourseDTO;
 import com.hl.web.rest.errors.BadRequestAlertException;
 import com.hl.web.rest.util.HeaderUtil;
 import com.hl.web.rest.util.PaginationUtil;
@@ -38,8 +44,17 @@ public class CourseLogResource {
 
     private final CourseLogService courseLogService;
 
-    public CourseLogResource(CourseLogService courseLogService) {
+    private final UserRepository userRepository;
+
+    private final CourseService courseService;
+
+    private final UserService userService;
+
+    public CourseLogResource(CourseLogService courseLogService, UserRepository userRepository, CourseService courseService, UserService userService) {
         this.courseLogService = courseLogService;
+        this.userRepository = userRepository;
+        this.courseService = courseService;
+        this.userService = userService;
     }
 
     /**
@@ -56,10 +71,21 @@ public class CourseLogResource {
         if (courseLogDTO.getId() != null) {
             throw new BadRequestAlertException("A new courseLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CourseLogDTO result = courseLogService.save(courseLogDTO);
-        return ResponseEntity.created(new URI("/api/course-logs/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User _user = user.get();
+        CourseDTO courseDTO = this.courseService.findOne(courseLogDTO.getCourseId());
+        this.userService.plusPoint(-1 * courseDTO.getCoin());
+        if(_user != null) {
+            if (_user.getCoin() >= courseDTO.getCoin()) {
+                courseLogDTO.setUserId(_user.getId());
+                CourseLogDTO result = courseLogService.save(courseLogDTO);
+
+                return ResponseEntity.created(new URI("/api/course-logs/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                    .body(result);
+            }
+        }
+        return ResponseEntity.status(404).body(courseLogDTO);
     }
 
     /**

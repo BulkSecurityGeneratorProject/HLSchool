@@ -12,6 +12,12 @@ export class User {
     public lastModifiedBy?: string;
     public lastModifiedDate?: Date;
     public password?: string;
+    public image?: any;
+    public imageContentType?: string;
+    public coin?: number;
+    public point?: number;
+    public todayPoint?: number;
+    public dateGoal?: number;
 
     constructor(
         id?: any,
@@ -26,7 +32,13 @@ export class User {
         createdDate?: Date,
         lastModifiedBy?: string,
         lastModifiedDate?: Date,
-        password?: string
+        password?: string,
+        image?: any,
+        imageContentType?: string,
+        coin?: number,
+        point?: number,
+        todayPoint?: number,
+        dateGoal?: number
     ) {
         this.id = id ? id : null;
         this.login = login ? login : null;
@@ -41,5 +53,11 @@ export class User {
         this.lastModifiedBy = lastModifiedBy ? lastModifiedBy : null;
         this.lastModifiedDate = lastModifiedDate ? lastModifiedDate : null;
         this.password = password ? password : null;
+        this.image = image ? image : null;
+        this.imageContentType = imageContentType ? imageContentType : null;
+        this.coin = coin ? coin : null;
+        this.point = point ? point : null;
+        this.todayPoint = todayPoint ? todayPoint : null;
+        this.dateGoal = dateGoal ? dateGoal : null;
     }
 }

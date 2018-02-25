@@ -102,6 +102,24 @@ public class CourseResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/coursesInLog")
+    @Timed
+    public ResponseEntity<List<CourseDTO>> getAllCoursesInLog(Pageable pageable) {
+        log.debug("REST request to get a page of Courses");
+        Page<CourseDTO> page = courseService.findAllInLog(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/courses");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/coursesNotInLog")
+    @Timed
+    public ResponseEntity<List<CourseDTO>> getAllCoursesNotInLog(Pageable pageable) {
+        log.debug("REST request to get a page of Courses");
+        Page<CourseDTO> page = courseService.findAllNotInLog(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/courses");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
     /**
      * GET  /courses/:id : get the "id" course.
      *

@@ -4,6 +4,7 @@ import com.hl.service.CourseLogService;
 import com.hl.domain.CourseLog;
 import com.hl.repository.CourseLogRepository;
 import com.hl.repository.search.CourseLogSearchRepository;
+import com.hl.service.UserService;
 import com.hl.service.dto.CourseLogDTO;
 import com.hl.service.mapper.CourseLogMapper;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class CourseLogServiceImpl implements CourseLogService {
     private final CourseLogMapper courseLogMapper;
 
     private final CourseLogSearchRepository courseLogSearchRepository;
+
 
     public CourseLogServiceImpl(CourseLogRepository courseLogRepository, CourseLogMapper courseLogMapper, CourseLogSearchRepository courseLogSearchRepository) {
         this.courseLogRepository = courseLogRepository;

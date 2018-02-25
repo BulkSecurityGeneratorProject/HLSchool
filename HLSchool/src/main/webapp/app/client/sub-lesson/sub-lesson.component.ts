@@ -29,7 +29,6 @@ export class ClientSubLessonComponent implements OnInit, OnDestroy {
         this.lesson = this.storeService.lesson;
         this.loadAll();
     }
-
     ngOnDestroy() {
     }
     loadAll() {

@@ -3,10 +3,23 @@
         <jhi-alert></jhi-alert>
         <div class="ltm-box">
             <div class="ltm-pd-35 ltm-box-header">
-                <h2 jhiTranslate="hlSchoolApp.course.usercourse">User Course</h2>
+                <h2 jhiTranslate="hlSchoolApp.course.usercourse">My Course</h2>
             </div>
             <div class="row ltm-pd-35 ltm-course">
-                <div *ngFor="let course of courses;" class="col-md-4 ltm-course-item" (click)="onClickCourse(course)">
+                <div *ngFor="let course of coursesInLog;" class="col-md-4 ltm-course-item" (click)="onClickCourse(course)">
+                    <img [src]="'data:' + course.imageContentType + ';base64,' + course.image" alt="">
+                    <div class="ltm-course-item-footer">
+                        <span class="t-item-name">{{course.title}}</span>
+                        <span class="t-item-status">{{course.coin}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ltm-pd-35 ltm-box-header">
+                <h2 jhiTranslate="hlSchoolApp.course.usercourse">Buy Course</h2>
+            </div>
+            <div class="row ltm-pd-35 ltm-course">
+                <div *ngFor="let course of coursesNotInLog;" class="col-md-4 ltm-course-item" routerLink="/client/course/{{course.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     <img [src]="'data:' + course.imageContentType + ';base64,' + course.image" alt="">
                     <div class="ltm-course-item-footer">
                         <span class="t-item-name">{{course.title}}</span>

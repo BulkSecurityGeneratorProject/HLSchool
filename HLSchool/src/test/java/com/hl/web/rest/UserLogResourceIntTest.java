@@ -90,13 +90,13 @@ public class UserLogResourceIntTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final UserLogResource userLogResource = new UserLogResource(userLogService);
-        this.restUserLogMockMvc = MockMvcBuilders.standaloneSetup(userLogResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+//        MockitoAnnotations.initMocks(this);
+//        final UserLogResource userLogResource = new UserLogResource(userLogService);
+//        this.restUserLogMockMvc = MockMvcBuilders.standaloneSetup(userLogResource)
+//            .setCustomArgumentResolvers(pageableArgumentResolver)
+//            .setControllerAdvice(exceptionTranslator)
+//            .setConversionService(createFormattingConversionService())
+//            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     /**

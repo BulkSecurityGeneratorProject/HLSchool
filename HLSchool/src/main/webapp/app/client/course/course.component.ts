@@ -6,6 +6,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper, StoreService } from '../../shared';
 import { Course } from './course.model';
 import { CourseService } from './course.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'jhi-client-course',
@@ -15,35 +16,55 @@ import { CourseService } from './course.service';
     ]
 })
 export class ClientCourseComponent implements OnInit, OnDestroy {
-    courses: Course[];
+    coursesInLog: Course[];
+    coursesNotInLog: Course[];
     constructor(
         private router: Router,
         private courseService: CourseService,
         private jhiAlertService: JhiAlertService,
-        private storeService: StoreService
+        private storeService: StoreService,
+        private translateService: TranslateService
     ) {
     }
     ngOnInit() {
-        this.loadAll();
+        this.loadAllInLog();
+        this.loadAllNotInLog();
     }
 
     ngOnDestroy() {
     }
 
-    loadAll() {
-        this.courseService.query({
+    loadAllInLog() {
+        this.courseService.queryInLog({
             page: 0,
             size: 10,
             sort: null}).subscribe(
-            (res: ResponseWrapper) => this.onLoadSuccess(res.json, res.headers),
-            (res: ResponseWrapper) => this.onLoadError(res.json)
+            (res: ResponseWrapper) => this.onLoadInLogSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onLoadInLogError(res.json)
         );
     }
-    onLoadSuccess(data, headers) {
-        this.courses = data;
+    onLoadInLogSuccess(data, headers) {
+        this.coursesInLog = data;
     }
 
-    onLoadError(error) {
+    onLoadInLogError(error) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    loadAllNotInLog() {
+        this.courseService.queryNotInLog({
+            page: 0,
+            size: 10,
+            sort: null}).subscribe(
+            (res: ResponseWrapper) => this.onLoadNotInLogSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onLoadNotInLogError(res.json)
+        );
+    }
+    onLoadNotInLogSuccess(data, headers) {
+        this.coursesNotInLog = data;
+    }
+
+    onLoadNotInLogError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }
 

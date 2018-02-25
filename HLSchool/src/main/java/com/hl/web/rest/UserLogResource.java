@@ -1,7 +1,9 @@
 package com.hl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.hl.security.SecurityUtils;
 import com.hl.service.UserLogService;
+import com.hl.service.UserService;
 import com.hl.web.rest.errors.BadRequestAlertException;
 import com.hl.web.rest.util.HeaderUtil;
 import com.hl.web.rest.util.PaginationUtil;
@@ -39,8 +41,11 @@ public class UserLogResource {
 
     private final UserLogService userLogService;
 
-    public UserLogResource(UserLogService userLogService) {
+    private final UserService userService;
+
+    public UserLogResource(UserLogService userLogService, UserService userService) {
         this.userLogService = userLogService;
+        this.userService = userService;
     }
 
     /**
@@ -58,7 +63,12 @@ public class UserLogResource {
             throw new BadRequestAlertException("A new userLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
         userLogDTO.setCreateDate(ZonedDateTime.now());
+
+        String loginUser = SecurityUtils.getCurrentUserLogin().get();
+        userLogDTO.setUserLogin(loginUser);
         UserLogDTO result = userLogService.save(userLogDTO);
+        userService.plusPoint(userLogDTO.getPoint());
+
         return ResponseEntity.created(new URI("/api/user-logs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

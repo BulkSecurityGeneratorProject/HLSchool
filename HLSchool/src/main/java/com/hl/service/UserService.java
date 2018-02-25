@@ -257,6 +257,18 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
+    public Optional<User> plusPoint(int point) {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User _user = user.get();
+        if(_user != null){
+            _user.setPoint(_user.getPoint() + point);
+            _user = userRepository.save(_user);
+            user.get().setPoint(_user.getPoint());
+        }
+        return user;
+    }
+
+
     /**
      * Not activated users should be automatically deleted after 3 days.
      * <p>

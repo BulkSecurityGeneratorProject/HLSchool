@@ -1,5 +1,8 @@
 package com.hl.service.impl;
 
+import com.hl.domain.User;
+import com.hl.repository.UserRepository;
+import com.hl.security.SecurityUtils;
 import com.hl.service.CourseService;
 import com.hl.domain.Course;
 import com.hl.repository.CourseRepository;
@@ -13,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -31,10 +36,13 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseSearchRepository courseSearchRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper, CourseSearchRepository courseSearchRepository) {
+    private final UserRepository userRepository;
+
+    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper, CourseSearchRepository courseSearchRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
         this.courseSearchRepository = courseSearchRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -67,6 +75,21 @@ public class CourseServiceImpl implements CourseService {
             .map(courseMapper::toDto);
     }
 
+    public Page<CourseDTO> findAllNotInLog(Pageable pageable){
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User _user = user.get();
+        if(_user == null) return null;
+        return courseRepository.findAllNotInLog(_user.getId(), pageable)
+            .map(courseMapper::toDto);
+    }
+
+    public Page<CourseDTO> findAllInLog(Pageable pageable){
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User _user = user.get();
+        if(_user == null) return null;
+        return courseRepository.findAllInLog(_user.getId(), pageable)
+            .map(courseMapper::toDto);
+    }
     /**
      * Get one course by id.
      *
