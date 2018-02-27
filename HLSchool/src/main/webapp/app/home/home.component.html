@@ -4,8 +4,8 @@
             <span class="hipster img-fluid rounded"></span>
         </div>
         <div class="col-md-9">
-            <h1 class="display-4">Chào mừng bạn đến với HLSchool</h1>
-            <p class="lead">Học tiếng nhật thật đơn giản</p>
+            <h1 class="display-4" jhiTranslate="home.title">Chào mừng bạn đến với HLSchool</h1>
+            <p class="lead" jhiTranslate="home.content1">Học tiếng nhật thật đơn giản</p>
 
             <div [ngSwitch]="isAuthenticated()">
                 <div class="alert alert-success" *ngSwitchCase="true">
@@ -25,22 +25,22 @@
                 </div>
             </div>
 
-            <p>
+            <p jhiTranslate="home.content2">
                 Các trang đang được xây dựng
             </p>
 
             <ul>
                 <li>
-                    <a routerLink="client/course" routerLinkActive="active">Course</a>
+                    <a routerLink="client/course" routerLinkActive="active" jhiTranslate="home.page1">Course</a>
                 </li>
                 <li>
-                    <a routerLink="client/lesson" routerLinkActive="active">Lesson</a>
+                    <a routerLink="client/lesson" routerLinkActive="active" jhiTranslate="home.page2">Lesson</a>
                 </li>
                 <li>
-                    <a routerLink="client/shop" routerLinkActive="active">Shop</a>
+                    <a routerLink="client/shop" routerLinkActive="active" jhiTranslate="home.page3">Shop</a>
                 </li>
                 <li>
-                    <a routerLink="client/room" routerLinkActive="active">Room</a>
+                    <a routerLink="client/room" routerLinkActive="active" jhiTranslate="home.page4">Room</a>
                 </li>
             </ul>
         </div>
@@ -48,7 +48,7 @@
     <div class="row">
         <div class="col-md-12" id="content">
             <div class="" style="padding-left: 35px">
-                <h2>Bảng thông báo</h2>
+                <h2 jhiTranslate="home.content3">Bảng thông báo</h2>
             </div>
 
             <div class="ltm-pd-35">

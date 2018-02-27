@@ -2,24 +2,24 @@
     "hlSchoolApp": {
         "room" : {
             "home": {
-                "title": "Rooms",
-                "createLabel": "Thêm mới một Room",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Room",
-                "search": "Tìm Room"
+                "title": "Phòng",
+                "createLabel": "Thêm mới một phòng",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật phòng",
+                "search": "Tìm phòng"
             },
-            "created": "Một Room mới được tạo với định danh {{ param }}",
-            "updated": "Một Room cập nhật với định danh {{ param }}",
-            "deleted": "Một Room đã xóa với định danh {{ param }}",
+            "created": "Một phòng mới được tạo với định danh {{ param }}",
+            "updated": "Một phòng cập nhật với định danh {{ param }}",
+            "deleted": "Một phòng đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Room {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa phòng {{ id }}?"
             },
             "detail": {
-                "title": "Room"
+                "title": "Phòng"
             },
-            "createDate": "Create Date",
-            "level": "Level",
-            "title": "Title",
-            "rawData": "Raw Data"
+            "createDate": "Ngày tạo",
+            "level": "Cấp độ",
+            "title": "Tiêu đề",
+            "rawData": "Dữ liệu thô"
         }
     }
 }

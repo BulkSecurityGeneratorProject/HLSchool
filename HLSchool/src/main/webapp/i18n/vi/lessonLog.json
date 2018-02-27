@@ -2,24 +2,24 @@
     "hlSchoolApp": {
         "lessonLog" : {
             "home": {
-                "title": "Lesson Logs",
-                "createLabel": "Thêm mới một Lesson Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Lesson Log",
-                "search": "Tìm Lesson Log"
+                "title": "Lịch sử bài học",
+                "createLabel": "Thêm mới một lịch sử bài học",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật lịch sử bài học",
+                "search": "Tìm lịch sử bài học"
             },
-            "created": "Một Lesson Log mới được tạo với định danh {{ param }}",
-            "updated": "Một Lesson Log cập nhật với định danh {{ param }}",
-            "deleted": "Một Lesson Log đã xóa với định danh {{ param }}",
+            "created": "Một lịch sử bài học mới được tạo với định danh {{ param }}",
+            "updated": "Một lịch sử bài học cập nhật với định danh {{ param }}",
+            "deleted": "Một lịch sử bài học đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Lesson Log {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa lịch sử bài học {{ id }}?"
             },
             "detail": {
-                "title": "Lesson Log"
+                "title": "Lịch sử bài học"
             },
-            "complete": "Complete",
-            "rawData": "Raw Data",
-            "user": "User",
-            "lesson": "Lesson"
+            "complete": "Hoàn thành",
+            "rawData": "Dữ liệu thô",
+            "user": "Người dùng",
+            "lesson": "Bài học"
         }
     }
 }

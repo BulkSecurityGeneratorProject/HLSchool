@@ -2,25 +2,25 @@
     "hlSchoolApp": {
         "comment" : {
             "home": {
-                "title": "Comments",
-                "createLabel": "Thêm mới một Comment",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Comment",
-                "search": "Tìm Comment"
+                "title": "Bình luận",
+                "createLabel": "Thêm mới một bình luận",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật bình luận",
+                "search": "Tìm bình luận"
             },
-            "created": "Một Comment mới được tạo với định danh {{ param }}",
-            "updated": "Một Comment cập nhật với định danh {{ param }}",
-            "deleted": "Một Comment đã xóa với định danh {{ param }}",
+            "created": "Một bình luận mới được tạo với định danh {{ param }}",
+            "updated": "Một bình luận cập nhật với định danh {{ param }}",
+            "deleted": "Một bình luận đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Comment {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa bình luận {{ id }}?"
             },
             "detail": {
-                "title": "Comment"
+                "title": "Bình luận"
             },
-            "createDate": "Create Date",
-            "content": "Content",
-            "rawData": "Raw Data",
-            "post": "Post",
-            "user": "User"
+            "createDate": "Ngày tạo",
+            "content": "Bình luận",
+            "rawData": "Dữ liệu thô",
+            "post": "Bài đăng",
+            "user": "Người dùng"
         }
     }
 }

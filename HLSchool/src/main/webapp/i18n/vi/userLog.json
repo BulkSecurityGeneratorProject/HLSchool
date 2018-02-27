@@ -2,25 +2,25 @@
     "hlSchoolApp": {
         "userLog" : {
             "home": {
-                "title": "User Logs",
-                "createLabel": "Thêm mới một User Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật User Log",
-                "search": "Tìm User Log"
+                "title": "Lịch sử người dùng",
+                "createLabel": "Thêm mới một lịch sử người dùng",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật lịch sử người dùng",
+                "search": "Tìm lịch sử người dùng"
             },
-            "created": "Một User Log mới được tạo với định danh {{ param }}",
-            "updated": "Một User Log cập nhật với định danh {{ param }}",
-            "deleted": "Một User Log đã xóa với định danh {{ param }}",
+            "created": "Một lịch sử người dùng mới được tạo với định danh {{ param }}",
+            "updated": "Một lịch sử người dùng cập nhật với định danh {{ param }}",
+            "deleted": "Một lịch sử người dùng đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa User Log {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa lịch sử người dùng {{ id }}?"
             },
             "detail": {
-                "title": "User Log"
+                "title": "Lịch sử người dùng"
             },
-            "createDate": "Create Date",
-            "complete": "Complete",
-            "point": "Point",
-            "rawData": "Raw Data",
-            "user": "User"
+            "createDate": "Ngày tạo",
+            "complete": "Hoàn thành",
+            "point": "Điểm",
+            "rawData": "Dữ liệu thô",
+            "user": "Người dùng"
         }
     }
 }

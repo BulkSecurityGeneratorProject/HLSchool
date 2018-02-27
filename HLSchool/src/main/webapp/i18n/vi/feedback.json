@@ -2,25 +2,25 @@
     "hlSchoolApp": {
         "feedback" : {
             "home": {
-                "title": "Feedbacks",
-                "createLabel": "Thêm mới một Feedback",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Feedback",
-                "search": "Tìm Feedback"
+                "title": "Phản hồi",
+                "createLabel": "Thêm mới một phản hồi",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật phản hồi",
+                "search": "Tìm phản hồi"
             },
-            "created": "Một Feedback mới được tạo với định danh {{ param }}",
-            "updated": "Một Feedback cập nhật với định danh {{ param }}",
-            "deleted": "Một Feedback đã xóa với định danh {{ param }}",
+            "created": "Một phản hồi mới được tạo với định danh {{ param }}",
+            "updated": "Một phản hồi cập nhật với định danh {{ param }}",
+            "deleted": "Một phản hồi đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Feedback {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa phản hồi {{ id }}?"
             },
             "detail": {
-                "title": "Feedback"
+                "title": "Phản hồi"
             },
-            "createDate": "Create Date",
-            "content": "Content",
-            "rawData": "Raw Data",
-            "question": "Question",
-            "user": "User"
+            "createDate": "Ngày tạo",
+            "content": "Nội dung",
+            "rawData": "Dữ liệu thô",
+            "question": "Câu hỏi",
+            "user": "Người dùng"
         }
     }
 }

@@ -2,29 +2,29 @@
     "hlSchoolApp": {
         "post" : {
             "home": {
-                "title": "Posts",
-                "createLabel": "Thêm mới một Post",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Post",
+                "title": "Bài đăng",
+                "createLabel": "Thêm mới một bài đăng",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật bài đăng",
                 "search": "Tìm Post"
             },
-            "created": "Một Post mới được tạo với định danh {{ param }}",
-            "updated": "Một Post cập nhật với định danh {{ param }}",
-            "deleted": "Một Post đã xóa với định danh {{ param }}",
+            "created": "Một bài đăng mới được tạo với định danh {{ param }}",
+            "updated": "Một bài đăng cập nhật với định danh {{ param }}",
+            "deleted": "Một bài đăng đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Post {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa bài đăng {{ id }}?"
             },
             "detail": {
-                "title": "Post"
+                "title": "Bài đăng"
             },
             "title": "Title",
-            "contenten": "Contenten",
-            "contentvi": "Contentvi",
-            "createDate": "Create Date",
-            "lastModifier": "Last Modifier",
-            "activated": "Activated",
-            "rawData": "Raw Data",
-            "user": "User",
-            "comment": "Comment"
+            "contenten": "Nội dung tiếng anh",
+            "contentvi": "Nội dung tiếng viêt",
+            "createDate": "Ngày tạo",
+            "lastModifier": "Sửa đổi cuối cùng",
+            "activated": "Kích hoạt",
+            "rawData": "Dữ liệu thô",
+            "user": "Người dùng",
+            "comment": "Chú thích"
         }
     }
 }

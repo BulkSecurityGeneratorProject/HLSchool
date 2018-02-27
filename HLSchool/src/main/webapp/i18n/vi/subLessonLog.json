@@ -2,24 +2,24 @@
     "hlSchoolApp": {
         "subLessonLog" : {
             "home": {
-                "title": "Sub Lesson Logs",
-                "createLabel": "Thêm mới một Sub Lesson Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Sub Lesson Log",
-                "search": "Tìm Sub Lesson Log"
+                "title": "Lịch sử bài học phụ",
+                "createLabel": "Thêm mới một lịch sử bài học phụ",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật lịch sử bài học phụ",
+                "search": "Tìm lịch sử bài học phụ"
             },
-            "created": "Một Sub Lesson Log mới được tạo với định danh {{ param }}",
-            "updated": "Một Sub Lesson Log cập nhật với định danh {{ param }}",
-            "deleted": "Một Sub Lesson Log đã xóa với định danh {{ param }}",
+            "created": "Một lịch sử bài học phụ mới được tạo với định danh {{ param }}",
+            "updated": "Một lịch sử bài học phụ cập nhật với định danh {{ param }}",
+            "deleted": "Một lịch sử bài học phụ đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Sub Lesson Log {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa lịch sử bài học phụ {{ id }}?"
             },
             "detail": {
-                "title": "Sub Lesson Log"
+                "title": "Lịch sử bài học phụ"
             },
-            "complete": "Complete",
-            "rawData": "Raw Data",
-            "user": "User",
-            "subLesson": "Sub Lesson"
+            "complete": "Hoàn thành",
+            "rawData": "Dữ liệu thô",
+            "user": "Người dùng",
+            "subLesson": "Bài học phụ"
         }
     }
 }

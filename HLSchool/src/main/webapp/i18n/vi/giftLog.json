@@ -2,24 +2,24 @@
     "hlSchoolApp": {
         "giftLog" : {
             "home": {
-                "title": "Gift Logs",
-                "createLabel": "Thêm mới một Gift Log",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift Log",
-                "search": "Tìm Gift Log"
+                "title": "Danh sách tặng quà",
+                "createLabel": "Thêm mới một danh sách tặng quà",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật danh sách tặng quà",
+                "search": "Tìm danh sách tặng quà"
             },
-            "created": "Một Gift Log mới được tạo với định danh {{ param }}",
-            "updated": "Một Gift Log cập nhật với định danh {{ param }}",
-            "deleted": "Một Gift Log đã xóa với định danh {{ param }}",
+            "created": "Một danh sách tặng quà được tạo với định danh {{ param }}",
+            "updated": "Một danh sách tặng quà cập nhật với định danh {{ param }}",
+            "deleted": "Một danh sách tặng quà đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Gift Log {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa danh sách tặng quà{{ id }}?"
             },
             "detail": {
-                "title": "Gift Log"
+                "title": "Danh sách tặng quà"
             },
-            "createDate": "Create Date",
-            "rawData": "Raw Data",
-            "user": "User",
-            "gift": "Gift"
+            "createDate": "Ngày tạo",
+            "rawData": "Dữ liệu thô",
+            "user": "Người dùng",
+            "gift": "Quà tặng"
         }
     }
 }

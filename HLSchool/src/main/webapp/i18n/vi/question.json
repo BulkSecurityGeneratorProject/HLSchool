@@ -2,29 +2,29 @@
     "hlSchoolApp": {
         "question" : {
             "home": {
-                "title": "Questions",
-                "createLabel": "Thêm mới một Question",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Question",
-                "search": "Tìm Question"
+                "title": "Câu hỏi",
+                "createLabel": "Thêm mới một câu hỏi",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật câu hỏi",
+                "search": "Tìm câu hỏi"
             },
-            "created": "Một Question mới được tạo với định danh {{ param }}",
-            "updated": "Một Question cập nhật với định danh {{ param }}",
-            "deleted": "Một Question đã xóa với định danh {{ param }}",
+            "created": "Một câu hỏi mới được tạo với định danh {{ param }}",
+            "updated": "Một câu hỏi cập nhật với định danh {{ param }}",
+            "deleted": "Một câu hỏi đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Question {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa câu hỏi {{ id }}?"
             },
             "detail": {
-                "title": "Question"
+                "title": "Câu hỏi"
             },
-            "createDate": "Create Date",
-            "questionType": "Question Type",
-            "questionSubType": "Question Sub Type",
-            "contenten": "Contenten",
-            "contentvi": "Contentvi",
-            "image": "Image",
-            "resource": "Resource",
-            "rawData": "Raw Data",
-            "subLesson": "Sub Lesson"
+            "createDate": "Ngày tạo",
+            "questionType": "Loại câu hỏi",
+            "questionSubType": "Loại câu hỏi phụ",
+            "contenten": "Nội dung tiếng Anh",
+            "contentvi": "Nội dung tiếng Việt",
+            "image": "Ảnh",
+            "resource": "Nguồn",
+            "rawData": "Dữ liệu thô",
+            "subLesson": "Bài học phụ"
         }
     }
 }

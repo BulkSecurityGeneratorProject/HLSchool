@@ -14,6 +14,13 @@
             "follow": "follow @java_hipster on Twitter"
         },
         "like": "If you like JHipster, don't forget to give us a star on",
-        "github": "GitHub"
+        "github": "GitHub",
+        "content1": "Learning english is so easy!",
+        "content2": "Pages are under construction!",
+        "page1": "Course",
+        "page2": "Lesson",
+        "page3": "Shop",
+        "page4": "Room",
+        "content3": "Bulletin board"
     }
 }

@@ -2,26 +2,26 @@
     "hlSchoolApp": {
         "gift" : {
             "home": {
-                "title": "Gifts",
-                "createLabel": "Thêm mới một Gift",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Gift",
-                "search": "Tìm Gift"
+                "title": "Quà",
+                "createLabel": "Thêm mới một quà",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật quà",
+                "search": "Tìm quà"
             },
-            "created": "Một Gift mới được tạo với định danh {{ param }}",
-            "updated": "Một Gift cập nhật với định danh {{ param }}",
-            "deleted": "Một Gift đã xóa với định danh {{ param }}",
+            "created": "Một quà mới được tạo với định danh {{ param }}",
+            "updated": "Một quà cập nhật với định danh {{ param }}",
+            "deleted": "Một quà đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Gift {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa quà {{ id }}?"
             },
             "detail": {
-                "title": "Gift"
+                "title": "quà"
             },
-            "price": "Price",
-            "image": "Image",
-            "contenten": "Contenten",
-            "contentvi": "Contentvi",
-            "createDate": "Create Date",
-            "rawData": "Raw Data"
+            "price": "Giá bán",
+            "image": "Ảnh",
+            "contenten": "Nội dung tiếng Anh",
+            "contentvi": "Nội dung tiếng Việt",
+            "createDate": "Ngày tạo",
+            "rawData": "Dữ liệu thô"
         }
     }
 }

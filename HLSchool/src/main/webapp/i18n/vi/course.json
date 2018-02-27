@@ -2,29 +2,29 @@
     "hlSchoolApp": {
         "course" : {
             "home": {
-                "title": "Courses",
-                "createLabel": "Thêm mới một Course",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Course",
-                "search": "Tìm Course"
+                "title": "Khóa học",
+                "createLabel": "Thêm mới một khóa học",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật khóa học",
+                "search": "Tìm khóa học"
             },
-            "created": "Một Course mới được tạo với định danh {{ param }}",
-            "updated": "Một Course cập nhật với định danh {{ param }}",
-            "deleted": "Một Course đã xóa với định danh {{ param }}",
+            "created": "Một khóa học mới được tạo với định danh {{ param }}",
+            "updated": "Một khóa học cập nhật với định danh {{ param }}",
+            "deleted": "Một khóa học đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Course {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa khóa học {{ id }}?"
             },
             "detail": {
-                "title": "Course"
+                "title": "Khóa học"
             },
-            "createDate": "Create Date",
-            "activated": "Activated",
-            "title": "Title",
-            "level": "Level",
-            "coin": "Coin",
-            "contenten": "Contenten",
-            "contentvi": "Contentvi",
-            "image": "Image",
-            "rawData": "Raw Data",
+            "createDate": "Ngày tạo",
+            "activated": "Kích hoạt",
+            "title": "Tiêu đề",
+            "level": "Cấp độ",
+            "coin": "Điểm thưởng",
+            "contenten": "Nội dùng tiếng Anh",
+            "contentvi": "Nội dung tiếng Việt",
+            "image": "Ảnh",
+            "rawData": "Dữ liệu thô",
             "usercourse": "Khóa học"
         }
     }

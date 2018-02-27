@@ -2,26 +2,26 @@
     "hlSchoolApp": {
         "vocabulary" : {
             "home": {
-                "title": "Vocabularies",
-                "createLabel": "Thêm mới một Vocabulary",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật Vocabulary",
-                "search": "Tìm Vocabulary"
+                "title": "Thực thể",
+                "createLabel": "Thêm mới một thực thể",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật thực thể",
+                "search": "Tìm thực thể"
             },
-            "created": "Một Vocabulary mới được tạo với định danh {{ param }}",
-            "updated": "Một Vocabulary cập nhật với định danh {{ param }}",
-            "deleted": "Một Vocabulary đã xóa với định danh {{ param }}",
+            "created": "Một thực thể mới được tạo với định danh {{ param }}",
+            "updated": "Một thực thể cập nhật với định danh {{ param }}",
+            "deleted": "Một thực thể đã xóa với định danh {{ param }}",
             "delete": {
-                "question": "Bạn có chắc là muốn xóa Vocabulary {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa thực thể {{ id }}?"
             },
             "detail": {
-                "title": "Vocabulary"
+                "title": "thực thể"
             },
-            "japanese": "Japanese",
-            "english": "English",
-            "vietnamese": "Vietnamese",
-            "image": "Image",
-            "audio": "Audio",
-            "rawData": "Raw Data"
+            "japanese": "Tiếng Nhật",
+            "english": "Tiếng Anh",
+            "vietnamese": "Tiếng Việt",
+            "image": "Ảnh",
+            "audio": "Âm thanh",
+            "rawData": "Dữ liệu thô"
         }
     }
 }
