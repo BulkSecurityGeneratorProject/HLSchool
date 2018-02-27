@@ -4,8 +4,11 @@ import com.hl.HlSchoolApp;
 
 import com.hl.domain.CourseLog;
 import com.hl.repository.CourseLogRepository;
+import com.hl.repository.UserRepository;
 import com.hl.service.CourseLogService;
 import com.hl.repository.search.CourseLogSearchRepository;
+import com.hl.service.CourseService;
+import com.hl.service.UserService;
 import com.hl.service.dto.CourseLogDTO;
 import com.hl.service.mapper.CourseLogMapper;
 import com.hl.web.rest.errors.ExceptionTranslator;
@@ -73,6 +76,16 @@ public class CourseLogResourceIntTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private UserService userService;
+
+
     private MockMvc restCourseLogMockMvc;
 
     private CourseLog courseLog;
@@ -80,7 +93,7 @@ public class CourseLogResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CourseLogResource courseLogResource = new CourseLogResource(courseLogService);
+        final CourseLogResource courseLogResource = new CourseLogResource(courseLogService, userRepository, courseService, userService);
         this.restCourseLogMockMvc = MockMvcBuilders.standaloneSetup(courseLogResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
