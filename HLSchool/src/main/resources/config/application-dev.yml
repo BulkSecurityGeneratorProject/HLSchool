@@ -60,12 +60,16 @@ spring:
                     logs: target/elasticsearch/log
                     data: target/elasticsearch/data
     mail:
-        host: smtp.localhost
+        host: smtp.gmail.com
         port: 587
-        username: admin@localhost
+        username: luantm96@gmail.com
         password: Dienvi96
         protocol: smtp
         tls: true
+        properties.mail.smtp:
+            auth: true
+            starttls.enable: true
+            ssl.trust: smtp.gmail.com
     messages:
         cache-seconds: 1
     thymeleaf:
