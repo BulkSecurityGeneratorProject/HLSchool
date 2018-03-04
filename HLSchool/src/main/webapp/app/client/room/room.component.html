@@ -9,7 +9,7 @@
                 <div style="display:inline-block;" *ngFor="let room of rooms ;trackBy: trackId" class="col-lg-4 col-xs-6">
                     <!-- small box -->
                     <div class="small-box" ngClass="{{room.rawData}}">
-                        <div class="inner">0
+                        <div class="inner">{{room.level}}
                             <p>{{room.title}}</p>
                         </div>
                         <div class="icon">
