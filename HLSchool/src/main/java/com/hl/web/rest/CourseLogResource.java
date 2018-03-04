@@ -74,11 +74,11 @@ public class CourseLogResource {
         Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
         User _user = user.get();
         CourseDTO courseDTO = this.courseService.findOne(courseLogDTO.getCourseId());
-        this.userService.plusPoint(-1 * courseDTO.getCoin());
         if(_user != null) {
             if (_user.getCoin() >= courseDTO.getCoin()) {
                 courseLogDTO.setUserId(_user.getId());
                 CourseLogDTO result = courseLogService.save(courseLogDTO);
+                this.userService.plusCoin(-1 * courseDTO.getCoin());
 
                 return ResponseEntity.created(new URI("/api/course-logs/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

@@ -32,7 +32,7 @@ export const commentRoute: Routes = [
             'pagingParams': CommentResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.comment.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const commentRoute: Routes = [
         path: 'comment/:id',
         component: CommentDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.comment.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const commentPopupRoute: Routes = [
         path: 'comment-new',
         component: CommentPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.comment.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const commentPopupRoute: Routes = [
         path: 'comment/:id/edit',
         component: CommentPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.comment.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const commentPopupRoute: Routes = [
         path: 'comment/:id/delete',
         component: CommentDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.comment.home.title'
         },
         canActivate: [UserRouteAccessService],

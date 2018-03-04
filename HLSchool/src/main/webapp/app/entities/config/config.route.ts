@@ -32,7 +32,7 @@ export const configRoute: Routes = [
             'pagingParams': ConfigResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.config.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const configRoute: Routes = [
         path: 'config/:id',
         component: ConfigDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.config.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const configPopupRoute: Routes = [
         path: 'config-new',
         component: ConfigPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.config.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const configPopupRoute: Routes = [
         path: 'config/:id/edit',
         component: ConfigPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.config.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const configPopupRoute: Routes = [
         path: 'config/:id/delete',
         component: ConfigDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.config.home.title'
         },
         canActivate: [UserRouteAccessService],

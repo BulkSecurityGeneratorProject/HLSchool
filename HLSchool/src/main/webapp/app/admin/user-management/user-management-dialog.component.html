@@ -92,6 +92,16 @@
                  </small>
             </div>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="userManagement.coin">Coin</label>
+            <input type="number" class="form-control" name="coin" #emailInput="ngModel"
+                    [(ngModel)]="user.coin">
+        </div>
+        <div class="form-group">
+                <label class="form-control-label" jhiTranslate="userManagement.point">Point</label>
+                <input type="number" class="form-control" name="point" #emailInput="ngModel"
+                        [(ngModel)]="user.point">
+            </div>
         <div class="form-check">
             <label class="form-check-label" for="activated">
                 <input class="form-check-input" [disabled]="user.id === null" type="checkbox" id="activated" name="activated" [(ngModel)]="user.activated">

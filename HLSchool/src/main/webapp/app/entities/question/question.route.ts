@@ -32,7 +32,7 @@ export const questionRoute: Routes = [
             'pagingParams': QuestionResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.question.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const questionRoute: Routes = [
         path: 'question/:id',
         component: QuestionDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.question.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const questionPopupRoute: Routes = [
         path: 'question-new',
         component: QuestionPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.question.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const questionPopupRoute: Routes = [
         path: 'question/:id/edit',
         component: QuestionPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.question.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const questionPopupRoute: Routes = [
         path: 'question/:id/delete',
         component: QuestionDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.question.home.title'
         },
         canActivate: [UserRouteAccessService],

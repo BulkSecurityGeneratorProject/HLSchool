@@ -32,7 +32,7 @@ export const giftLogRoute: Routes = [
             'pagingParams': GiftLogResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.giftLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const giftLogRoute: Routes = [
         path: 'gift-log/:id',
         component: GiftLogDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.giftLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const giftLogPopupRoute: Routes = [
         path: 'gift-log-new',
         component: GiftLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.giftLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const giftLogPopupRoute: Routes = [
         path: 'gift-log/:id/edit',
         component: GiftLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.giftLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const giftLogPopupRoute: Routes = [
         path: 'gift-log/:id/delete',
         component: GiftLogDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.giftLog.home.title'
         },
         canActivate: [UserRouteAccessService],

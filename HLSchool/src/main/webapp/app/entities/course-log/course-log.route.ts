@@ -32,7 +32,7 @@ export const courseLogRoute: Routes = [
             'pagingParams': CourseLogResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.courseLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const courseLogRoute: Routes = [
         path: 'course-log/:id',
         component: CourseLogDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.courseLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const courseLogPopupRoute: Routes = [
         path: 'course-log-new',
         component: CourseLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.courseLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const courseLogPopupRoute: Routes = [
         path: 'course-log/:id/edit',
         component: CourseLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.courseLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const courseLogPopupRoute: Routes = [
         path: 'course-log/:id/delete',
         component: CourseLogDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.courseLog.home.title'
         },
         canActivate: [UserRouteAccessService],

@@ -32,7 +32,7 @@ export const subLessonLogRoute: Routes = [
             'pagingParams': SubLessonLogResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.subLessonLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const subLessonLogRoute: Routes = [
         path: 'sub-lesson-log/:id',
         component: SubLessonLogDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.subLessonLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const subLessonLogPopupRoute: Routes = [
         path: 'sub-lesson-log-new',
         component: SubLessonLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.subLessonLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const subLessonLogPopupRoute: Routes = [
         path: 'sub-lesson-log/:id/edit',
         component: SubLessonLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.subLessonLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const subLessonLogPopupRoute: Routes = [
         path: 'sub-lesson-log/:id/delete',
         component: SubLessonLogDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.subLessonLog.home.title'
         },
         canActivate: [UserRouteAccessService],

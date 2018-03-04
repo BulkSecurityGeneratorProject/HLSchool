@@ -32,7 +32,7 @@ export const vocabularyRoute: Routes = [
             'pagingParams': VocabularyResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.vocabulary.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const vocabularyRoute: Routes = [
         path: 'vocabulary/:id',
         component: VocabularyDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.vocabulary.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const vocabularyPopupRoute: Routes = [
         path: 'vocabulary-new',
         component: VocabularyPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.vocabulary.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const vocabularyPopupRoute: Routes = [
         path: 'vocabulary/:id/edit',
         component: VocabularyPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.vocabulary.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const vocabularyPopupRoute: Routes = [
         path: 'vocabulary/:id/delete',
         component: VocabularyDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLL_TEACHER', 'ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.vocabulary.home.title'
         },
         canActivate: [UserRouteAccessService],

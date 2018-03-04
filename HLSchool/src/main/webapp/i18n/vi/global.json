@@ -143,7 +143,8 @@
         "Size": "Trường {{ fieldName }} không nằm trong giới hạn tối thiểu/tối đa!",
         "userexists": "Tên đăng nhập đã được sử dụng!",
         "emailexists": "Email đã được sử dụng!",
-        "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại"
+        "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại",
+        "not.enough.coin": "Bạn không đủ coin"
     },
     "footer": {
         "about": "Giới thiệu",

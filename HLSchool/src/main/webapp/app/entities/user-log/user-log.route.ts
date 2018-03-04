@@ -32,7 +32,7 @@ export const userLogRoute: Routes = [
             'pagingParams': UserLogResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.userLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const userLogRoute: Routes = [
         path: 'user-log/:id',
         component: UserLogDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.userLog.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,7 +52,7 @@ export const userLogPopupRoute: Routes = [
         path: 'user-log-new',
         component: UserLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.userLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -62,7 +62,7 @@ export const userLogPopupRoute: Routes = [
         path: 'user-log/:id/edit',
         component: UserLogPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.userLog.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -72,7 +72,7 @@ export const userLogPopupRoute: Routes = [
         path: 'user-log/:id/delete',
         component: UserLogDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'hlSchoolApp.userLog.home.title'
         },
         canActivate: [UserRouteAccessService],

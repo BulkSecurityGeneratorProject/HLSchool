@@ -34,9 +34,6 @@
                     <a routerLink="client/course" routerLinkActive="active" jhiTranslate="home.page1">Course</a>
                 </li>
                 <li>
-                    <a routerLink="client/lesson" routerLinkActive="active" jhiTranslate="home.page2">Lesson</a>
-                </li>
-                <li>
                     <a routerLink="client/shop" routerLinkActive="active" jhiTranslate="home.page3">Shop</a>
                 </li>
                 <li>
@@ -60,7 +57,7 @@
                         {{translateService.currentLang == 'en' ? post.contenten.substring(0, 500) : post.contentvi.substring(0, 500)}}
                     </div>
                     <div class="ltm-post-bottom">
-                        by {{post.user}}
+                        by {{post.userLogin}}
                     </div>
                 </div>
             </div>

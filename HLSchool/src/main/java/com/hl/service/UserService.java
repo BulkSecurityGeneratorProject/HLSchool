@@ -201,6 +201,8 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+                user.setPoint(userDTO.getPoint());
+                user.setCoin(userDTO.getCoin());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
@@ -264,6 +266,17 @@ public class UserService {
             _user.setPoint(_user.getPoint() + point);
             _user = userRepository.save(_user);
             user.get().setPoint(_user.getPoint());
+        }
+        return user;
+    }
+
+    public Optional<User> plusCoin(int coin) {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        User _user = user.get();
+        if(_user != null){
+            _user.setCoin(_user.getCoin() + coin);
+            _user = userRepository.save(_user);
+            user.get().setCoin(_user.getCoin());
         }
         return user;
     }

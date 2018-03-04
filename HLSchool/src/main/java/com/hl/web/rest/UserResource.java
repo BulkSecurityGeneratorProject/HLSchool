@@ -107,8 +107,12 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            userDTO.setCoin(0);
-            userDTO.setPoint(0);
+            if(userDTO.getCoin() == null){
+                userDTO.setCoin(0);
+            }
+            if(userDTO.getPoint() == null) {
+                userDTO.setPoint(0);
+            }
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))

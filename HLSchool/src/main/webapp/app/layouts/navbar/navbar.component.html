@@ -46,7 +46,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="post" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-portrait" aria-hidden="true"></i>
+                                <i class="fa fa-fw fa-book" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.post">Post</span>
                             </a>
                         </li>
@@ -70,13 +70,13 @@
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="lesson" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-file-alt" aria-hidden="true"></i>
+                                <i class="fa fa-fw fa-book" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.lesson">Lesson</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" routerLink="sub-lesson" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                                <i class="fa fa-fw fa-book" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.subLesson">Sub Lesson</span>
                             </a>
                         </li>
@@ -98,49 +98,43 @@
                                 <span jhiTranslate="global.menu.entities.answer">Answer</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="user-log" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.userLog">User Log</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="gift-log" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-gift" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.giftLog">Gift Log</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="course-log" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.courseLog">Course Log</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="sub-lesson-log" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
                                 (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.subLessonLog">Sub Lesson Log</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="lesson-log" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.lessonLog">Lesson Log</span>
                             </a>
                         </li>
-                        <li>
+                        <li *jhiHasAnyAuthority="['ROLE_ADMIN']">
                             <a class="dropdown-item" routerLink="gift" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                                 <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                                 <span jhiTranslate="global.menu.entities.gift">Gift</span>
                             </a>
                         </li>
-                        <li>
-                        <a class="dropdown-item" routerLink="sub-lesson" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-hand-spock" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.subLesson">Sub Lesson</span>
-                        </a>
-                    </li>
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>

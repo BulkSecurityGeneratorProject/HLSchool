@@ -55,6 +55,6 @@ export class ClientCourseDetailComponent implements OnInit, OnDestroy {
     }
 
     private onSaveCourseLogError(error: any) {
-        this.jhiAlertService.error('Bạn không đủ coin', null, null);
+        this.jhiAlertService.error('error.not.enough.coin', null, null);
     }
 }
