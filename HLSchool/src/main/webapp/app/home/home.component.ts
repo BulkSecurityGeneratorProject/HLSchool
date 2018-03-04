@@ -5,6 +5,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account, LoginModalService, Principal, ResponseWrapper } from '../shared';
 import { Post } from './post.model';
 import { PostService } from './post.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'jhi-home',
@@ -23,7 +24,8 @@ export class HomeComponent implements OnInit {
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: JhiEventManager,
-        private postService: PostService
+        private postService: PostService,
+        private translateService: TranslateService
     ) {
     }
 
@@ -62,6 +64,7 @@ export class HomeComponent implements OnInit {
     }
     private onLoadSuccess(data, headers) {
         this.posts = data;
+        console.log(data);
     }
     private onLoadError(error) {
         console.log(error)

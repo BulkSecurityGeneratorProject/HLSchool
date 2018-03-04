@@ -5,6 +5,7 @@ import { HlSchoolSharedModule } from '../../shared';
 import { lessonRoute } from './lesson.route';
 import { ClientLessonComponent} from './lesson.component';
 import { LessonService } from './lesson.service';
+import { ConfigService } from './config.service';
 
 const ENTITY_STATES = [
     ...lessonRoute
@@ -22,7 +23,8 @@ const ENTITY_STATES = [
         ClientLessonComponent,
     ],
     providers: [
-        LessonService
+        LessonService,
+        ConfigService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

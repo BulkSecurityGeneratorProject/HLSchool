@@ -17,7 +17,7 @@
             <div *ngFor="let lesson of lessons ;trackBy: trackId">
                 <div class="ltm-lesson ltm-pd-35">
                     <div class="ltm-lesson-item" (click)="onClickLesson(lesson)">
-                        <img src="./../../../content/images/complete.PNG" alt=""> hello {{trackBy}}
+                        <img src="./../../../content/images/complete.PNG" alt=""> {{translateService.currentLang == 'en' ? lesson.contenten : lesson.contentvi}}
                     </div>
                 </div>
             </div>
@@ -25,16 +25,13 @@
     </div>
     <div class="col-md-4" id="sidebar">
         <div class="ltm-box ltm-pd-30">
-            <h5>Daily Goal</h5>
-
+            <h5>Profile</h5>
             <div>
-                hêlo
+                <h6>Admin</h6>
+                <span>{{level}}</span> <br>
+                <span>Point {{account != null ? account.point: ''}}</span> <br>
+                <span>Coin {{account != null ? account.coin: ''}}</span> <br>
             </div>
-        </div>
-
-        <div class="ltm-box ltm-pd-30">
-            <h5>Leader board</h5>
-            <div>content</div>
         </div>
     </div>
 </div>

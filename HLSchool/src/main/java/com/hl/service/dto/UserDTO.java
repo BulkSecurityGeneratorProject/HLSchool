@@ -82,6 +82,8 @@ public class UserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.coin = user.getCoin();
+        this.point = user.getPoint();
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());

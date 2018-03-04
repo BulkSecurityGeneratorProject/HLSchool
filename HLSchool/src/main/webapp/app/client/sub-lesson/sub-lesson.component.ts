@@ -7,6 +7,10 @@ import { ITEMS_PER_PAGE, Principal, ResponseWrapper, StoreService } from '../../
 import { Lesson } from './../lesson/lesson.model';
 import { SubLesson } from './sub-lesson.model';
 import { SubLessonService } from './sub-lesson.service';
+import { AccountService } from '../../shared/auth/account.service';
+import { ConfigService } from './config.service';
+import { Config } from './config.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'jhi-client-sub-lesson',
@@ -18,16 +22,23 @@ import { SubLessonService } from './sub-lesson.service';
 export class ClientSubLessonComponent implements OnInit, OnDestroy {
     lesson: Lesson;
     subLessons: SubLesson[];
+    account: any;
+    level = '';
+    configs: Config[];
     i = 2;
     constructor(
         private router: Router,
         private storeService: StoreService,
-        private subLessonService: SubLessonService
+        private subLessonService: SubLessonService,
+        private accountService: AccountService,
+        private configService: ConfigService,
+        private translateService: TranslateService
     ) {
     }
     ngOnInit() {
         this.lesson = this.storeService.lesson;
         this.loadAll();
+        this.loadAccount();
     }
     ngOnDestroy() {
     }
@@ -40,6 +51,34 @@ export class ClientSubLessonComponent implements OnInit, OnDestroy {
             (res: ResponseWrapper) => this.onLoadSuccess(res.json, res.headers),
             (res: ResponseWrapper) => this.onLoadError(res.json)
         );
+    }
+    thenLoadAccount() {
+        this.configService.query({
+            page: 0,
+            size: 10,
+            sort: null}).subscribe(
+                (res) => {
+                    this.configs = res.json;
+                    console.log(this.configs);
+                    this.configs.every((element, index) => {
+                        if ( parseInt(element.value, 10) >= this.account.point) {
+                            this.level = element.key;
+                            return false;
+                        }
+                        return true;
+                    });
+
+                },
+                null
+            )
+
+    }
+    loadAccount() {
+        this.accountService.get().subscribe(
+            (res) => {
+                this.account = res;
+                this.thenLoadAccount();
+            }, null)
     }
     private onLoadSuccess(data, headers) {
         // this.page = pagingParams.page;

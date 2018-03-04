@@ -57,7 +57,7 @@
                         <a href="#">{{post.title}}</a>
                     </div>
                     <div class="ltm-post-content">
-                        {{post.contenten.substring(0, 500)}}
+                        {{translateService.currentLang == 'en' ? post.contenten.substring(0, 500) : post.contentvi.substring(0, 500)}}
                     </div>
                     <div class="ltm-post-bottom">
                         by {{post.user}}
