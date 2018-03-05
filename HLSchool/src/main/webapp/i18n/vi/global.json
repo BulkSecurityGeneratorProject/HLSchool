@@ -146,6 +146,9 @@
         "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại",
         "not.enough.coin": "Bạn không đủ coin"
     },
+    "success": {
+        "buy.success": "Buy success"
+    },
     "footer": {
         "about": "Giới thiệu",
         "schools": "Trường học",

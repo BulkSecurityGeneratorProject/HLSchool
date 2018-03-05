@@ -147,6 +147,9 @@
         "idexists": "A new {{ entityName }} cannot already have an ID",
         "not.enough.coin": "You not enough coin"
     },
+    "success": {
+        "buy.success": "Buy success"
+    },
     "footer": {
         "about": "About",
         "schools": "Schools",

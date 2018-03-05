@@ -10,6 +10,7 @@ import { createRequestOption } from '../model/request-util';
 @Injectable()
 export class UserService {
     private resourceUrl = SERVER_API_URL + 'api/users';
+    private plusCoinUrl = SERVER_API_URL + 'api/users/plusCoin/';
 
     constructor(private http: Http) { }
 
@@ -42,6 +43,10 @@ export class UserService {
             const json = res.json();
             return <string[]> json;
         });
+    }
+
+    plusCoin(coin: number): Observable<any> {
+        return this.http.get(this.plusCoinUrl + coin);
     }
 
     private convertResponse(res: Response): ResponseWrapper {

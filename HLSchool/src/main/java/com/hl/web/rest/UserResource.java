@@ -216,4 +216,10 @@ public class UserResource {
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+    @GetMapping("/users/plusCoin/{id}")
+    public String plusCoin(@PathVariable int id)
+    {
+        userService.plusCoin(id);
+        return "true";
+    }
 }

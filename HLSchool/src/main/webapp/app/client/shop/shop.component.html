@@ -11,9 +11,34 @@
                         <button class="ltm-btn ltm-btn-border-white" routerLink="/client/course">Leave shop</button>
                     </div>
                 </div>
+                <jhi-alert></jhi-alert>
                 <div class="ltm-pd-35">
-                    <div class="ltm-box ltm-pd-40  ltm-bg-blue2">
-                        hello
+                    <div class="ltm-shop-item row">
+                        <div class="col-md-8">
+                            <div class="ltm-shop-item-header">Small coin</div>
+                            <div class="ltm-shop-item-content">Get 500 coin</div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="ltm-btn ltm-btn-green ltm-btn-lg" (click)="plusCoin(500)">500 coin</button>
+                        </div>
+                    </div>
+                    <div class="ltm-shop-item row">
+                        <div class="col-md-8">
+                            <div class="ltm-shop-item-header">Normal coin</div>
+                            <div class="ltm-shop-item-content">Get 1000 coin</div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="ltm-btn ltm-btn-green ltm-btn-lg" (click)="plusCoin(1000)">1000 coin</button>
+                        </div>
+                    </div>
+                    <div class="ltm-shop-item row">
+                        <div class="col-md-8">
+                            <div class="ltm-shop-item-header">Big coin</div>
+                            <div class="ltm-shop-item-content">Get 5000 coin</div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="ltm-btn ltm-btn-green ltm-btn-lg" (click)="plusCoin(5000)">5000 coin</button>
+                        </div>
                     </div>
                 </div>
                 

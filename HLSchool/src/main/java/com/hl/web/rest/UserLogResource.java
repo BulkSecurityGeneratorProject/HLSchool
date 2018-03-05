@@ -156,4 +156,6 @@ public class UserLogResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+
 }
